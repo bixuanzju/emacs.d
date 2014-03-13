@@ -51,22 +51,29 @@
 (if (fboundp 'fringe-mode)
     (fringe-mode 4))
 
-;; enable y/n answers
-(fset 'yes-or-no-p 'y-or-n-p)
+;; Answering just 'y' or 'n' will do
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; more useful frame title, that show either a file or a
 ;; buffer name (if the buffer isn't visiting a file)
-(setq frame-title-format
-      '("" invocation-name " Jeremy - " (:eval (if (buffer-file-name)
-                                                   (abbreviate-file-name (buffer-file-name))
-                                                 "%b"))))
+(when window-system
+  (setq frame-title-format
+        '("" invocation-name " Jeremy - "
+          (:eval (if (buffer-file-name)
+                     (abbreviate-file-name (buffer-file-name))
+                   "%b")))))
 
-;; Emacs modes typically provide a standard means to change the
-;; indentation width -- eg. c-basic-offset: use that to adjust your
-;; personal indentation width, while maintaining the style (and
-;; meaning) of any files you load.
+;; Show keystrokes in progress
+(setq echo-keystrokes 0.1)
+
+;; Smooth Scroll:
+(setq mouse-wheel-scroll-amount '(1 ((shift) .1))) ;; one line at a time
+
 (setq-default indent-tabs-mode nil)   ;; don't use tabs to indent
 (setq-default tab-width 8)            ;; but maintain correct appearance
+
+;; Remove alarm (bell) on scroll
+(setq ring-bell-function 'ignore)
 
 ;; delete the selection with a keypress
 (delete-selection-mode t)
@@ -110,6 +117,8 @@
 ;; highlight the current line
 (global-hl-line-mode +1)
 
+(show-paren-mode 1)
+
 ;; add the ability to copy and cut the current line, without marking it
 (defadvice kill-ring-save (before smart-copy activate compile)
   "When called interactively with no active region, copy a single line instead."
@@ -132,7 +141,6 @@
 (setq tramp-default-method "ssh")
 
 ;; Ido-related config
-
 (setq ido-enable-prefix nil
       ido-enable-flex-matching t
       ido-create-new-buffer 'always

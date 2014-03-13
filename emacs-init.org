@@ -48,22 +48,29 @@
 Some quick essential customizations.
 
 #+BEGIN_SRC emacs-lisp
+  ;; Turn off mouse interface early in startup to avoid momentary display
+  (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+  (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+  (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+
   (defvar savefile-dir (expand-file-name "savefile" user-emacs-directory)
     "This folder stores all the automatically generated save/history-files.")
 
   (unless (file-exists-p savefile-dir)
     (make-directory savefile-dir))
 
-  ;; Turn off mouse interface early in startup to avoid momentary display
-  (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
-  (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
-  (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-
   ;; Add the personal packages directory to the load-path
   (add-to-list 'load-path (concat user-emacs-directory "packages/"))
 
   ;; Start off with some sanity.
   (require 'better-defaults)
+
+  ;; Load elisp bits collected from everywhere
+  (require 'elisp)
+
+  ;; OSX specific settings
+  (when (eq system-type 'darwin)
+    (require 'cocoa-emacs-default))
 
   ;; No splash screen please
   (setq inhibit-startup-screen t)
@@ -72,11 +79,10 @@ Some quick essential customizations.
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
   (load custom-file)
 
-  ;; store all backup and autosave files in the tmp dir
+  ;; Write backup files to own directory
   (setq backup-directory-alist
-        `((".*" . ,temporary-file-directory)))
-  (setq auto-save-file-name-transforms
-        `((".*" ,temporary-file-directory t)))
+        `(("." . ,(expand-file-name
+                   (concat user-emacs-directory "backups")))))
 
   ;; saveplace remembers your location in a file when saving files
   (require 'saveplace)
@@ -106,6 +112,81 @@ Some quick essential customizations.
 
   ;; enable erase-buffer command
   (put 'erase-buffer 'disabled nil)
+#+END_SRC
 
-  (req-package-finish)
+* Appearance
+** Theme
+
+Set custom theme path and load theme
+#+BEGIN_SRC emacs-lisp
+  (req-package zenburn-theme
+    :init
+    (load-theme 'zenburn t))
+#+END_SRC
+
+** Mode Line
+
+#+BEGIN_SRC emacs-lisp
+  (req-package smart-mode-line
+    :config
+    (progn
+      (setq sml/theme 'dark)
+      (sml/setup)))
+#+END_SRC
+
+* Keybindings
+
+** Exiting
+I don't like to quite Emacs on accident, and I find closing frames are
+more useful.
+
+#+BEGIN_SRC emacs-lisp
+  ;; The mnemonic is C-t REALLY QUIT
+  (bind-key "C-x r q" 'save-buffers-kill-terminal)
+  (bind-key "C-x C-c" 'delete-frame)
+#+END_SRC
+
+** Improvements
+#+BEGIN_SRC emacs-lisp
+  ;; convenient line number showing
+  (global-set-key [remap goto-line] 'goto-line-with-feedback)
+
+  (bind-key "M-/" 'hippie-expand)
+  (bind-key "C-s" 'isearch-forward-regexp)
+  (bind-key "C-r" 'isearch-backward-regexp)
+  (bind-key "C-M-s" 'isearch-forward)
+  (bind-key "C-M-r" 'isearch-backward)
+#+END_SRC
+
+** Key-chord
+
+#+BEGIN_SRC emacs-lisp
+  (req-package key-chord
+    :init
+    (key-chord-mode +1)
+    :config
+    (progn
+      (setq key-chord-two-keys-delay 0.05)
+      (key-chord-define-global "jl" 'ace-jump-line-mode)
+      (key-chord-define-global "JJ" 'prelude-switch-to-previous-buffer)
+      (key-chord-define-global "x1" 'delete-other-windows)
+      (key-chord-define-global "xk" 'switch-window)
+      (key-chord-define-global "0o" 'delete-window)
+      (key-chord-define-global "xn" 'helm-mini)
+      (key-chord-define-global "jk" 'magit-status)
+      (key-chord-define-global "jh" 'ace-jump-word-mode)
+      (key-chord-define-global "xl" 'kill-this-buffer)
+      (key-chord-define-global "xm" 'helm-M-x)))
+#+END_SRC
+
+** Unbind keys
+
+#+BEGIN_SRC emacs-lisp
+  (unbind-key "C-o")
+  (unbind-key "C-x f")
+#+END_SRC
+* Finish Requirements
+All done with  =req-package=.
+#+BEGIN_SRC emacs-lisp
+(req-package-finish)
 #+END_SRC
