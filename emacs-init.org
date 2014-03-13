@@ -8,6 +8,8 @@
 *** Credits:
     This emacs.d was heavily inspired by the following configurations.
 
+    [[https://github.com/daschwa/dotfiles/tree/master/emacs.d][daschwa's emacs.d]]
+
 * Package Management
 
   [[https://github.com/rdallasgray/pallet][Pallet]] is a very helpful package management tool for Emacs.  It
