@@ -1,0 +1,111 @@
+* Emacs Org Configuration
+
+  This file is tangled using =org-babel-load-file=. What this does is
+  generate a =emacs-init.el= from the =emacs-lisp= source blocks.
+
+  This emacs.d is currently  designed for Emacs 24.3 and above.
+
+*** Credits:
+    This emacs.d was heavily inspired by the following configurations.
+
+* Package Management
+
+  [[https://github.com/rdallasgray/pallet][Pallet]] is a very helpful package management tool for Emacs.  It
+  utilizes a dependency management platform called [[https://github.com/cask/cask][Cask]], to update a
+  centralized =Cask= file when you install or remove packages.
+
+** Cask
+   Cask is initialized in =init.el= with the following:
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (require 'cask "~/.cask/cask.el")
+     (cask-initialize)
+   #+END_SRC
+
+** Pallet
+   You can download all packages in your =Cask= file by using =M-x
+   pallet-install=.  However, this should not be necessary.
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (require 'pallet)
+   #+END_SRC
+
+* Packages, Modes, and Extensions
+
+** Dependency Management with =req-package=
+
+   Where Pallet keeps track of the packages we have installed, =req-package=
+   handles all our internal package dependencies and configurations.
+
+   Another nice thing about =req-package=, is that you no longer not
+   need to specify the =:ensure= keyword, as it is added by default.
+
+   Start using =req-package=
+   #+BEGIN_SRC emacs-lisp
+     (require 'req-package)
+   #+END_SRC
+
+* Essentials
+
+Some quick essential customizations.
+
+#+BEGIN_SRC emacs-lisp
+  (defvar savefile-dir (expand-file-name "savefile" user-emacs-directory)
+    "This folder stores all the automatically generated save/history-files.")
+
+  (unless (file-exists-p savefile-dir)
+    (make-directory savefile-dir))
+
+  ;; Turn off mouse interface early in startup to avoid momentary display
+  (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+  (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+  (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+
+  ;; Add the personal packages directory to the load-path
+  (add-to-list 'load-path (concat user-emacs-directory "packages/"))
+
+  ;; Start off with some sanity.
+  (require 'better-defaults)
+
+  ;; No splash screen please
+  (setq inhibit-startup-screen t)
+
+  ;; Keep emacs Custom-settings in separate file
+  (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+  (load custom-file)
+
+  ;; store all backup and autosave files in the tmp dir
+  (setq backup-directory-alist
+        `((".*" . ,temporary-file-directory)))
+  (setq auto-save-file-name-transforms
+        `((".*" ,temporary-file-directory t)))
+
+  ;; saveplace remembers your location in a file when saving files
+  (require 'saveplace)
+  (setq save-place-file (expand-file-name "saveplace" savefile-dir))
+  ;; activate it for all buffers
+  (setq-default save-place t)
+
+  ;; savehist keeps track of some history
+  (require 'savehist)
+  (setq savehist-additional-variables
+        ;; search entries
+        '(search ring regexp-search-ring)
+        ;; save every minute
+        savehist-autosave-interval 60
+        ;; keep the home clean
+        savehist-file (expand-file-name "savehist" savefile-dir))
+  (savehist-mode +1)
+
+  ;; enable narrowing commands
+  (put 'narrow-to-region 'disabled nil)
+  (put 'narrow-to-page 'disabled nil)
+  (put 'narrow-to-defun 'disabled nil)
+
+  ;; enabled change region case commands
+  (put 'upcase-region 'disabled nil)
+  (put 'downcase-region 'disabled nil)
+
+  ;; enable erase-buffer command
+  (put 'erase-buffer 'disabled nil)
+
+  (req-package-finish)
+#+END_SRC
