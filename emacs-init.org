@@ -150,37 +150,46 @@ more useful.
 #+BEGIN_SRC emacs-lisp
   ;; convenient line number showing
   (global-set-key [remap goto-line] 'goto-line-with-feedback)
-
+  
   ;; From better defaults
+  (bind-key "C-x C-f" 'helm-find-files)
   (bind-key "M-/" 'hippie-expand)
   (bind-key "C-s" 'isearch-forward-regexp)
   (bind-key "C-r" 'isearch-backward-regexp)
   (bind-key "C-M-s" 'isearch-forward)
   (bind-key "C-M-r" 'isearch-backward)
   (bind-key "C-x C-b" 'ibuffer)
-
+  (bind-key "C-:" 'eval-expression)
+  (bind-key "M-SPC" 'cycle-spacing)
+  (bind-key "C-c x" 'sunrise-cd)
+  (bind-key "C-c X" 'sunrise)
+  (bind-key "C-c t" 'toggle-window-split)
+  (bind-key "C-S-l" 'package-list-packages)
+  (bind-key "C-c q" 'auto-fill-mode)
+  (bind-key "M-'" 'next-error)
+  
   ;; Set Regexp Alignment
   (bind-key "C-x \\" 'align-regexp)
-
+  
   ;; Font size
   (bind-key "C-+" 'text-scale-increase)
   (bind-key "C--" 'text-scale-decrease)
-
+  
   ;; Indentation help
   (global-set-key (kbd "C-^") 'prelude-top-join-line)
-
+  
   ;; A complementary binding to the apropos-command (C-h a)
   (define-key 'help-command "A" 'apropos)
-
+  
   (bind-key "C-h C-f" 'find-function)
   (bind-key "C-h C-k" 'find-function-on-key)
   (bind-key "C-h C-v" 'find-variable)
   (bind-key "C-h C-l" 'find-library)
-
+  
   (global-set-key [remap kill-whole-line] 'prelude-kill-whole-line)
   (global-set-key [remap move-beginning-of-line]
                   'prelude-move-beginning-of-line)
-
+  
   ;; Activate occur easily inside isearch
   (define-key isearch-mode-map (kbd "C-o")
     (lambda () (interactive)
@@ -256,6 +265,39 @@ exiting.
       (fullframe ibuffer ibuffer-quit)))
 #+END_SRC
 
+*** Mykie
+
+Mykie is a command multiplexer, which can add other functions to a
+single keybind.
+
+#+BEGIN_SRC emacs-lisp
+  (req-package mykie
+    :config
+    (progn
+      (setq mykie:use-major-mode-key-override 'global)
+      (mykie:initialize)
+      (mykie:set-keys nil
+        "C-e"
+        :default (move-end-of-line 1)
+        :repeat  (end-of-buffer)
+        :C-u (beginning-of-buffer)
+        "C-S-n"
+        :default (next-line 4)
+        "C-S-p"
+        :default (previous-line 4)
+        "C-w"
+        :default (kill-region (mark) (point))
+        :minibuff (backward-kill-word 1))))
+#+END_SRC
+
+*** Switch-window
+
+Window switching, the visual way.
+
+#+BEGIN_SRC emacs-lisp
+  (req-package switch-window
+    :bind ("C-x o" . switch-window))
+#+END_SRC
 
 * Finish Requirements
 All done with  =req-package=.
