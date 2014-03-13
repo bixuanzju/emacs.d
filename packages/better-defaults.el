@@ -155,11 +155,11 @@
 (setq ido-use-faces nil)
 
 (req-package ido-ubiquitous
-  :init
+  :config
   (ido-ubiquitous-mode +1))
 
 (req-package flx-ido
-  :init
+  :config
   (flx-ido-mode +1))
 
 (provide 'better-defaults)

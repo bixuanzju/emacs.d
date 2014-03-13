@@ -62,11 +62,11 @@ Some quick essential customizations.
   ;; Add the personal packages directory to the load-path
   (add-to-list 'load-path (concat user-emacs-directory "packages/"))
 
-  ;; Start off with some sanity.
-  (require 'better-defaults)
-
   ;; Load elisp bits collected from everywhere
   (require 'elisp)
+
+  ;; Start off with some sanity.
+  (require 'better-defaults)
 
   ;; OSX specific settings
   (when (eq system-type 'darwin)
@@ -120,7 +120,7 @@ Some quick essential customizations.
 Set custom theme path and load theme
 #+BEGIN_SRC emacs-lisp
   (req-package zenburn-theme
-    :init
+    :config
     (load-theme 'zenburn t))
 #+END_SRC
 
@@ -151,21 +151,52 @@ more useful.
   ;; convenient line number showing
   (global-set-key [remap goto-line] 'goto-line-with-feedback)
 
+  ;; From better defaults
   (bind-key "M-/" 'hippie-expand)
   (bind-key "C-s" 'isearch-forward-regexp)
   (bind-key "C-r" 'isearch-backward-regexp)
   (bind-key "C-M-s" 'isearch-forward)
   (bind-key "C-M-r" 'isearch-backward)
+  (bind-key "C-x C-b" 'ibuffer)
+
+  ;; Set Regexp Alignment
+  (bind-key "C-x \\" 'align-regexp)
+
+  ;; Font size
+  (bind-key "C-+" 'text-scale-increase)
+  (bind-key "C--" 'text-scale-decrease)
+
+  ;; Indentation help
+  (global-set-key (kbd "C-^") 'prelude-top-join-line)
+
+  ;; A complementary binding to the apropos-command (C-h a)
+  (define-key 'help-command "A" 'apropos)
+
+  (bind-key "C-h C-f" 'find-function)
+  (bind-key "C-h C-k" 'find-function-on-key)
+  (bind-key "C-h C-v" 'find-variable)
+  (bind-key "C-h C-l" 'find-library)
+
+  (global-set-key [remap kill-whole-line] 'prelude-kill-whole-line)
+  (global-set-key [remap move-beginning-of-line]
+                  'prelude-move-beginning-of-line)
+
+  ;; Activate occur easily inside isearch
+  (define-key isearch-mode-map (kbd "C-o")
+    (lambda () (interactive)
+      (let ((case-fold-search isearch-case-fold-search))
+        (occur (if isearch-regexp
+                   isearch-string
+                 (regexp-quote isearch-string))))))
 #+END_SRC
 
 ** Key-chord
 
 #+BEGIN_SRC emacs-lisp
   (req-package key-chord
-    :init
-    (key-chord-mode +1)
     :config
     (progn
+      (key-chord-mode +1)
       (setq key-chord-two-keys-delay 0.05)
       (key-chord-define-global "jl" 'ace-jump-line-mode)
       (key-chord-define-global "JJ" 'prelude-switch-to-previous-buffer)
@@ -185,6 +216,47 @@ more useful.
   (unbind-key "C-o")
   (unbind-key "C-x f")
 #+END_SRC
+* Setups
+
+  All packages and modes are configured here.
+
+** Major Modes
+
+*** Magit
+
+[[https://github.com/magit/magit][Magit]] is the ultimate =git= interface for Emacs.
+
+#+BEGIN_SRC emacs-lisp
+  (req-package magit)
+#+END_SRC
+
+** Minor Modes
+
+*** Helm
+
+=helm-mini= is a part of [[https://github.com/emacs-helm/helm][Helm]] that shows current buffers and a list of
+recent files using =recentf=.  It is a great way to manage many open
+files.
+
+#+BEGIN_SRC emacs-lisp
+  (req-package helm
+    :require (helm-config helm-misc))
+#+END_SRC
+
+*** Fulframe
+
+Advice commands to execute fullscreen, restoring the window setup when
+exiting.
+
+#+BEGIN_SRC emacs-lisp
+  (req-package fullframe
+    :config
+    (progn
+      (fullframe magit-status magit-mode-quit-window)
+      (fullframe ibuffer ibuffer-quit)))
+#+END_SRC
+
+
 * Finish Requirements
 All done with  =req-package=.
 #+BEGIN_SRC emacs-lisp
