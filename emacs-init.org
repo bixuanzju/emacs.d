@@ -178,7 +178,7 @@ more useful.
   (bind-key "C--" 'text-scale-decrease)
   
   ;; Indentation help
-  (global-set-key (kbd "C-^") 'prelude-top-join-line)
+  (bind-key "C-^" 'prelude-top-join-line)
   
   ;; A complementary binding to the apropos-command (C-h a)
   (define-key 'help-command "A" 'apropos)
