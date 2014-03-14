@@ -456,7 +456,6 @@ keep pressing the key until it selects what you want.
           (expand-file-name  "projectile.cache" savefile-dir)))
 #+END_SRC
 
-
 *** Lispy
 
 [[https://github.com/abo-abo/lispy][Lispy]] implements various vi-like commands for navigating and editing
@@ -479,9 +478,9 @@ Lisp code.
                ("G" . special-lispy-goto)))
 #+END_SRC
 
-*** TODO Yasnippets
+*** Yasnippets
 
-Snippets are key.
+Snippets are keys.
 
 #+BEGIN_SRC emacs-lisp
   (req-package yasnippet
@@ -500,8 +499,16 @@ Snippets are key.
       (bind-key "<return>" 'yas-exit-all-snippets yas-keymap)))
 #+END_SRC
 
-*** TODO Undo-Tree
+*** Undo-Tree
 
+More natural undo or redo. Undo with =C-/= and redo with =C-?=.
+
+#+BEGIN_SRC emacs-lisp
+  (req-package undo-tree
+               :diminish (undo-tree-mode . "")
+               :config
+               (global-undo-tree-mode 1))
+#+END_SRC
 
 * Finish Requirements
 All done with  =req-package=.

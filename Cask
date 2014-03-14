@@ -40,6 +40,7 @@
 (depends-on "s")
 (depends-on "smart-mode-line")
 (depends-on "switch-window")
+(depends-on "undo-tree")
 (depends-on "use-package")
 (depends-on "yasnippet")
 (depends-on "zenburn-theme")
