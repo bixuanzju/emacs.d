@@ -152,9 +152,8 @@ more useful.
 #+BEGIN_SRC emacs-lisp
   ;; convenient line number showing
   (global-set-key [remap goto-line] 'goto-line-with-feedback)
-  
+
   ;; From better defaults
-  (bind-key "C-x C-f" 'helm-find-files)
   (bind-key "M-/" 'hippie-expand)
   (bind-key "C-s" 'isearch-forward-regexp)
   (bind-key "C-r" 'isearch-backward-regexp)
@@ -169,29 +168,29 @@ more useful.
   (bind-key "C-S-l" 'package-list-packages)
   (bind-key "C-c q" 'auto-fill-mode)
   (bind-key "M-'" 'next-error)
-  
+
   ;; Set Regexp Alignment
   (bind-key "C-x \\" 'align-regexp)
-  
+
   ;; Font size
   (bind-key "C-+" 'text-scale-increase)
   (bind-key "C--" 'text-scale-decrease)
-  
+
   ;; Indentation help
   (bind-key "C-^" 'prelude-top-join-line)
-  
+
   ;; A complementary binding to the apropos-command (C-h a)
   (define-key 'help-command "A" 'apropos)
-  
+
   (bind-key "C-h C-f" 'find-function)
   (bind-key "C-h C-k" 'find-function-on-key)
   (bind-key "C-h C-v" 'find-variable)
   (bind-key "C-h C-l" 'find-library)
-  
+
   (global-set-key [remap kill-whole-line] 'prelude-kill-whole-line)
   (global-set-key [remap move-beginning-of-line]
                   'prelude-move-beginning-of-line)
-  
+
   ;; Activate occur easily inside isearch
   (define-key isearch-mode-map (kbd "C-o")
     (lambda () (interactive)
@@ -202,6 +201,8 @@ more useful.
 #+END_SRC
 
 ** Key-chord
+
+Key-chord maps pairs of simultaneously pressed keys to commands.
 
 #+BEGIN_SRC emacs-lisp
   (req-package key-chord
@@ -238,7 +239,86 @@ more useful.
 [[https://github.com/magit/magit][Magit]] is the ultimate =git= interface for Emacs.
 
 #+BEGIN_SRC emacs-lisp
-  (req-package magit)
+  (req-package magit
+    :bind ("C-x g" . magit-status))
+#+END_SRC
+
+*** Lisp
+
+#+BEGIN_SRC emacs-lisp
+  ;; a great lisp coding hook
+  (defun prelude-lisp-coding-defaults ()
+    ;; (smartparens-strict-mode +1)
+    (rainbow-delimiters-mode +1)
+    (turn-on-prettify-symbols-mode))
+
+  (setq prelude-lisp-coding-hook 'prelude-lisp-coding-defaults)
+
+  ;; interactive modes don't need whitespace checks
+  (defun prelude-interactive-lisp-coding-defaults ()
+    ;; (smartparens-strict-mode +1)
+    (rainbow-delimiters-mode +1)
+    (whitespace-mode -1))
+
+  (setq prelude-interactive-lisp-coding-hook 'prelude-interactive-lisp-coding-defaults)
+#+END_SRC
+
+**** Emacs lisp
+
+#+BEGIN_SRC emacs-lisp
+  (req-package elisp-slime-nav
+    :diminish (elisp-slime-nav-mode . ""))
+  (req-package rainbow-delimiters)
+  (req-package eldoc
+    :diminish (eldoc-mode . ""))
+  
+  (defun prelude-recompile-elc-on-save ()
+    "Recompile your elc when saving an elisp file."
+    (add-hook 'after-save-hook
+              (lambda ()
+                (when (file-exists-p (byte-compile-dest-file buffer-file-name))
+                  (emacs-lisp-byte-compile)))
+              nil
+              t))
+  
+  (defun prelude-conditional-emacs-lisp-checker ()
+    "Don't check doc style in Emacs Lisp test files."
+    (let ((file-name (buffer-file-name)))
+      (when (and file-name (string-match-p ".*-tests?\\.el\\'" file-name))
+        (setq-local flycheck-checkers '(emacs-lisp)))))
+  
+  (defun prelude-emacs-lisp-mode-defaults ()
+    "Sensible defaults for `emacs-lisp-mode'."
+    (run-hooks 'prelude-lisp-coding-hook)
+    (turn-on-eldoc-mode)
+    (prelude-recompile-elc-on-save)
+    (rainbow-mode +1)
+    (setq mode-name "EL")
+    (add-hook 'eval-expression-minibuffer-setup-hook 'eldoc-mode)
+    (prelude-conditional-emacs-lisp-checker))
+  
+  (setq prelude-emacs-lisp-mode-hook 'prelude-emacs-lisp-mode-defaults)
+  
+  (add-hook 'emacs-lisp-mode-hook (lambda ()
+                                    (run-hooks 'prelude-emacs-lisp-mode-hook)))
+  
+  (add-to-list 'auto-mode-alist '("Cask\\'" . emacs-lisp-mode))
+  
+  ;; ielm is an interactive Emacs Lisp shell
+  (defun prelude-ielm-mode-defaults ()
+    "Sensible defaults for `ielm'."
+    (run-hooks 'prelude-interactive-lisp-coding-hook)
+    (turn-on-eldoc-mode))
+  
+  (setq prelude-ielm-mode-hook 'prelude-ielm-mode-defaults)
+  
+  (add-hook 'ielm-mode-hook (lambda ()
+                              (run-hooks 'prelude-ielm-mode-hook)))
+  
+  ;; enable elisp-slime-nav-mode
+  (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
+    (add-hook hook 'elisp-slime-nav-mode))
+  
 #+END_SRC
 
 ** Minor Modes
@@ -250,14 +330,14 @@ recent files using =recentf=.  It is a great way to manage many open
 files.
 
 #+BEGIN_SRC emacs-lisp
-  (req-package helm
-    :require (helm-config helm-misc))
+  (req-package helm-config
+    :require helm)
 #+END_SRC
 
 *** Fulframe
 
-Advice commands to execute fullscreen, restoring the window setup when
-exiting.
+[[https://github.com/tomterl/fullframe][Fullframe]] advises commands to execute fullscreen, restoring the window
+setup when exiting.
 
 #+BEGIN_SRC emacs-lisp
   (req-package fullframe
@@ -269,7 +349,7 @@ exiting.
 
 *** Mykie
 
-Mykie is a command multiplexer, which can add other functions to a
+[[https://github.com/yuutayamada/mykie-el][Mykie]] is a command multiplexer, which can add other functions to a
 single keybind.
 
 #+BEGIN_SRC emacs-lisp
@@ -294,11 +374,31 @@ single keybind.
 
 *** Switch-window
 
-Window switching, the visual way.
+[[https://github.com/dimitri/switch-win][Switch-window]] provides window switching, the visual way.
 
 #+BEGIN_SRC emacs-lisp
   (req-package switch-window
     :bind ("C-x o" . switch-window))
+#+END_SRC
+
+*** Diminish
+
+Move to setups for diminish and use =req-package= Removes minor modes
+from the mode line.  Can get back with =M-x RET diminish-undo=
+=diminish= is integrated with =req-package=.
+
+#+BEGIN_SRC emacs-lisp
+  (req-package diminish)
+#+END_SRC
+
+*** Rainbow mode
+
+=rainbow-mode= displays hexadecimal colors with the color they
+represent as their background.
+
+#+BEGIN_SRC emacs-lisp
+  (req-package rainbow-mode
+    :diminish (rainbow-mode . ""))
 #+END_SRC
 
 * Finish Requirements

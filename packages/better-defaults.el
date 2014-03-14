@@ -162,6 +162,10 @@
   :config
   (flx-ido-mode +1))
 
+(req-package ido-vertical-mode
+  :config
+  (ido-vertical-mode +1))
+
 (provide 'better-defaults)
 
 ;;; better-defaults.el ends here
