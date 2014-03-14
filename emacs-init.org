@@ -457,7 +457,7 @@ keep pressing the key until it selects what you want.
 #+END_SRC
 
 
-*** TODO Lispy
+*** Lispy
 
 [[https://github.com/abo-abo/lispy][Lispy]] implements various vi-like commands for navigating and editing
 Lisp code.
