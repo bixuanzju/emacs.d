@@ -88,10 +88,6 @@
                           'kill-region
                         'backward-kill-word)))
 
-;; after deleting a tag, indent properly
-;; (defadvice sgml-delete-tag (after reindent activate)
-;;   (indent-region (point-min) (point-max)))
-
 ;; (defmacro after-load (feature &rest body)
 ;;   "After FEATURE is loaded, evaluate BODY."
 ;;   (declare (indent defun))
@@ -207,6 +203,23 @@ point reaches the beginning or end of the buffer, stop there."
   "Join the current line with the line beneath it."
   (interactive)
   (delete-indentation 1))
+
+(defun prelude-indent-buffer ()
+  "Indent the currently visited buffer."
+  (interactive)
+  (indent-region (point-min) (point-max)))
+
+(defun prelude-untabify-buffer ()
+  "Remove all tabs from the current buffer."
+  (interactive)
+  (untabify (point-min) (point-max)))
+
+(defun prelude-cleanup-buffer ()
+  "Perform a bunch of operations on the whitespace content of a buffer."
+  (interactive)
+  (prelude-indent-buffer)
+  (prelude-untabify-buffer)
+  (whitespace-cleanup))
 
 (provide 'elisp)
 

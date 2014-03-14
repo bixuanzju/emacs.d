@@ -53,44 +53,45 @@ Some quick essential customizations.
   ;; Turn off mouse interface early in startup to avoid momentary display
   (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
   (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-  
+
   (defvar savefile-dir (expand-file-name "savefile" user-emacs-directory)
     "This folder stores all the automatically generated save/history-files.")
-  
+
   (unless (file-exists-p savefile-dir)
     (make-directory savefile-dir))
-  
+
   ;; Add the personal packages directory to the load-path
   (add-to-list 'load-path (concat user-emacs-directory "packages/"))
-  
+
   ;; Load elisp bits collected from everywhere
   (require 'elisp)
-  
+
   ;; Start off with some sanity.
   (require 'better-defaults)
-  
+
   ;; OSX specific settings
   (when (eq system-type 'darwin)
     (require 'cocoa-emacs-default))
-  
+
   ;; No splash screen please
   (setq inhibit-startup-screen t)
-  
+
   ;; Keep emacs Custom-settings in separate file
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
   (load custom-file)
-  
-  ;; Write backup files to own directory
+
+  ;; Store all backup and autosave files in the tmp dir
   (setq backup-directory-alist
-        `(("." . ,(expand-file-name
-                   (concat user-emacs-directory "backups")))))
-  
+        `((".*" . ,temporary-file-directory)))
+  (setq auto-save-file-name-transforms
+        `((".*" ,temporary-file-directory t)))
+
   ;; saveplace remembers your location in a file when saving files
   (require 'saveplace)
   (setq save-place-file (expand-file-name "saveplace" savefile-dir))
   ;; activate it for all buffers
   (setq-default save-place t)
-  
+
   ;; savehist keeps track of some history
   (require 'savehist)
   (setq savehist-additional-variables
@@ -101,16 +102,16 @@ Some quick essential customizations.
         ;; keep the home clean
         savehist-file (expand-file-name "savehist" savefile-dir))
   (savehist-mode +1)
-  
+
   ;; enable narrowing commands
   (put 'narrow-to-region 'disabled nil)
   (put 'narrow-to-page 'disabled nil)
   (put 'narrow-to-defun 'disabled nil)
-  
+
   ;; enabled change region case commands
   (put 'upcase-region 'disabled nil)
   (put 'downcase-region 'disabled nil)
-  
+
   ;; enable erase-buffer command
   (put 'erase-buffer 'disabled nil)
 #+END_SRC
@@ -167,6 +168,7 @@ more useful.
   (bind-key "C-S-l" 'package-list-packages)
   (bind-key "C-c q" 'auto-fill-mode)
   (bind-key "M-'" 'next-error)
+  (bind-key "C-c n" 'prelude-cleanup-buffer)
 
   ;; Set Regexp Alignment
   (bind-key "C-x \\" 'align-regexp)
@@ -255,13 +257,13 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
                   (emacs-lisp-byte-compile)))
               nil
               t))
-  
+
   (defun prelude-conditional-emacs-lisp-checker ()
     "Don't check doc style in Emacs Lisp test files."
     (let ((file-name (buffer-file-name)))
       (when (and file-name (string-match-p ".*-tests?\\.el\\'" file-name))
         (setq-local flycheck-checkers '(emacs-lisp)))))
-  
+
   (defun prelude-emacs-lisp-mode-defaults ()
     "Sensible defaults for `emacs-lisp-mode'."
     (turn-on-eldoc-mode)
@@ -271,25 +273,25 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
     (turn-on-prettify-symbols-mode)
     (add-hook 'eval-expression-minibuffer-setup-hook 'eldoc-mode)
     (prelude-conditional-emacs-lisp-checker))
-  
+
   (setq prelude-emacs-lisp-mode-hook 'prelude-emacs-lisp-mode-defaults)
-  
+
   (add-hook 'emacs-lisp-mode-hook (lambda ()
                                     (run-hooks 'prelude-emacs-lisp-mode-hook)))
-  
+
   ;; ielm is an interactive Emacs Lisp shell
   (defun prelude-ielm-mode-defaults ()
     "Sensible defaults for `ielm'."
     (whitespace-mode -1)
     (turn-on-eldoc-mode))
-  
+
   (setq prelude-ielm-mode-hook 'prelude-ielm-mode-defaults)
-  
+
   (add-hook 'ielm-mode-hook (lambda ()
                               (run-hooks 'prelude-ielm-mode-hook)))
-  
+
   (add-to-list 'auto-mode-alist '("Cask\\'" . emacs-lisp-mode))
-  
+
 #+END_SRC
 
 ** Minor Modes
@@ -399,7 +401,25 @@ keep pressing the key until it selects what you want.
     :bind ("C-=" . er/expand-region))
 #+END_SRC
 
-*** TODO Whitespace
+*** Whitespace
+
+#+BEGIN_SRC emacs-lisp
+  ;; whitespace-mode config
+  (require 'whitespace)
+  (setq whitespace-line-column 80) ;; limit line length
+  (setq whitespace-style '(face tabs trailing lines-tail))
+
+  (defun prelude-enable-whitespace ()
+    "Enable `whitespace-mode' if `prelude-whitespace' is not nil."
+    (add-hook 'before-save-hook 'whitespace-cleanup nil t)
+    (whitespace-mode +1))
+
+  (add-hook 'text-mode-hook 'prelude-enable-whitespace)
+
+#+END_SRC
+
+
+
 * Finish Requirements
 All done with  =req-package=.
 #+BEGIN_SRC emacs-lisp

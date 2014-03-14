@@ -58,7 +58,7 @@
 ;; buffer name (if the buffer isn't visiting a file)
 (when window-system
   (setq frame-title-format
-        '("" invocation-name " Jeremy - "
+        '("" " Jeremy - "
           (:eval (if (buffer-file-name)
                      (abbreviate-file-name (buffer-file-name))
                    "%b")))))
