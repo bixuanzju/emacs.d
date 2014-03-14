@@ -245,33 +245,9 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
 
 *** Lisp
 
-#+BEGIN_SRC emacs-lisp
-  ;; a great lisp coding hook
-  (defun prelude-lisp-coding-defaults ()
-    ;; (smartparens-strict-mode +1)
-    (rainbow-delimiters-mode +1)
-    (turn-on-prettify-symbols-mode))
-
-  (setq prelude-lisp-coding-hook 'prelude-lisp-coding-defaults)
-
-  ;; interactive modes don't need whitespace checks
-  (defun prelude-interactive-lisp-coding-defaults ()
-    ;; (smartparens-strict-mode +1)
-    (rainbow-delimiters-mode +1)
-    (whitespace-mode -1))
-
-  (setq prelude-interactive-lisp-coding-hook 'prelude-interactive-lisp-coding-defaults)
-#+END_SRC
-
 **** Emacs lisp
 
 #+BEGIN_SRC emacs-lisp
-  (req-package elisp-slime-nav
-    :diminish (elisp-slime-nav-mode . ""))
-  (req-package rainbow-delimiters)
-  (req-package eldoc
-    :diminish (eldoc-mode . ""))
-  
   (defun prelude-recompile-elc-on-save ()
     "Recompile your elc when saving an elisp file."
     (add-hook 'after-save-hook
@@ -289,11 +265,11 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
   
   (defun prelude-emacs-lisp-mode-defaults ()
     "Sensible defaults for `emacs-lisp-mode'."
-    (run-hooks 'prelude-lisp-coding-hook)
     (turn-on-eldoc-mode)
+    (diminish 'eldoc-mode "")
     (prelude-recompile-elc-on-save)
-    (rainbow-mode +1)
     (setq mode-name "EL")
+    (turn-on-prettify-symbols-mode)
     (add-hook 'eval-expression-minibuffer-setup-hook 'eldoc-mode)
     (prelude-conditional-emacs-lisp-checker))
   
@@ -302,12 +278,10 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
   (add-hook 'emacs-lisp-mode-hook (lambda ()
                                     (run-hooks 'prelude-emacs-lisp-mode-hook)))
   
-  (add-to-list 'auto-mode-alist '("Cask\\'" . emacs-lisp-mode))
-  
   ;; ielm is an interactive Emacs Lisp shell
   (defun prelude-ielm-mode-defaults ()
     "Sensible defaults for `ielm'."
-    (run-hooks 'prelude-interactive-lisp-coding-hook)
+    (whitespace-mode -1)
     (turn-on-eldoc-mode))
   
   (setq prelude-ielm-mode-hook 'prelude-ielm-mode-defaults)
@@ -315,9 +289,7 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
   (add-hook 'ielm-mode-hook (lambda ()
                               (run-hooks 'prelude-ielm-mode-hook)))
   
-  ;; enable elisp-slime-nav-mode
-  (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
-    (add-hook hook 'elisp-slime-nav-mode))
+  (add-to-list 'auto-mode-alist '("Cask\\'" . emacs-lisp-mode))
   
 #+END_SRC
 
@@ -381,16 +353,6 @@ single keybind.
     :bind ("C-x o" . switch-window))
 #+END_SRC
 
-*** Diminish
-
-Move to setups for diminish and use =req-package= Removes minor modes
-from the mode line.  Can get back with =M-x RET diminish-undo=
-=diminish= is integrated with =req-package=.
-
-#+BEGIN_SRC emacs-lisp
-  (req-package diminish)
-#+END_SRC
-
 *** Rainbow mode
 
 =rainbow-mode= displays hexadecimal colors with the color they
@@ -398,7 +360,34 @@ represent as their background.
 
 #+BEGIN_SRC emacs-lisp
   (req-package rainbow-mode
-    :diminish (rainbow-mode . ""))
+    :diminish (rainbow-mode . "")
+    :config
+    (add-hook 'prog-mode-hook 'rainbow-mode))
+#+END_SRC
+
+*** Rainbow-delimiter
+
+[[https://github.com/jlr/rainbow-delimiters][Rainbow Delimiters]] is a “rainbow parentheses”-like mode which
+highlights parentheses, brackets, and braces according to their depth
+
+#+BEGIN_SRC emacs-lisp
+  (req-package rainbow-delimiters
+    :config
+    (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+#+END_SRC
+
+*** Elisp-slime-nav
+
+[[https://github.com/purcell/elisp-slime-nav][Elisp-slime-nav]] allows very convenient navigation to the symbol at
+point (using =M-.=), and the ability to pop back to previous marks
+(using =M-,=).
+
+#+BEGIN_SRC emacs-lisp
+  (req-package elisp-slime-nav
+    :diminish (elisp-slime-nav-mode . "")
+    :config
+    (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
+      (add-hook hook 'elisp-slime-nav-mode)))
 #+END_SRC
 
 * Finish Requirements
