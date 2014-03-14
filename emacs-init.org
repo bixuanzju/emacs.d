@@ -481,6 +481,25 @@ Lisp code.
 
 *** TODO Yasnippets
 
+Snippets are key.
+
+#+BEGIN_SRC emacs-lisp
+  (req-package yasnippet
+    :idle
+    (yas-global-mode 1)
+    :diminish (yas-minor-mode . "")
+    :config
+    (progn
+      (setq yas-snippet-dirs '("~/.emacs.d/snippets/"))
+      (add-to-list 'auto-mode-alist '("\\.yasnippet$" . snippet-mode))
+      (setq yas-verbosity 1)
+       ;; No need to be so verbose
+      (setq yas-wrap-around-region t)
+      ;; Wrap around region
+      (setq-default yas/prompt-functions '(yas/ido-prompt))
+      (bind-key "<return>" 'yas-exit-all-snippets yas-keymap)))
+#+END_SRC
+
 *** TODO Undo-Tree
 
 
