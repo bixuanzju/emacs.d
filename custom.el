@@ -40,4 +40,6 @@
    ((t (:background "steelblue" :foreground "white"))))
  '(cursor ((t (:background "gray78" :foreground "#DCDCCC"))))
  '(shm-current-face ((t (:background "gray22"))))
- '(sr-active-path-face ((t (:weight bold :height 180)))))
+ '(sr-active-path-face ((t (:weight bold :height 180))))
+ '(flyspell-incorrect ((t (:inherit nil :underline (:color "yellow" :style wave)))))
+ '(flyspell-duplicate ((t nil))))

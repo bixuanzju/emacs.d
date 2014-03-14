@@ -169,6 +169,7 @@ more useful.
   (bind-key "C-c q" 'auto-fill-mode)
   (bind-key "M-'" 'next-error)
   (bind-key "C-c n" 'prelude-cleanup-buffer)
+  (bind-key "C-M-h" 'backward-kill-word)
 
   ;; Set Regexp Alignment
   (bind-key "C-x \\" 'align-regexp)
@@ -546,6 +547,41 @@ action to work.
 #+BEGIN_SRC emacs-lisp
   (req-package shell-pop)
 #+END_SRC
+
+*** Flyspell
+
+Enable spell-checking in Emacs.
+
+#+BEGIN_SRC emacs-lisp
+  (req-package flyspell
+    :diminish (flyspell-mode . "")
+    :init
+    (progn
+      ;; Enable spell check in only plaintext
+      (add-hook 'text-mode-hook 'flyspell-mode)
+      ;; Enable spell check in comments
+      (add-hook 'prog-mode-hook 'flyspell-prog-mode))
+    :config
+    (progn
+      (setq flyspell-issue-welcome-flag nil)
+      (setq flyspell-issue-message-flag nil)
+      (setq ispell-program-name "aspell" ; use aspell instead of ispell
+            ispell-extra-args '("--sug-mode=ultra"))
+      ;; Make spell check on right click.
+      (define-key flyspell-mouse-map [down-mouse-3] 'flyspell-correct-word)
+      (define-key flyspell-mouse-map [mouse-3] 'undefined)))
+
+#+END_SRC
+
+**** Helpful Default Keybindings
+=C-.= corrects word at point.  =C-,​= to jump to next misspelled word.
+
+
+*** TODO Flycheck
+
+*** TODO Pop Win
+
+*** TODO Multiple Cursors
 
 * Finish Requirements
 All done with  =req-package=.
