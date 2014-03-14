@@ -11,6 +11,7 @@
 (depends-on "elisp-slime-nav")
 (depends-on "epl")
 (depends-on "exec-path-from-shell")
+(depends-on "expand-region")
 (depends-on "f")
 (depends-on "flx")
 (depends-on "flx-ido")

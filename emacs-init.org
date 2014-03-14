@@ -51,47 +51,46 @@ Some quick essential customizations.
 
 #+BEGIN_SRC emacs-lisp
   ;; Turn off mouse interface early in startup to avoid momentary display
-  (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
   (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
   (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-
+  
   (defvar savefile-dir (expand-file-name "savefile" user-emacs-directory)
     "This folder stores all the automatically generated save/history-files.")
-
+  
   (unless (file-exists-p savefile-dir)
     (make-directory savefile-dir))
-
+  
   ;; Add the personal packages directory to the load-path
   (add-to-list 'load-path (concat user-emacs-directory "packages/"))
-
+  
   ;; Load elisp bits collected from everywhere
   (require 'elisp)
-
+  
   ;; Start off with some sanity.
   (require 'better-defaults)
-
+  
   ;; OSX specific settings
   (when (eq system-type 'darwin)
     (require 'cocoa-emacs-default))
-
+  
   ;; No splash screen please
   (setq inhibit-startup-screen t)
-
+  
   ;; Keep emacs Custom-settings in separate file
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
   (load custom-file)
-
+  
   ;; Write backup files to own directory
   (setq backup-directory-alist
         `(("." . ,(expand-file-name
                    (concat user-emacs-directory "backups")))))
-
+  
   ;; saveplace remembers your location in a file when saving files
   (require 'saveplace)
   (setq save-place-file (expand-file-name "saveplace" savefile-dir))
   ;; activate it for all buffers
   (setq-default save-place t)
-
+  
   ;; savehist keeps track of some history
   (require 'savehist)
   (setq savehist-additional-variables
@@ -102,16 +101,16 @@ Some quick essential customizations.
         ;; keep the home clean
         savehist-file (expand-file-name "savehist" savefile-dir))
   (savehist-mode +1)
-
+  
   ;; enable narrowing commands
   (put 'narrow-to-region 'disabled nil)
   (put 'narrow-to-page 'disabled nil)
   (put 'narrow-to-defun 'disabled nil)
-
+  
   ;; enabled change region case commands
   (put 'upcase-region 'disabled nil)
   (put 'downcase-region 'disabled nil)
-
+  
   ;; enable erase-buffer command
   (put 'erase-buffer 'disabled nil)
 #+END_SRC
@@ -390,6 +389,17 @@ point (using =M-.=), and the ability to pop back to previous marks
       (add-hook hook 'elisp-slime-nav-mode)))
 #+END_SRC
 
+*** Expand-region
+
+[[https://github.com/magnars/expand-region.el][Expand-region]] increases the selected region by semantic units. Just
+keep pressing the key until it selects what you want.
+
+#+BEGIN_SRC emacs-lisp
+  (req-package expand-region
+    :bind ("C-=" . er/expand-region))
+#+END_SRC
+
+*** TODO Whitespace
 * Finish Requirements
 All done with  =req-package=.
 #+BEGIN_SRC emacs-lisp
