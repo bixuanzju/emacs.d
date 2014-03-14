@@ -66,6 +66,10 @@ Some quick essential customizations.
   ;; Load elisp bits collected from everywhere
   (require 'elisp)
 
+  ;; Keep emacs custom-settings in separate file
+  (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+  (load custom-file)
+
   ;; Start off with some sanity.
   (require 'better-defaults)
 
@@ -75,10 +79,6 @@ Some quick essential customizations.
 
   ;; No splash screen please
   (setq inhibit-startup-screen t)
-
-  ;; Keep emacs Custom-settings in separate file
-  (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-  (load custom-file)
 
   ;; Store all backup and autosave files in the tmp dir
   (setq backup-directory-alist
@@ -309,6 +309,12 @@ favorite feature is that pressing =F= will open all marked files.
 
 ** Minor Modes
 
+*** Pallet
+
+#+BEGIN_SRC emacs-lisp
+  (req-package pallet)
+#+END_SRC
+
 *** Helm
 
 =helm-mini= is a part of [[https://github.com/emacs-helm/helm][Helm]] that shows current buffers and a list of
@@ -508,6 +514,37 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
                :diminish (undo-tree-mode . "")
                :config
                (global-undo-tree-mode 1))
+#+END_SRC
+
+*** Company
+
+[[https://github.com/company-mode/company-mode][Company]] is a code completion framework for Emacs. The name stands for
+"complete anything".
+
+#+BEGIN_SRC emacs-lisp
+  (req-package company
+    :init
+    (add-hook 'after-init-hook #'global-company-mode)
+    :diminish (company-mode . "")
+    :config
+    (progn
+      ;; repomacs problematic
+      ;; (delq 'company-ropemacs 'company-backends)
+      (setq company-idle-delay .3)
+      (setq company-dabbrev-ignore-case nil)
+      (setq company-dabbrev-downcase nil)
+      (eval-after-load 'company-dabbrev-code
+        '(dolist (mode '(coq-mode oz-mode))
+           (add-to-list 'company-dabbrev-code-modes mode)))))
+#+END_SRC
+
+*** Shell-pop
+
+[[https://github.com/kyagi/shell-pop-el][Shell-pop.el]] helps you to use shell easily on Emacs. Only one key
+action to work.
+
+#+BEGIN_SRC emacs-lisp
+  (req-package shell-pop)
 #+END_SRC
 
 * Finish Requirements
