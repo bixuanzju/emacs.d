@@ -471,6 +471,19 @@
         (bind-key "M-i" 'helm-multi-swoop-all-from-helm-swoop helm-swoop-map))
     #+END_SRC
 
+*** Helm-descbinds
+
+    [[https://github.com/emacs-helm/helm-descbinds][Helm Descbinds]] provides an interface to emacs' =describe-bindings=
+    making the currently active key bindings interactively searchable
+    with helm.
+
+    #+BEGIN_SRC emacs-lisp
+      (req-package helm-descbinds
+        :require helm
+        :config
+        (helm-descbinds-mode 1))
+    #+END_SRC
+
 *** Fulframe
 
     [[https://github.com/tomterl/fullframe][Fullframe]] advises commands to execute fullscreen, restoring the window
@@ -523,7 +536,7 @@
 
     #+BEGIN_SRC emacs-lisp
       (req-package rainbow-mode
-        :diminish rainbow-mode ""
+        :diminish (rainbow-mode . "")
         :config
         (add-hook 'prog-mode-hook 'rainbow-mode))
     #+END_SRC
@@ -547,7 +560,7 @@
 
     #+BEGIN_SRC emacs-lisp
       (req-package elisp-slime-nav
-        :diminish elisp-slime-nav-mode ""
+        :diminish (elisp-slime-nav-mode . "")
         :config
         (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
           (add-hook hook 'elisp-slime-nav-mode)))
@@ -570,7 +583,7 @@
     #+BEGIN_SRC emacs-lisp
 
       (req-package whitespace
-        :diminish whitespace-mode ""
+        :diminish (whitespace-mode . "")
         :config
         (setq whitespace-line-column 80) ;; limit line length
         (setq whitespace-style '(face tabs trailing lines-tail))
@@ -639,7 +652,7 @@
       (req-package yasnippet
         :idle
         (yas-global-mode 1)
-        :diminish yas-minor-mode ""
+        :diminish (yas-minor-mode . "")
         :config
         (setq yas-snippet-dirs '("~/.emacs.d/snippets/"))
         (add-to-list 'auto-mode-alist '("\\.yasnippet$" . snippet-mode))
@@ -657,7 +670,7 @@
 
     #+BEGIN_SRC emacs-lisp
       (req-package undo-tree
-        :diminish undo-tree-mode ""
+        :diminish (undo-tree-mode . "")
         :config
         (global-undo-tree-mode 1))
     #+END_SRC
@@ -671,7 +684,7 @@
       (req-package company
         :init
         (add-hook 'after-init-hook #'global-company-mode)
-        :diminish company-mode ""
+        :diminish (company-mode . "")
         :config
         ;; repomacs problematic
         ;; (delq 'company-ropemacs 'company-backends)
@@ -698,7 +711,7 @@
 
     #+BEGIN_SRC emacs-lisp
       (req-package flyspell
-        :diminish flyspell-mode ""
+        :diminish (flyspell-mode . "")
         :init
         (progn
           ;; Enable spell check in only plaintext
@@ -775,7 +788,7 @@
 
     #+BEGIN_SRC emacs-lisp
       (req-package guide-key
-        :diminish guide-key-mode ""
+        :diminish (guide-key-mode . "")
         :config
         (guide-key-mode 1)
         (setq guide-key/guide-key-sequence
@@ -786,6 +799,28 @@
                 ("register"  . font-lock-type-face))))
     #+END_SRC
 
+*** Reveal-in-finder
+
+    Open file in Finder
+
+    #+BEGIN_SRC emacs-lisp
+      (req-package reveal-in-finder
+        :if (eq system-type 'darwin)
+        :bind
+        ("C-c o" . reveal-in-finder))
+    #+END_SRC
+
+*** Lexbind-mode
+
+    [[https://github.com/spacebat/lexbind-mode][Lexbind-mode]] is an Emacs minor mode to display the value of the
+    lexical-binding variable which determines the behaviour of
+    variable binding forms in Emacs Lisp.
+
+    #+BEGIN_SRC emacs-lisp
+      (req-package lexbind-mode
+        :config
+        (add-hook 'emacs-lisp-mode-hook 'lexbind-mode))
+    #+END_SRC
 
 
 * Finish Requirements
