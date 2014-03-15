@@ -1,5 +1,3 @@
-#+OPTIONS: toc:2
-
 * Emacs Org Configuration
 
   This file is tangled using =org-babel-load-file=. What this does is

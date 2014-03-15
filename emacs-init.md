@@ -2,7 +2,15 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#sec-1">1. Emacs Org Configuration</a></li>
+<li><a href="#sec-1">1. Emacs Org Configuration</a>
+<ul>
+<li>
+<ul>
+<li><a href="#sec-1-0-1">1.0.1. Credits:</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a href="#sec-2">2. Package Management</a>
 <ul>
 <li><a href="#sec-2-1">2.1. Cask</a></li>
@@ -31,15 +39,58 @@
 </li>
 <li><a href="#sec-7">7. Setups</a>
 <ul>
-<li><a href="#sec-7-1">7.1. Major Modes</a></li>
-<li><a href="#sec-7-2">7.2. Minor Modes</a></li>
+<li><a href="#sec-7-1">7.1. Major Modes</a>
+<ul>
+<li><a href="#sec-7-1-1">7.1.1. Magit</a></li>
+<li><a href="#sec-7-1-2">7.1.2. Lisp</a></li>
+<li><a href="#sec-7-1-3">7.1.3. LaTex</a></li>
+<li><a href="#sec-7-1-4">7.1.4. Org Mode</a></li>
+<li><a href="#sec-7-1-5">7.1.5. Dired and dired+</a></li>
+<li><a href="#sec-7-1-6">7.1.6. <span class="todo TODO">TODO</span> Scala-mode</a></li>
+<li><a href="#sec-7-1-7">7.1.7. <span class="todo TODO">TODO</span> Geiser/Scheme</a></li>
+<li><a href="#sec-7-1-8">7.1.8. <span class="todo TODO">TODO</span> Markdown</a></li>
+<li><a href="#sec-7-1-9">7.1.9. Eshell</a></li>
+</ul>
+</li>
+<li><a href="#sec-7-2">7.2. Minor Modes</a>
+<ul>
+<li><a href="#sec-7-2-1">7.2.1. Pallet</a></li>
+<li><a href="#sec-7-2-2">7.2.2. Wgrep</a></li>
+<li><a href="#sec-7-2-3">7.2.3. Helm</a></li>
+<li><a href="#sec-7-2-4">7.2.4. Helm-swoop</a></li>
+<li><a href="#sec-7-2-5">7.2.5. Helm-descbinds</a></li>
+<li><a href="#sec-7-2-6">7.2.6. Fulframe</a></li>
+<li><a href="#sec-7-2-7">7.2.7. Mykie</a></li>
+<li><a href="#sec-7-2-8">7.2.8. Switch-window</a></li>
+<li><a href="#sec-7-2-9">7.2.9. Rainbow mode</a></li>
+<li><a href="#sec-7-2-10">7.2.10. Rainbow-delimiter</a></li>
+<li><a href="#sec-7-2-11">7.2.11. Elisp-slime-nav</a></li>
+<li><a href="#sec-7-2-12">7.2.12. Expand-region</a></li>
+<li><a href="#sec-7-2-13">7.2.13. Whitespace</a></li>
+<li><a href="#sec-7-2-14">7.2.14. Ag</a></li>
+<li><a href="#sec-7-2-15">7.2.15. Projectile</a></li>
+<li><a href="#sec-7-2-16">7.2.16. Lispy</a></li>
+<li><a href="#sec-7-2-17">7.2.17. Yasnippets</a></li>
+<li><a href="#sec-7-2-18">7.2.18. Undo-Tree</a></li>
+<li><a href="#sec-7-2-19">7.2.19. Company</a></li>
+<li><a href="#sec-7-2-20">7.2.20. Shell-pop</a></li>
+<li><a href="#sec-7-2-21">7.2.21. Flyspell</a></li>
+<li><a href="#sec-7-2-22">7.2.22. Flycheck</a></li>
+<li><a href="#sec-7-2-23">7.2.23. Pop Win</a></li>
+<li><a href="#sec-7-2-24">7.2.24. Multiple Cursors</a></li>
+<li><a href="#sec-7-2-25">7.2.25. Move-text</a></li>
+<li><a href="#sec-7-2-26">7.2.26. Guide-key</a></li>
+<li><a href="#sec-7-2-27">7.2.27. Reveal-in-finder</a></li>
+<li><a href="#sec-7-2-28">7.2.28. Eyebrowse</a></li>
+<li><a href="#sec-7-2-29">7.2.29. Lexbind-mode</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#sec-8">8. Finish Requirements</a></li>
 </ul>
 </div>
 </div>
-
 
 # Emacs Org Configuration
 
