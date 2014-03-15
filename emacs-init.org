@@ -403,6 +403,7 @@
       (req-package dired+)
     #+END_SRC
 
+*** TODO Scala-mode
 *** TODO Geiser/Scheme
 
 *** TODO Markdown
@@ -808,6 +809,20 @@
         :if (eq system-type 'darwin)
         :bind
         ("C-c o" . reveal-in-finder))
+    #+END_SRC
+
+*** Eyebrowse
+
+    [[https://github.com/wasamasa/eyebrowse][Eyebrowse]] is a global minor mode for Emacs that allows you to
+    manage your window configurations in a simple manner. It displays
+    their current state in the modeline by default.
+
+    #+BEGIN_SRC emacs-lisp
+      (req-package eyebrowse
+        :diminish ""
+        :config
+        (eyebrowse-mode t)
+        (setq eyebrowse-wrap-around-p t))
     #+END_SRC
 
 *** Lexbind-mode
