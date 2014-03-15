@@ -576,10 +576,34 @@ Enable spell-checking in Emacs.
 **** Helpful Default Keybindings
 =C-.= corrects word at point.  =C-,​= to jump to next misspelled word.
 
+*** Flycheck
 
-*** TODO Flycheck
+A great syntax checker.
 
-*** TODO Pop Win
+#+BEGIN_SRC emacs-lisp
+  (req-package flycheck
+    :bind ("C-c L" . flycheck-list-errors)
+    :init
+    (if (fboundp 'global-flycheck-mode)
+          (global-flycheck-mode +1)
+        (add-hook 'prog-mode-hook 'flycheck-mode))
+    :config
+    (progn
+      ;; disable the annoying doc checker
+      (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+      (setq flycheck-indication-mode 'left-fringe)
+      (setq flycheck-completion-system 'ido)))
+#+END_SRC
+
+*** Pop Win
+
+[[https://github.com/m2ym/popwin-el][popwin]] is used to manage the size of "popup" buffers.
+
+#+BEGIN_SRC emacs-lisp
+  (req-package popwin
+    :config
+    (popwin-mode 1))
+#+END_SRC
 
 *** TODO Multiple Cursors
 
