@@ -1,4 +1,4 @@
 My Emacs Directory
 =================
 
-See [this](./emacs-init.org) file for more information.
+See [this](./emacs-init.md) file for more information.
