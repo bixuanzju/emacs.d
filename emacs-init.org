@@ -297,7 +297,48 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
 
 *** TODO LaTex
 
-*** TODO Org Mode
+*** Org Mode
+
+If you are not using it, you need to start.
+
+#+BEGIN_SRC emacs-lisp
+  (req-package org
+    :config
+    (progn
+      (require 'ox-md)
+      (require 'ox-latex)
+      (require 'org-bullets)
+      ;; Show org-mode bullets as UTF-8 characters.
+      (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+      ;; Fontify org-mode code blocks
+      (setq org-src-fontify-natively t)
+
+      (setq org-todo-keyword-faces
+             '(("TODO" . (:foreground "green" :weight bold))
+               ("NEXT" :foreground "blue" :weight bold)
+               ("WAITING" :foreground "orange" :weight bold)
+               ("HOLD" :foreground "magenta" :weight bold)
+               ("CANCELLED" :foreground "forest green" :weight bold)))
+
+      (setq org-enforce-todo-dependencies t)
+      (setq org-src-tab-acts-natively t)
+      (setq org-src-window-setup 'current-window)
+
+      ;; set up latex
+      (setq org-latex-create-formula-image-program 'imagemagick)
+
+      ;; Add minted to the defaults packages to include when exporting.
+      (add-to-list 'org-latex-packages-alist '("" "minted"))
+
+      ;; Tell the latex export to use the minted package for source
+      ;; code coloration.
+      (setq org-latex-listings 'minted)
+      ;; Let the exporter use the -shell-escape option to let latex
+      ;; execute external programs.
+      (setq org-latex-pdf-process
+            '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))))
+#+END_SRC
 
 *** dired+
 
@@ -316,6 +357,16 @@ favorite feature is that pressing =F= will open all marked files.
   (req-package pallet)
 #+END_SRC
 
+*** Wgrep
+
+[[https://github.com/mhayashi1120/Emacs-wgrep][Wgrep]] allows you to edit a grep buffer and apply those changes to the
+file buffer.
+
+#+BEGIN_SRC emacs-lisp
+  (req-package wgrep-ag
+    :require wgrep)
+#+END_SRC
+
 *** Helm
 
 =helm-mini= is a part of [[https://github.com/emacs-helm/helm][Helm]] that shows current buffers and a list of
@@ -323,8 +374,10 @@ recent files using =recentf=.  It is a great way to manage many open
 files.
 
 #+BEGIN_SRC emacs-lisp
-  (req-package helm-config
-    :require helm)
+  (req-package helm
+    :init
+    (require 'helm-config)
+    :bind ("C-x C-f" . helm-find-files))
 #+END_SRC
 
 *** Fulframe
@@ -605,7 +658,17 @@ A great syntax checker.
     (popwin-mode 1))
 #+END_SRC
 
-*** TODO Multiple Cursors
+*** Multiple Cursors
+
+[[https://github.com/emacsmirror/multiple-cursors][Multiple Cursors]] brings you seemingly unlimited power.
+
+#+BEGIN_SRC emacs-lisp
+  (req-package multiple-cursors
+    :bind (("C->" . mc/mark-next-like-this)
+           ("C-<" . mc/mark-previous-like-this)
+           ("C-c C-<" . mc/mark-all-like-this)
+           ("C-c C->" . mc/mark-more-like-this-extended)))
+#+END_SRC
 
 * Finish Requirements
 All done with  =req-package=.
