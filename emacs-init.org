@@ -382,18 +382,38 @@
                 '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))))
     #+END_SRC
 
-*** dired+
+*** Dired and dired+
 
     Dired Plus is an extension to the =dired= file manager in Emacs.  My
     favorite feature is that pressing =F= will open all marked files.
 
     #+BEGIN_SRC emacs-lisp
+      (req-package dired
+        :commands dired-jump
+        :config
+        (progn
+          ;; dired - reuse current buffer by pressing 'a'
+          (put 'dired-find-alternate-file 'disabled nil)
+
+          ;; always delete and copy recursively
+          (setq dired-recursive-deletes 'always)
+          (setq dired-recursive-copies 'always)
+
+          (setq dired-dwim-target t)
+
+          ;; enable some really cool extensions like C-x C-j(dired-jump)
+          (require 'dired-x)
+
+          (setq-default dired-omit-mode t
+                        dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$\\|^\\.")))
+
       (req-package dired+)
     #+END_SRC
 
 *** TODO Geiser/Scheme
 
 *** TODO Markdown
+
 
 *** Eshell
 
