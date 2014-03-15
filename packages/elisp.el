@@ -139,13 +139,6 @@
           (lambda nil
             (local-set-key (kbd "C-c C-t x") 'TeX-toggle-escape)))
 
-(defun eshell/clear ()
-  "Clears the shell buffer ala Unix's clear."
-  ;; the shell prompts are read-only, so clear that for the duration
-  (let ((inhibit-read-only t))
-    ;; simply delete the region
-    (delete-region (point-min) (point-max))))
-
 ;; (defun my-find-user-custom-file ()
 ;;   "Edit the `custom-file', in another window."
 ;;   (interactive)

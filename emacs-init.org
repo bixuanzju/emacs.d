@@ -10,6 +10,8 @@
 
     [[https://github.com/daschwa/dotfiles/tree/master/emacs.d][daschwa's emacs.d]]
 
+    [[https://github.com/bbatsov/prelude][Bozhidar Batsov's prelude]]
+
 * Package Management
 
   [[https://github.com/rdallasgray/pallet][Pallet]] is a very helpful package management tool for Emacs.  It
@@ -47,189 +49,189 @@
 
 * Essentials
 
-Some quick essential customizations.
+  Some quick essential customizations.
 
-#+BEGIN_SRC emacs-lisp
-  ;; Turn off mouse interface early in startup to avoid momentary display
-  (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
-  (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+  #+BEGIN_SRC emacs-lisp
+    ;; Turn off mouse interface early in startup to avoid momentary display
+    (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+    (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
-  (defvar savefile-dir (expand-file-name "savefile" user-emacs-directory)
-    "This folder stores all the automatically generated save/history-files.")
+    (defvar savefile-dir (expand-file-name "savefile" user-emacs-directory)
+      "This folder stores all the automatically generated save/history-files.")
 
-  (unless (file-exists-p savefile-dir)
-    (make-directory savefile-dir))
+    (unless (file-exists-p savefile-dir)
+      (make-directory savefile-dir))
 
-  ;; Add the personal packages directory to the load-path
-  (add-to-list 'load-path (concat user-emacs-directory "packages/"))
+    ;; Add the personal packages directory to the load-path
+    (add-to-list 'load-path (concat user-emacs-directory "packages/"))
 
-  ;; Load elisp bits collected from everywhere
-  (require 'elisp)
+    ;; Load elisp bits collected from everywhere
+    (require 'elisp)
 
-  ;; Keep emacs custom-settings in separate file
-  (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-  (load custom-file)
+    ;; Keep emacs custom-settings in separate file
+    (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+    (load custom-file)
 
-  ;; Start off with some sanity.
-  (require 'better-defaults)
+    ;; Start off with some sanity.
+    (require 'better-defaults)
 
-  ;; OSX specific settings
-  (when (eq system-type 'darwin)
-    (require 'cocoa-emacs-default))
+    ;; OSX specific settings
+    (when (eq system-type 'darwin)
+      (require 'cocoa-emacs-default))
 
-  ;; No splash screen please
-  (setq inhibit-startup-screen t)
+    ;; No splash screen please
+    (setq inhibit-startup-screen t)
 
-  ;; Store all backup and autosave files in the tmp dir
-  (setq backup-directory-alist
-        `((".*" . ,temporary-file-directory)))
-  (setq auto-save-file-name-transforms
-        `((".*" ,temporary-file-directory t)))
+    ;; Store all backup and autosave files in the tmp dir
+    (setq backup-directory-alist
+          `((".*" . ,temporary-file-directory)))
+    (setq auto-save-file-name-transforms
+          `((".*" ,temporary-file-directory t)))
 
-  ;; saveplace remembers your location in a file when saving files
-  (require 'saveplace)
-  (setq save-place-file (expand-file-name "saveplace" savefile-dir))
-  ;; activate it for all buffers
-  (setq-default save-place t)
+    ;; saveplace remembers your location in a file when saving files
+    (require 'saveplace)
+    (setq save-place-file (expand-file-name "saveplace" savefile-dir))
+    ;; activate it for all buffers
+    (setq-default save-place t)
 
-  ;; savehist keeps track of some history
-  (require 'savehist)
-  (setq savehist-additional-variables
-        ;; search entries
-        '(search ring regexp-search-ring)
-        ;; save every minute
-        savehist-autosave-interval 60
-        ;; keep the home clean
-        savehist-file (expand-file-name "savehist" savefile-dir))
-  (savehist-mode +1)
+    ;; savehist keeps track of some history
+    (require 'savehist)
+    (setq savehist-additional-variables
+          ;; search entries
+          '(search ring regexp-search-ring)
+          ;; save every minute
+          savehist-autosave-interval 60
+          ;; keep the home clean
+          savehist-file (expand-file-name "savehist" savefile-dir))
+    (savehist-mode +1)
 
-  ;; enable narrowing commands
-  (put 'narrow-to-region 'disabled nil)
-  (put 'narrow-to-page 'disabled nil)
-  (put 'narrow-to-defun 'disabled nil)
+    ;; enable narrowing commands
+    (put 'narrow-to-region 'disabled nil)
+    (put 'narrow-to-page 'disabled nil)
+    (put 'narrow-to-defun 'disabled nil)
 
-  ;; enabled change region case commands
-  (put 'upcase-region 'disabled nil)
-  (put 'downcase-region 'disabled nil)
+    ;; enabled change region case commands
+    (put 'upcase-region 'disabled nil)
+    (put 'downcase-region 'disabled nil)
 
-  ;; enable erase-buffer command
-  (put 'erase-buffer 'disabled nil)
-#+END_SRC
+    ;; enable erase-buffer command
+    (put 'erase-buffer 'disabled nil)
+  #+END_SRC
 
 * Appearance
 ** Theme
 
-Set custom theme path and load theme
-#+BEGIN_SRC emacs-lisp
-  (req-package zenburn-theme
-    :config
-    (load-theme 'zenburn t))
-#+END_SRC
+   Set custom theme path and load theme
+   #+BEGIN_SRC emacs-lisp
+     (req-package zenburn-theme
+       :config
+       (load-theme 'zenburn t))
+   #+END_SRC
 
 ** Mode Line
 
-#+BEGIN_SRC emacs-lisp
-  (req-package smart-mode-line
-    :config
-    (progn
-      (setq sml/theme 'dark)
-      (sml/setup)))
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (req-package smart-mode-line
+       :config
+       (progn
+         (setq sml/theme 'dark)
+         (sml/setup)))
+   #+END_SRC
 
 * Keybindings
 
 ** Exiting
-I don't like to quite Emacs on accident, and I find closing frames are
-more useful.
+   I don't like to quite Emacs on accident, and I find closing frames are
+   more useful.
 
-#+BEGIN_SRC emacs-lisp
-  ;; The mnemonic is C-t REALLY QUIT
-  (bind-key "C-x r q" 'save-buffers-kill-terminal)
-  (bind-key "C-x C-c" 'delete-frame)
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     ;; The mnemonic is C-t REALLY QUIT
+     (bind-key "C-x r q" 'save-buffers-kill-terminal)
+     (bind-key "C-x C-c" 'delete-frame)
+   #+END_SRC
 
 ** Improvements
-#+BEGIN_SRC emacs-lisp
-  ;; convenient line number showing
-  (global-set-key [remap goto-line] 'goto-line-with-feedback)
+   #+BEGIN_SRC emacs-lisp
+     ;; convenient line number showing
+     (global-set-key [remap goto-line] 'goto-line-with-feedback)
 
-  ;; From better defaults
-  (bind-key "M-/" 'hippie-expand)
-  (bind-key "C-s" 'isearch-forward-regexp)
-  (bind-key "C-r" 'isearch-backward-regexp)
-  (bind-key "C-M-s" 'isearch-forward)
-  (bind-key "C-M-r" 'isearch-backward)
-  (bind-key "C-x C-b" 'ibuffer)
-  (bind-key "C-:" 'eval-expression)
-  (bind-key "M-SPC" 'cycle-spacing)
-  (bind-key "C-c x" 'sunrise-cd)
-  (bind-key "C-c X" 'sunrise)
-  (bind-key "C-c t" 'toggle-window-split)
-  (bind-key "C-S-l" 'package-list-packages)
-  (bind-key "C-c q" 'auto-fill-mode)
-  (bind-key "M-'" 'next-error)
-  (bind-key "C-c n" 'prelude-cleanup-buffer)
-  (bind-key "C-M-h" 'backward-kill-word)
+     ;; From better defaults
+     (bind-key "M-/" 'hippie-expand)
+     (bind-key "C-s" 'isearch-forward-regexp)
+     (bind-key "C-r" 'isearch-backward-regexp)
+     (bind-key "C-M-s" 'isearch-forward)
+     (bind-key "C-M-r" 'isearch-backward)
+     (bind-key "C-x C-b" 'ibuffer)
+     (bind-key "C-:" 'eval-expression)
+     (bind-key "M-SPC" 'cycle-spacing)
+     (bind-key "C-c x" 'sunrise-cd)
+     (bind-key "C-c X" 'sunrise)
+     (bind-key "C-c t" 'toggle-window-split)
+     (bind-key "C-S-l" 'package-list-packages)
+     (bind-key "C-c q" 'auto-fill-mode)
+     (bind-key "M-'" 'next-error)
+     (bind-key "C-c n" 'prelude-cleanup-buffer)
+     (bind-key "C-M-h" 'backward-kill-word)
 
-  ;; Set Regexp Alignment
-  (bind-key "C-x \\" 'align-regexp)
+     ;; Set Regexp Alignment
+     (bind-key "C-x \\" 'align-regexp)
 
-  ;; Font size
-  (bind-key "C-+" 'text-scale-increase)
-  (bind-key "C--" 'text-scale-decrease)
+     ;; Font size
+     (bind-key "C-+" 'text-scale-increase)
+     (bind-key "C--" 'text-scale-decrease)
 
-  ;; Indentation help
-  (bind-key "C-^" 'prelude-top-join-line)
+     ;; Indentation help
+     (bind-key "C-^" 'prelude-top-join-line)
 
-  ;; A complementary binding to the apropos-command (C-h a)
-  (define-key 'help-command "A" 'apropos)
+     ;; A complementary binding to the apropos-command (C-h a)
+     (define-key 'help-command "A" 'apropos)
 
-  (bind-key "C-h C-f" 'find-function)
-  (bind-key "C-h C-k" 'find-function-on-key)
-  (bind-key "C-h C-v" 'find-variable)
-  (bind-key "C-h C-l" 'find-library)
+     (bind-key "C-h C-f" 'find-function)
+     (bind-key "C-h C-k" 'find-function-on-key)
+     (bind-key "C-h C-v" 'find-variable)
+     (bind-key "C-h C-l" 'find-library)
 
-  (global-set-key [remap kill-whole-line] 'prelude-kill-whole-line)
-  (global-set-key [remap move-beginning-of-line]
-                  'prelude-move-beginning-of-line)
+     (global-set-key [remap kill-whole-line] 'prelude-kill-whole-line)
+     (global-set-key [remap move-beginning-of-line]
+                     'prelude-move-beginning-of-line)
 
-  ;; Activate occur easily inside isearch
-  (define-key isearch-mode-map (kbd "C-o")
-    (lambda () (interactive)
-      (let ((case-fold-search isearch-case-fold-search))
-        (occur (if isearch-regexp
-                   isearch-string
-                 (regexp-quote isearch-string))))))
-#+END_SRC
+     ;; Activate occur easily inside isearch
+     (define-key isearch-mode-map (kbd "C-o")
+       (lambda () (interactive)
+         (let ((case-fold-search isearch-case-fold-search))
+           (occur (if isearch-regexp
+                      isearch-string
+                    (regexp-quote isearch-string))))))
+   #+END_SRC
 
 ** Key-chord
 
-Key-chord maps pairs of simultaneously pressed keys to commands.
+   Key-chord maps pairs of simultaneously pressed keys to commands.
 
-#+BEGIN_SRC emacs-lisp
-  (req-package key-chord
-    :config
-    (progn
-      (key-chord-mode +1)
-      (setq key-chord-two-keys-delay 0.05)
-      (key-chord-define-global "jl" 'ace-jump-line-mode)
-      (key-chord-define-global "JJ" 'prelude-switch-to-previous-buffer)
-      (key-chord-define-global "x1" 'delete-other-windows)
-      (key-chord-define-global "xk" 'switch-window)
-      (key-chord-define-global "0o" 'delete-window)
-      (key-chord-define-global "xn" 'helm-mini)
-      (key-chord-define-global "jk" 'magit-status)
-      (key-chord-define-global "jh" 'ace-jump-word-mode)
-      (key-chord-define-global "xl" 'kill-this-buffer)
-      (key-chord-define-global "xm" 'helm-M-x)))
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (req-package key-chord
+       :config
+       (progn
+         (key-chord-mode +1)
+         (setq key-chord-two-keys-delay 0.05)
+         (key-chord-define-global "jl" 'ace-jump-line-mode)
+         (key-chord-define-global "JJ" 'prelude-switch-to-previous-buffer)
+         (key-chord-define-global "x1" 'delete-other-windows)
+         (key-chord-define-global "xk" 'switch-window)
+         (key-chord-define-global "0o" 'delete-window)
+         (key-chord-define-global "xn" 'helm-mini)
+         (key-chord-define-global "jk" 'magit-status)
+         (key-chord-define-global "jh" 'ace-jump-word-mode)
+         (key-chord-define-global "xl" 'kill-this-buffer)
+         (key-chord-define-global "xm" 'helm-M-x)))
+   #+END_SRC
 
 ** Unbind keys
 
-#+BEGIN_SRC emacs-lisp
-  (unbind-key "C-o")
-  (unbind-key "C-x f")
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (unbind-key "C-o")
+     (unbind-key "C-x f")
+   #+END_SRC
 * Setups
 
   All packages and modes are configured here.
@@ -238,440 +240,502 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
 
 *** Magit
 
-[[https://github.com/magit/magit][Magit]] is the ultimate =git= interface for Emacs.
+    [[https://github.com/magit/magit][Magit]] is the ultimate =git= interface for Emacs.
 
-#+BEGIN_SRC emacs-lisp
-  (req-package magit
-    :bind ("C-x g" . magit-status))
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (req-package magit
+        :bind ("C-x g" . magit-status))
+    #+END_SRC
 
 *** Lisp
 
 **** Emacs lisp
 
-#+BEGIN_SRC emacs-lisp
-  (defun prelude-recompile-elc-on-save ()
-    "Recompile your elc when saving an elisp file."
-    (add-hook 'after-save-hook
-              (lambda ()
-                (when (file-exists-p (byte-compile-dest-file buffer-file-name))
-                  (emacs-lisp-byte-compile)))
-              nil
-              t))
+     #+BEGIN_SRC emacs-lisp
+       (defun prelude-recompile-elc-on-save ()
+         "Recompile your elc when saving an elisp file."
+         (add-hook 'after-save-hook
+                   (lambda ()
+                     (when (file-exists-p (byte-compile-dest-file buffer-file-name))
+                       (emacs-lisp-byte-compile)))
+                   nil
+                   t))
 
-  (defun prelude-conditional-emacs-lisp-checker ()
-    "Don't check doc style in Emacs Lisp test files."
-    (let ((file-name (buffer-file-name)))
-      (when (and file-name (string-match-p ".*-tests?\\.el\\'" file-name))
-        (setq-local flycheck-checkers '(emacs-lisp)))))
+       (defun prelude-conditional-emacs-lisp-checker ()
+         "Don't check doc style in Emacs Lisp test files."
+         (let ((file-name (buffer-file-name)))
+           (when (and file-name (string-match-p ".*-tests?\\.el\\'" file-name))
+             (setq-local flycheck-checkers '(emacs-lisp)))))
 
-  (defun prelude-emacs-lisp-mode-defaults ()
-    "Sensible defaults for `emacs-lisp-mode'."
-    (turn-on-eldoc-mode)
-    (diminish 'eldoc-mode "")
-    (prelude-recompile-elc-on-save)
-    (setq mode-name "EL")
-    (turn-on-prettify-symbols-mode)
-    (add-hook 'eval-expression-minibuffer-setup-hook 'eldoc-mode)
-    (prelude-conditional-emacs-lisp-checker))
+       (defun prelude-emacs-lisp-mode-defaults ()
+         "Sensible defaults for `emacs-lisp-mode'."
+         (turn-on-eldoc-mode)
+         (diminish 'eldoc-mode "")
+         (prelude-recompile-elc-on-save)
+         (setq mode-name "EL")
+         (turn-on-prettify-symbols-mode)
+         (add-hook 'eval-expression-minibuffer-setup-hook 'eldoc-mode)
+         (prelude-conditional-emacs-lisp-checker))
 
-  (setq prelude-emacs-lisp-mode-hook 'prelude-emacs-lisp-mode-defaults)
+       (setq prelude-emacs-lisp-mode-hook 'prelude-emacs-lisp-mode-defaults)
 
-  (add-hook 'emacs-lisp-mode-hook (lambda ()
-                                    (run-hooks 'prelude-emacs-lisp-mode-hook)))
+       (add-hook 'emacs-lisp-mode-hook (lambda ()
+                                         (run-hooks 'prelude-emacs-lisp-mode-hook)))
 
-  ;; ielm is an interactive Emacs Lisp shell
-  (defun prelude-ielm-mode-defaults ()
-    "Sensible defaults for `ielm'."
-    (whitespace-mode -1)
-    (turn-on-eldoc-mode))
+       ;; ielm is an interactive Emacs Lisp shell
+       (defun prelude-ielm-mode-defaults ()
+         "Sensible defaults for `ielm'."
+         (whitespace-mode -1)
+         (turn-on-eldoc-mode))
 
-  (setq prelude-ielm-mode-hook 'prelude-ielm-mode-defaults)
+       (setq prelude-ielm-mode-hook 'prelude-ielm-mode-defaults)
 
-  (add-hook 'ielm-mode-hook (lambda ()
-                              (run-hooks 'prelude-ielm-mode-hook)))
+       (add-hook 'ielm-mode-hook (lambda ()
+                                   (run-hooks 'prelude-ielm-mode-hook)))
 
-  (add-to-list 'auto-mode-alist '("Cask\\'" . emacs-lisp-mode))
+       (add-to-list 'auto-mode-alist '("Cask\\'" . emacs-lisp-mode))
 
-#+END_SRC
+     #+END_SRC
 
-*** TODO LaTex
+*** LaTex
+
+    Sane setup for LaTeX writers.
+
+    #+BEGIN_SRC emacs-lisp
+      (req-package tex-site
+        :config
+        (progn
+          ;; AUCTeX configuration
+          (setq TeX-auto-save t)
+          (setq TeX-parse-self t)
+
+          (setq-default TeX-master nil)
+
+          ;; use pdflatex
+          (setq TeX-PDF-mode t)
+
+          (setq LaTeX-command "latex -shell-escape")
+
+          ;; sensible defaults for OS X, other OSes should be covered out-of-the-box
+          (when (eq system-type 'darwin)
+            (setq TeX-view-program-selection
+                  '((output-dvi "DVI Viewer")
+                    (output-pdf "PDF Viewer")
+                    (output-html "HTML Viewer")))
+
+            (setq TeX-view-program-list
+                  '(("DVI Viewer" "open %o")
+                    ("PDF Viewer" "open %o")
+                    ("HTML Viewer" "open %o"))))
+
+          (defun prelude-latex-mode-defaults ()
+            (turn-on-auto-fill)
+            (abbrev-mode +1))
+
+          (setq prelude-latex-mode-hook 'prelude-latex-mode-defaults)
+
+          (add-hook 'LaTeX-mode-hook (lambda ()
+                                       (run-hooks 'prelude-latex-mode-hook)))))
+
+    #+END_SRC
 
 *** Org Mode
 
-If you are not using it, you need to start.
+    If you are not using it, you need to start.
 
-#+BEGIN_SRC emacs-lisp
-  (req-package org
-    :config
-    (progn
-      (require 'ox-md)
-      (require 'ox-latex)
-      (require 'org-bullets)
-      ;; Show org-mode bullets as UTF-8 characters.
-      (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+    #+BEGIN_SRC emacs-lisp
+      (req-package org
+        :config
+        (progn
+          (require 'ox-md)
+          (require 'ox-latex)
+          (require 'org-bullets)
+          ;; Show org-mode bullets as UTF-8 characters.
+          (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
-      ;; Fontify org-mode code blocks
-      (setq org-src-fontify-natively t)
+          ;; Fontify org-mode code blocks
+          (setq org-src-fontify-natively t)
 
-      (setq org-todo-keyword-faces
-             '(("TODO" . (:foreground "green" :weight bold))
-               ("NEXT" :foreground "blue" :weight bold)
-               ("WAITING" :foreground "orange" :weight bold)
-               ("HOLD" :foreground "magenta" :weight bold)
-               ("CANCELLED" :foreground "forest green" :weight bold)))
+          (setq org-todo-keyword-faces
+                '(("TODO" . (:foreground "green" :weight bold))
+                  ("NEXT" :foreground "blue" :weight bold)
+                  ("WAITING" :foreground "orange" :weight bold)
+                  ("HOLD" :foreground "magenta" :weight bold)
+                  ("CANCELLED" :foreground "forest green" :weight bold)))
 
-      (setq org-enforce-todo-dependencies t)
-      (setq org-src-tab-acts-natively t)
-      (setq org-src-window-setup 'current-window)
+          (setq org-enforce-todo-dependencies t)
+          (setq org-src-tab-acts-natively t)
+          (setq org-src-window-setup 'current-window)
 
-      ;; set up latex
-      (setq org-latex-create-formula-image-program 'imagemagick)
+          ;; set up latex
+          (setq org-latex-create-formula-image-program 'imagemagick)
 
-      ;; Add minted to the defaults packages to include when exporting.
-      (add-to-list 'org-latex-packages-alist '("" "minted"))
+          ;; Add minted to the defaults packages to include when exporting.
+          (add-to-list 'org-latex-packages-alist '("" "minted"))
 
-      ;; Tell the latex export to use the minted package for source
-      ;; code coloration.
-      (setq org-latex-listings 'minted)
-      ;; Let the exporter use the -shell-escape option to let latex
-      ;; execute external programs.
-      (setq org-latex-pdf-process
-            '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))))
-#+END_SRC
+          ;; Tell the latex export to use the minted package for source
+          ;; code coloration.
+          (setq org-latex-listings 'minted)
+          ;; Let the exporter use the -shell-escape option to let latex
+          ;; execute external programs.
+          (setq org-latex-pdf-process
+                '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))))
+    #+END_SRC
 
 *** dired+
 
-Dired Plus is an extension to the =dired= file manager in Emacs.  My
-favorite feature is that pressing =F= will open all marked files.
+    Dired Plus is an extension to the =dired= file manager in Emacs.  My
+    favorite feature is that pressing =F= will open all marked files.
 
-#+BEGIN_SRC emacs-lisp
-  (req-package dired+)
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (req-package dired+)
+    #+END_SRC
 
+*** TODO Geiser/Scheme
+
+*** TODO Markdown
+
+*** Eshell
+
+    Type =clear= to clear the buffer like in other terminal emulators.
+
+    #+BEGIN_SRC emacs-lisp
+      (defun eshell/clear ()
+        "Clears the shell buffer ala Unix's clear."
+        ;; the shell prompts are read-only, so clear that for the duration
+        (let ((inhibit-read-only t))
+          ;; simply delete the region
+          (erase-buffer)))
+
+    #+END_SRC
 ** Minor Modes
 
 *** Pallet
 
-#+BEGIN_SRC emacs-lisp
-  (req-package pallet)
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (req-package pallet)
+    #+END_SRC
 
 *** Wgrep
 
-[[https://github.com/mhayashi1120/Emacs-wgrep][Wgrep]] allows you to edit a grep buffer and apply those changes to the
-file buffer.
+    [[https://github.com/mhayashi1120/Emacs-wgrep][Wgrep]] allows you to edit a grep buffer and apply those changes to the
+    file buffer.
 
-#+BEGIN_SRC emacs-lisp
-  (req-package wgrep-ag
-    :require wgrep)
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (req-package wgrep-ag
+        :require wgrep)
+    #+END_SRC
 
 *** Helm
 
-=helm-mini= is a part of [[https://github.com/emacs-helm/helm][Helm]] that shows current buffers and a list of
-recent files using =recentf=.  It is a great way to manage many open
-files.
+    =helm-mini= is a part of [[https://github.com/emacs-helm/helm][Helm]] that shows current buffers and a list of
+    recent files using =recentf=.  It is a great way to manage many open
+    files.
 
-#+BEGIN_SRC emacs-lisp
-  (req-package helm
-    :init
-    (require 'helm-config)
-    :bind ("C-x C-f" . helm-find-files))
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (req-package helm
+        :init
+        (require 'helm-config)
+        :bind ("C-x C-f" . helm-find-files))
+    #+END_SRC
 
 *** Fulframe
 
-[[https://github.com/tomterl/fullframe][Fullframe]] advises commands to execute fullscreen, restoring the window
-setup when exiting.
+    [[https://github.com/tomterl/fullframe][Fullframe]] advises commands to execute fullscreen, restoring the window
+    setup when exiting.
 
-#+BEGIN_SRC emacs-lisp
-  (req-package fullframe
-    :config
-    (progn
-      (fullframe magit-status magit-mode-quit-window)
-      (fullframe ibuffer ibuffer-quit)))
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (req-package fullframe
+        :config
+        (progn
+          (fullframe magit-status magit-mode-quit-window)
+          (fullframe ibuffer ibuffer-quit)))
+    #+END_SRC
 
 *** Mykie
 
-[[https://github.com/yuutayamada/mykie-el][Mykie]] is a command multiplexer, which can add other functions to a
-single keybind.
+    [[https://github.com/yuutayamada/mykie-el][Mykie]] is a command multiplexer, which can add other functions to a
+    single keybind.
 
-#+BEGIN_SRC emacs-lisp
-  (req-package mykie
-    :config
-    (progn
-      (setq mykie:use-major-mode-key-override 'global)
-      (mykie:initialize)
-      (mykie:set-keys nil
-        "C-e"
-        :default (move-end-of-line 1)
-        :repeat  (end-of-buffer)
-        :C-u (beginning-of-buffer)
-        "C-S-n"
-        :default (next-line 4)
-        "C-S-p"
-        :default (previous-line 4)
-        "C-w"
-        :default (kill-region (mark) (point))
-        :minibuff (backward-kill-word 1))))
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (req-package mykie
+        :config
+        (progn
+          (setq mykie:use-major-mode-key-override 'global)
+          (mykie:initialize)
+          (mykie:set-keys nil
+            "C-e"
+            :default (move-end-of-line 1)
+            :repeat  (end-of-buffer)
+            :C-u (beginning-of-buffer)
+            "C-S-n"
+            :default (next-line 4)
+            "C-S-p"
+            :default (previous-line 4)
+            "C-w"
+            :default (kill-region (mark) (point))
+            :minibuff (backward-kill-word 1))))
+    #+END_SRC
 
 *** Switch-window
 
-[[https://github.com/dimitri/switch-win][Switch-window]] provides window switching, the visual way.
+    [[https://github.com/dimitri/switch-win][Switch-window]] provides window switching, the visual way.
 
-#+BEGIN_SRC emacs-lisp
-  (req-package switch-window
-    :bind ("C-x o" . switch-window))
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (req-package switch-window
+        :bind ("C-x o" . switch-window))
+    #+END_SRC
 
 *** Rainbow mode
 
-=rainbow-mode= displays hexadecimal colors with the color they
-represent as their background.
+    =rainbow-mode= displays hexadecimal colors with the color they
+    represent as their background.
 
-#+BEGIN_SRC emacs-lisp
-  (req-package rainbow-mode
-    :diminish (rainbow-mode . "")
-    :config
-    (add-hook 'prog-mode-hook 'rainbow-mode))
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (req-package rainbow-mode
+        :diminish (rainbow-mode . "")
+        :config
+        (add-hook 'prog-mode-hook 'rainbow-mode))
+    #+END_SRC
 
 *** Rainbow-delimiter
 
-[[https://github.com/jlr/rainbow-delimiters][Rainbow Delimiters]] is a “rainbow parentheses”-like mode which
-highlights parentheses, brackets, and braces according to their depth
+    [[https://github.com/jlr/rainbow-delimiters][Rainbow Delimiters]] is a “rainbow parentheses”-like mode which
+    highlights parentheses, brackets, and braces according to their depth
 
-#+BEGIN_SRC emacs-lisp
-  (req-package rainbow-delimiters
-    :config
-    (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (req-package rainbow-delimiters
+        :config
+        (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+    #+END_SRC
 
 *** Elisp-slime-nav
 
-[[https://github.com/purcell/elisp-slime-nav][Elisp-slime-nav]] allows very convenient navigation to the symbol at
-point (using =M-.=), and the ability to pop back to previous marks
-(using =M-,=).
+    [[https://github.com/purcell/elisp-slime-nav][Elisp-slime-nav]] allows very convenient navigation to the symbol at
+    point (using =M-.=), and the ability to pop back to previous marks
+    (using =M-,=).
 
-#+BEGIN_SRC emacs-lisp
-  (req-package elisp-slime-nav
-    :diminish (elisp-slime-nav-mode . "")
-    :config
-    (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
-      (add-hook hook 'elisp-slime-nav-mode)))
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (req-package elisp-slime-nav
+        :diminish (elisp-slime-nav-mode . "")
+        :config
+        (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
+          (add-hook hook 'elisp-slime-nav-mode)))
+    #+END_SRC
 
 *** Expand-region
 
-[[https://github.com/magnars/expand-region.el][Expand-region]] increases the selected region by semantic units. Just
-keep pressing the key until it selects what you want.
+    [[https://github.com/magnars/expand-region.el][Expand-region]] increases the selected region by semantic units. Just
+    keep pressing the key until it selects what you want.
 
-#+BEGIN_SRC emacs-lisp
-  (req-package expand-region
-    :bind ("C-=" . er/expand-region))
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (req-package expand-region
+        :bind ("C-=" . er/expand-region))
+    #+END_SRC
 
 *** Whitespace
 
-#+BEGIN_SRC emacs-lisp
-  ;; whitespace-mode config
-  (require 'whitespace)
-  (setq whitespace-line-column 80) ;; limit line length
-  (setq whitespace-style '(face tabs trailing lines-tail))
+    Whitespace-mode configuration.
 
-  (defun prelude-enable-whitespace ()
-    "Enable `whitespace-mode' if `prelude-whitespace' is not nil."
-    (add-hook 'before-save-hook 'whitespace-cleanup nil t)
-    (whitespace-mode +1))
+    #+BEGIN_SRC emacs-lisp
 
-  (add-hook 'text-mode-hook 'prelude-enable-whitespace)
+      (req-package whitespace
+        :diminish (whitespace-mode . "")
+        :config
+        (progn
+          (setq whitespace-line-column 80) ;; limit line length
+          (setq whitespace-style '(face tabs trailing lines-tail))
 
-#+END_SRC
+          (defun prelude-enable-whitespace ()
+            "Enable `whitespace-mode' if `prelude-whitespace' is not nil."
+            (add-hook 'before-save-hook 'whitespace-cleanup nil t)
+            (whitespace-mode +1))
+
+          (add-hook 'text-mode-hook 'prelude-enable-whitespace)))
+
+    #+END_SRC
 
 *** Ag
 
-[[https://github.com/Wilfred/ag.el][Ag.el]] is a simple ag frontend, loosely based on ack-and-half.el.
+    [[https://github.com/Wilfred/ag.el][Ag.el]] is a simple ag frontend, loosely based on ack-and-half.el.
 
-#+BEGIN_SRC emacs-lisp
-  (req-package ag
-    :config
-    (setq ag-highlight-search t))
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (req-package ag
+        :config
+        (setq ag-highlight-search t))
+    #+END_SRC
 
 *** Projectile
 
-#+BEGIN_SRC emacs-lisp
-  (req-package projectile
-    :diminish ""
-    :bind (("s-p" . projectile-switch-project)
-           ("s-f" . projectile-find-file)
-           ("s-g" . projectile-ag))
-    :init
-    (projectile-global-mode t)
-    :config
-    (setq projectile-cache-file
-          (expand-file-name  "projectile.cache" savefile-dir)))
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (req-package projectile
+        :diminish ""
+        :bind (("s-p" . projectile-switch-project)
+               ("s-f" . projectile-find-file)
+               ("s-g" . projectile-ag))
+        :init
+        (projectile-global-mode t)
+        :config
+        (setq projectile-cache-file
+              (expand-file-name  "projectile.cache" savefile-dir)))
+    #+END_SRC
 
 *** Lispy
 
-[[https://github.com/abo-abo/lispy][Lispy]] implements various vi-like commands for navigating and editing
-Lisp code.
+    [[https://github.com/abo-abo/lispy][Lispy]] implements various vi-like commands for navigating and editing
+    Lisp code.
 
-#+BEGIN_SRC emacs-lisp
-  (req-package lispy
-    :init
-    (dolist (hook '(emacs-lisp-mode-hook
-                    lisp-mode-hook
-                    scheme-mode-hook
-                    clojure-mode))
-      (add-hook hook (lambda () (lispy-mode +1))))
-    :config
-    (bind-keys :map lispy-mode-map
-               ("C-e" . nil)
-               ("M-i" . nil)
-               ("M-e" . lispy-iedit)
-               ("g" . special-lispy-goto-local)
-               ("G" . special-lispy-goto)))
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (req-package lispy
+        :init
+        (dolist (hook '(emacs-lisp-mode-hook
+                        lisp-mode-hook
+                        scheme-mode-hook
+                        clojure-mode))
+          (add-hook hook (lambda () (lispy-mode +1))))
+        :config
+        (bind-keys :map lispy-mode-map
+                   ("C-e" . nil)
+                   ("M-i" . nil)
+                   ("M-e" . lispy-iedit)
+                   ("g" . special-lispy-goto-local)
+                   ("G" . special-lispy-goto)))
+    #+END_SRC
 
 *** Yasnippets
 
-Snippets are keys.
+    Snippets are keys.
 
-#+BEGIN_SRC emacs-lisp
-  (req-package yasnippet
-    :idle
-    (yas-global-mode 1)
-    :diminish (yas-minor-mode . "")
-    :config
-    (progn
-      (setq yas-snippet-dirs '("~/.emacs.d/snippets/"))
-      (add-to-list 'auto-mode-alist '("\\.yasnippet$" . snippet-mode))
-      (setq yas-verbosity 1)
-       ;; No need to be so verbose
-      (setq yas-wrap-around-region t)
-      ;; Wrap around region
-      (setq-default yas/prompt-functions '(yas/ido-prompt))
-      (bind-key "<return>" 'yas-exit-all-snippets yas-keymap)))
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (req-package yasnippet
+        :idle
+        (yas-global-mode 1)
+        :diminish (yas-minor-mode . "")
+        :config
+        (progn
+          (setq yas-snippet-dirs '("~/.emacs.d/snippets/"))
+          (add-to-list 'auto-mode-alist '("\\.yasnippet$" . snippet-mode))
+          (setq yas-verbosity 1)
+          ;; No need to be so verbose
+          (setq yas-wrap-around-region t)
+          ;; Wrap around region
+          (setq-default yas/prompt-functions '(yas/ido-prompt))
+          (bind-key "<return>" 'yas-exit-all-snippets yas-keymap)))
+    #+END_SRC
 
 *** Undo-Tree
 
-More natural undo or redo. Undo with =C-/= and redo with =C-?=.
+    More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 
-#+BEGIN_SRC emacs-lisp
-  (req-package undo-tree
-               :diminish (undo-tree-mode . "")
-               :config
-               (global-undo-tree-mode 1))
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (req-package undo-tree
+        :diminish (undo-tree-mode . "")
+        :config
+        (global-undo-tree-mode 1))
+    #+END_SRC
 
 *** Company
 
-[[https://github.com/company-mode/company-mode][Company]] is a code completion framework for Emacs. The name stands for
-"complete anything".
+    [[https://github.com/company-mode/company-mode][Company]] is a code completion framework for Emacs. The name stands for
+    "complete anything".
 
-#+BEGIN_SRC emacs-lisp
-  (req-package company
-    :init
-    (add-hook 'after-init-hook #'global-company-mode)
-    :diminish (company-mode . "")
-    :config
-    (progn
-      ;; repomacs problematic
-      ;; (delq 'company-ropemacs 'company-backends)
-      (setq company-idle-delay .3)
-      (setq company-dabbrev-ignore-case nil)
-      (setq company-dabbrev-downcase nil)
-      (eval-after-load 'company-dabbrev-code
-        '(dolist (mode '(coq-mode oz-mode))
-           (add-to-list 'company-dabbrev-code-modes mode)))))
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (req-package company
+        :init
+        (add-hook 'after-init-hook #'global-company-mode)
+        :diminish (company-mode . "")
+        :config
+        (progn
+          ;; repomacs problematic
+          ;; (delq 'company-ropemacs 'company-backends)
+          (setq company-idle-delay .3)
+          (setq company-dabbrev-ignore-case nil)
+          (setq company-dabbrev-downcase nil)
+          (eval-after-load 'company-dabbrev-code
+            '(dolist (mode '(coq-mode oz-mode))
+               (add-to-list 'company-dabbrev-code-modes mode)))))
+    #+END_SRC
 
 *** Shell-pop
 
-[[https://github.com/kyagi/shell-pop-el][Shell-pop.el]] helps you to use shell easily on Emacs. Only one key
-action to work.
+    [[https://github.com/kyagi/shell-pop-el][Shell-pop.el]] helps you to use shell easily on Emacs. Only one key
+    action to work.
 
-#+BEGIN_SRC emacs-lisp
-  (req-package shell-pop)
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (req-package shell-pop)
+    #+END_SRC
 
 *** Flyspell
 
-Enable spell-checking in Emacs.
+    Enable spell-checking in Emacs.
 
-#+BEGIN_SRC emacs-lisp
-  (req-package flyspell
-    :diminish (flyspell-mode . "")
-    :init
-    (progn
-      ;; Enable spell check in only plaintext
-      (add-hook 'text-mode-hook 'flyspell-mode)
-      ;; Enable spell check in comments
-      (add-hook 'prog-mode-hook 'flyspell-prog-mode))
-    :config
-    (progn
-      (setq flyspell-issue-welcome-flag nil)
-      (setq flyspell-issue-message-flag nil)
-      (setq ispell-program-name "aspell" ; use aspell instead of ispell
-            ispell-extra-args '("--sug-mode=ultra"))
-      ;; Make spell check on right click.
-      (define-key flyspell-mouse-map [down-mouse-3] 'flyspell-correct-word)
-      (define-key flyspell-mouse-map [mouse-3] 'undefined)))
+    #+BEGIN_SRC emacs-lisp
+      (req-package flyspell
+        :diminish (flyspell-mode . "")
+        :init
+        (progn
+          ;; Enable spell check in only plaintext
+          (add-hook 'text-mode-hook 'flyspell-mode)
+          ;; Enable spell check in comments
+          (add-hook 'prog-mode-hook 'flyspell-prog-mode))
+        :config
+        (progn
+          (setq flyspell-issue-welcome-flag nil)
+          (setq flyspell-issue-message-flag nil)
+          (setq ispell-program-name "aspell" ; use aspell instead of ispell
+                ispell-extra-args '("--sug-mode=ultra"))
+          ;; Make spell check on right click.
+          (define-key flyspell-mouse-map [down-mouse-3] 'flyspell-correct-word)
+          (define-key flyspell-mouse-map [mouse-3] 'undefined)))
 
-#+END_SRC
+    #+END_SRC
 
 **** Helpful Default Keybindings
-=C-.= corrects word at point.  =C-,​= to jump to next misspelled word.
+     =C-.= corrects word at point.  =C-,​= to jump to next misspelled word.
 
 *** Flycheck
 
-A great syntax checker.
+    A great syntax checker.
 
-#+BEGIN_SRC emacs-lisp
-  (req-package flycheck
-    :bind ("C-c L" . flycheck-list-errors)
-    :init
-    (if (fboundp 'global-flycheck-mode)
-          (global-flycheck-mode +1)
-        (add-hook 'prog-mode-hook 'flycheck-mode))
-    :config
-    (progn
-      ;; disable the annoying doc checker
-      (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
-      (setq flycheck-indication-mode 'left-fringe)
-      (setq flycheck-completion-system 'ido)))
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (req-package flycheck
+        :bind ("C-c L" . flycheck-list-errors)
+        :init
+        (if (fboundp 'global-flycheck-mode)
+            (global-flycheck-mode +1)
+          (add-hook 'prog-mode-hook 'flycheck-mode))
+        :config
+        (progn
+          ;; disable the annoying doc checker
+          (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+          (setq flycheck-indication-mode 'left-fringe)
+          (setq flycheck-completion-system 'ido)))
+    #+END_SRC
 
 *** Pop Win
 
-[[https://github.com/m2ym/popwin-el][popwin]] is used to manage the size of "popup" buffers.
+    [[https://github.com/m2ym/popwin-el][popwin]] is used to manage the size of "popup" buffers.
 
-#+BEGIN_SRC emacs-lisp
-  (req-package popwin
-    :config
-    (popwin-mode 1))
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (req-package popwin
+        :config
+        (popwin-mode 1))
+    #+END_SRC
 
 *** Multiple Cursors
 
-[[https://github.com/emacsmirror/multiple-cursors][Multiple Cursors]] brings you seemingly unlimited power.
+    [[https://github.com/emacsmirror/multiple-cursors][Multiple Cursors]] brings you seemingly unlimited power.
 
-#+BEGIN_SRC emacs-lisp
-  (req-package multiple-cursors
-    :bind (("C->" . mc/mark-next-like-this)
-           ("C-<" . mc/mark-previous-like-this)
-           ("C-c C-<" . mc/mark-all-like-this)
-           ("C-c C->" . mc/mark-more-like-this-extended)))
-#+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (req-package multiple-cursors
+        :bind (("C->" . mc/mark-next-like-this)
+               ("C-<" . mc/mark-previous-like-this)
+               ("C-c C-<" . mc/mark-all-like-this)
+               ("C-c C->" . mc/mark-more-like-this-extended)))
+    #+END_SRC
 
 * Finish Requirements
-All done with  =req-package=.
-#+BEGIN_SRC emacs-lisp
-(req-package-finish)
-#+END_SRC
+  All done with  =req-package=.
+  #+BEGIN_SRC emacs-lisp
+    (req-package-finish)
+  #+END_SRC

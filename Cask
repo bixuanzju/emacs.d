@@ -5,6 +5,7 @@
 
 (depends-on "ace-jump-mode")
 (depends-on "ag")
+(depends-on "auctex")
 (depends-on "bind-key")
 (depends-on "cask")
 (depends-on "company")
