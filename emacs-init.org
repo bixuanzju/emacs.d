@@ -133,9 +133,8 @@
    #+BEGIN_SRC emacs-lisp
      (req-package smart-mode-line
        :config
-       (progn
-         (setq sml/theme 'dark)
-         (sml/setup)))
+       (setq sml/theme 'dark)
+       (sml/setup))
    #+END_SRC
 
 * Keybindings
@@ -211,19 +210,18 @@
    #+BEGIN_SRC emacs-lisp
      (req-package key-chord
        :config
-       (progn
-         (key-chord-mode +1)
-         (setq key-chord-two-keys-delay 0.05)
-         (key-chord-define-global "jl" 'ace-jump-line-mode)
-         (key-chord-define-global "JJ" 'prelude-switch-to-previous-buffer)
-         (key-chord-define-global "x1" 'delete-other-windows)
-         (key-chord-define-global "xk" 'switch-window)
-         (key-chord-define-global "0o" 'delete-window)
-         (key-chord-define-global "xn" 'helm-mini)
-         (key-chord-define-global "jk" 'magit-status)
-         (key-chord-define-global "jh" 'ace-jump-word-mode)
-         (key-chord-define-global "xl" 'kill-this-buffer)
-         (key-chord-define-global "xm" 'helm-M-x)))
+       (key-chord-mode +1)
+       (setq key-chord-two-keys-delay 0.05)
+       (key-chord-define-global "jl" 'ace-jump-line-mode)
+       (key-chord-define-global "JJ" 'prelude-switch-to-previous-buffer)
+       (key-chord-define-global "x1" 'delete-other-windows)
+       (key-chord-define-global "xk" 'switch-window)
+       (key-chord-define-global "0o" 'delete-window)
+       (key-chord-define-global "xn" 'helm-mini)
+       (key-chord-define-global "jk" 'magit-status)
+       (key-chord-define-global "jh" 'ace-jump-word-mode)
+       (key-chord-define-global "xl" 'kill-this-buffer)
+       (key-chord-define-global "xm" 'helm-M-x))
    #+END_SRC
 
 ** Unbind keys
@@ -304,38 +302,36 @@
     #+BEGIN_SRC emacs-lisp
       (req-package tex-site
         :config
-        (progn
-          ;; AUCTeX configuration
-          (setq TeX-auto-save t)
-          (setq TeX-parse-self t)
+        (setq TeX-auto-save t)
+        (setq TeX-parse-self t)
 
-          (setq-default TeX-master nil)
+        (setq-default TeX-master nil)
 
-          ;; use pdflatex
-          (setq TeX-PDF-mode t)
+        ;; use pdflatex
+        (setq TeX-PDF-mode t)
 
-          (setq LaTeX-command "latex -shell-escape")
+        (setq LaTeX-command "latex -shell-escape")
 
-          ;; sensible defaults for OS X, other OSes should be covered out-of-the-box
-          (when (eq system-type 'darwin)
-            (setq TeX-view-program-selection
-                  '((output-dvi "DVI Viewer")
-                    (output-pdf "PDF Viewer")
-                    (output-html "HTML Viewer")))
+        ;; sensible defaults for OS X, other OSes should be covered out-of-the-box
+        (when (eq system-type 'darwin)
+          (setq TeX-view-program-selection
+                '((output-dvi "DVI Viewer")
+                  (output-pdf "PDF Viewer")
+                  (output-html "HTML Viewer")))
 
-            (setq TeX-view-program-list
-                  '(("DVI Viewer" "open %o")
-                    ("PDF Viewer" "open %o")
-                    ("HTML Viewer" "open %o"))))
+          (setq TeX-view-program-list
+                '(("DVI Viewer" "open %o")
+                  ("PDF Viewer" "open %o")
+                  ("HTML Viewer" "open %o"))))
 
-          (defun prelude-latex-mode-defaults ()
-            (turn-on-auto-fill)
-            (abbrev-mode +1))
+        (defun prelude-latex-mode-defaults ()
+          (turn-on-auto-fill)
+          (abbrev-mode +1))
 
-          (setq prelude-latex-mode-hook 'prelude-latex-mode-defaults)
+        (setq prelude-latex-mode-hook 'prelude-latex-mode-defaults)
 
-          (add-hook 'LaTeX-mode-hook (lambda ()
-                                       (run-hooks 'prelude-latex-mode-hook)))))
+        (add-hook 'LaTeX-mode-hook (lambda ()
+                                     (run-hooks 'prelude-latex-mode-hook))))
 
     #+END_SRC
 
@@ -346,40 +342,39 @@
     #+BEGIN_SRC emacs-lisp
       (req-package org
         :config
-        (progn
-          (require 'ox-md)
-          (require 'ox-latex)
-          (require 'org-bullets)
-          ;; Show org-mode bullets as UTF-8 characters.
-          (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+        (require 'ox-md)
+        (require 'ox-latex)
+        (require 'org-bullets)
+        ;; Show org-mode bullets as UTF-8 characters.
+        (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
-          ;; Fontify org-mode code blocks
-          (setq org-src-fontify-natively t)
+        ;; Fontify org-mode code blocks
+        (setq org-src-fontify-natively t)
 
-          (setq org-todo-keyword-faces
-                '(("TODO" . (:foreground "green" :weight bold))
-                  ("NEXT" :foreground "blue" :weight bold)
-                  ("WAITING" :foreground "orange" :weight bold)
-                  ("HOLD" :foreground "magenta" :weight bold)
-                  ("CANCELLED" :foreground "forest green" :weight bold)))
+        (setq org-todo-keyword-faces
+              '(("TODO" . (:foreground "green" :weight bold))
+                ("NEXT" :foreground "blue" :weight bold)
+                ("WAITING" :foreground "orange" :weight bold)
+                ("HOLD" :foreground "magenta" :weight bold)
+                ("CANCELLED" :foreground "forest green" :weight bold)))
 
-          (setq org-enforce-todo-dependencies t)
-          (setq org-src-tab-acts-natively t)
-          (setq org-src-window-setup 'current-window)
+        (setq org-enforce-todo-dependencies t)
+        (setq org-src-tab-acts-natively t)
+        (setq org-src-window-setup 'current-window)
 
-          ;; set up latex
-          (setq org-latex-create-formula-image-program 'imagemagick)
+        ;; set up latex
+        (setq org-latex-create-formula-image-program 'imagemagick)
 
-          ;; Add minted to the defaults packages to include when exporting.
-          (add-to-list 'org-latex-packages-alist '("" "minted"))
+        ;; Add minted to the defaults packages to include when exporting.
+        (add-to-list 'org-latex-packages-alist '("" "minted"))
 
-          ;; Tell the latex export to use the minted package for source
-          ;; code coloration.
-          (setq org-latex-listings 'minted)
-          ;; Let the exporter use the -shell-escape option to let latex
-          ;; execute external programs.
-          (setq org-latex-pdf-process
-                '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))))
+        ;; Tell the latex export to use the minted package for source
+        ;; code coloration.
+        (setq org-latex-listings 'minted)
+        ;; Let the exporter use the -shell-escape option to let latex
+        ;; execute external programs.
+        (setq org-latex-pdf-process
+              '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")))
     #+END_SRC
 
 *** Dired and dired+
@@ -391,21 +386,19 @@
       (req-package dired
         :commands dired-jump
         :config
-        (progn
-          ;; dired - reuse current buffer by pressing 'a'
-          (put 'dired-find-alternate-file 'disabled nil)
+        (put 'dired-find-alternate-file 'disabled nil)
 
-          ;; always delete and copy recursively
-          (setq dired-recursive-deletes 'always)
-          (setq dired-recursive-copies 'always)
+        ;; always delete and copy recursively
+        (setq dired-recursive-deletes 'always)
+        (setq dired-recursive-copies 'always)
 
-          (setq dired-dwim-target t)
+        (setq dired-dwim-target t)
 
-          ;; enable some really cool extensions like C-x C-j(dired-jump)
-          (require 'dired-x)
+        ;; enable some really cool extensions like C-x C-j(dired-jump)
+        (require 'dired-x)
 
-          (setq-default dired-omit-mode t
-                        dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$\\|^\\.")))
+        (setq-default dired-omit-mode t
+                      dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$\\|^\\."))
 
       (req-package dired+)
     #+END_SRC
@@ -459,6 +452,25 @@
         :bind ("C-x C-f" . helm-find-files))
     #+END_SRC
 
+*** Helm-swoop
+
+    [[https://github.com/ShingoFukuyama/helm-swoop][Helm-swoop]], efficiently hopping squeezed lines powered by Emacs
+    helm interface.
+
+    #+BEGIN_SRC emacs-lisp
+      (req-package helm-swoop
+        :require helm
+        :bind (("M-i" . helm-swoop)
+               ("M-I" . helm-swoop-back-to-last-point)
+               ("C-c M-i" . helm-multi-swoop)
+               ("C-x M-i" . helm-multi-swoop-all))
+        :config
+        ;; When doing isearch, hand the word over to helm-swoop
+        (bind-key "M-i" 'helm-swoop-from-isearch isearch-mode-map)
+        ;; From helm-swoop to helm-multi-swoop-all
+        (bind-key "M-i" 'helm-multi-swoop-all-from-helm-swoop helm-swoop-map))
+    #+END_SRC
+
 *** Fulframe
 
     [[https://github.com/tomterl/fullframe][Fullframe]] advises commands to execute fullscreen, restoring the window
@@ -467,9 +479,8 @@
     #+BEGIN_SRC emacs-lisp
       (req-package fullframe
         :config
-        (progn
-          (fullframe magit-status magit-mode-quit-window)
-          (fullframe ibuffer ibuffer-quit)))
+        (fullframe magit-status magit-mode-quit-window)
+        (fullframe ibuffer ibuffer-quit))
     #+END_SRC
 
 *** Mykie
@@ -480,21 +491,20 @@
     #+BEGIN_SRC emacs-lisp
       (req-package mykie
         :config
-        (progn
-          (setq mykie:use-major-mode-key-override 'global)
-          (mykie:initialize)
-          (mykie:set-keys nil
-            "C-e"
-            :default (move-end-of-line 1)
-            :repeat  (end-of-buffer)
-            :C-u (beginning-of-buffer)
-            "C-S-n"
-            :default (next-line 4)
-            "C-S-p"
-            :default (previous-line 4)
-            "C-w"
-            :default (kill-region (mark) (point))
-            :minibuff (backward-kill-word 1))))
+        (setq mykie:use-major-mode-key-override 'global)
+        (mykie:initialize)
+        (mykie:set-keys nil
+          "C-e"
+          :default (move-end-of-line 1)
+          :repeat  (end-of-buffer)
+          :C-u (beginning-of-buffer)
+          "C-S-n"
+          :default (next-line 4)
+          "C-S-p"
+          :default (previous-line 4)
+          "C-w"
+          :default (kill-region (mark) (point))
+          :minibuff (backward-kill-word 1)))
     #+END_SRC
 
 *** Switch-window
@@ -513,7 +523,7 @@
 
     #+BEGIN_SRC emacs-lisp
       (req-package rainbow-mode
-        :diminish (rainbow-mode . "")
+        :diminish rainbow-mode ""
         :config
         (add-hook 'prog-mode-hook 'rainbow-mode))
     #+END_SRC
@@ -537,7 +547,7 @@
 
     #+BEGIN_SRC emacs-lisp
       (req-package elisp-slime-nav
-        :diminish (elisp-slime-nav-mode . "")
+        :diminish elisp-slime-nav-mode ""
         :config
         (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
           (add-hook hook 'elisp-slime-nav-mode)))
@@ -560,18 +570,17 @@
     #+BEGIN_SRC emacs-lisp
 
       (req-package whitespace
-        :diminish (whitespace-mode . "")
+        :diminish whitespace-mode ""
         :config
-        (progn
-          (setq whitespace-line-column 80) ;; limit line length
-          (setq whitespace-style '(face tabs trailing lines-tail))
+        (setq whitespace-line-column 80) ;; limit line length
+        (setq whitespace-style '(face tabs trailing lines-tail))
 
-          (defun prelude-enable-whitespace ()
-            "Enable `whitespace-mode' if `prelude-whitespace' is not nil."
-            (add-hook 'before-save-hook 'whitespace-cleanup nil t)
-            (whitespace-mode +1))
+        (defun prelude-enable-whitespace ()
+          "Enable `whitespace-mode' if `prelude-whitespace' is not nil."
+          (add-hook 'before-save-hook 'whitespace-cleanup nil t)
+          (whitespace-mode +1))
 
-          (add-hook 'text-mode-hook 'prelude-enable-whitespace)))
+        (add-hook 'text-mode-hook 'prelude-enable-whitespace))
 
     #+END_SRC
 
@@ -630,17 +639,16 @@
       (req-package yasnippet
         :idle
         (yas-global-mode 1)
-        :diminish (yas-minor-mode . "")
+        :diminish yas-minor-mode ""
         :config
-        (progn
-          (setq yas-snippet-dirs '("~/.emacs.d/snippets/"))
-          (add-to-list 'auto-mode-alist '("\\.yasnippet$" . snippet-mode))
-          (setq yas-verbosity 1)
-          ;; No need to be so verbose
-          (setq yas-wrap-around-region t)
-          ;; Wrap around region
-          (setq-default yas/prompt-functions '(yas/ido-prompt))
-          (bind-key "<return>" 'yas-exit-all-snippets yas-keymap)))
+        (setq yas-snippet-dirs '("~/.emacs.d/snippets/"))
+        (add-to-list 'auto-mode-alist '("\\.yasnippet$" . snippet-mode))
+        (setq yas-verbosity 1)
+        ;; No need to be so verbose
+        (setq yas-wrap-around-region t)
+        ;; Wrap around region
+        (setq-default yas/prompt-functions '(yas/ido-prompt))
+        (bind-key "<return>" 'yas-exit-all-snippets yas-keymap))
     #+END_SRC
 
 *** Undo-Tree
@@ -649,7 +657,7 @@
 
     #+BEGIN_SRC emacs-lisp
       (req-package undo-tree
-        :diminish (undo-tree-mode . "")
+        :diminish undo-tree-mode ""
         :config
         (global-undo-tree-mode 1))
     #+END_SRC
@@ -663,17 +671,16 @@
       (req-package company
         :init
         (add-hook 'after-init-hook #'global-company-mode)
-        :diminish (company-mode . "")
+        :diminish company-mode ""
         :config
-        (progn
-          ;; repomacs problematic
-          ;; (delq 'company-ropemacs 'company-backends)
-          (setq company-idle-delay .3)
-          (setq company-dabbrev-ignore-case nil)
-          (setq company-dabbrev-downcase nil)
-          (eval-after-load 'company-dabbrev-code
-            '(dolist (mode '(coq-mode oz-mode))
-               (add-to-list 'company-dabbrev-code-modes mode)))))
+        ;; repomacs problematic
+        ;; (delq 'company-ropemacs 'company-backends)
+        (setq company-idle-delay .3)
+        (setq company-dabbrev-ignore-case nil)
+        (setq company-dabbrev-downcase nil)
+        (eval-after-load 'company-dabbrev-code
+          '(dolist (mode '(coq-mode oz-mode))
+             (add-to-list 'company-dabbrev-code-modes mode))))
     #+END_SRC
 
 *** Shell-pop
@@ -691,7 +698,7 @@
 
     #+BEGIN_SRC emacs-lisp
       (req-package flyspell
-        :diminish (flyspell-mode . "")
+        :diminish flyspell-mode ""
         :init
         (progn
           ;; Enable spell check in only plaintext
@@ -699,14 +706,13 @@
           ;; Enable spell check in comments
           (add-hook 'prog-mode-hook 'flyspell-prog-mode))
         :config
-        (progn
-          (setq flyspell-issue-welcome-flag nil)
-          (setq flyspell-issue-message-flag nil)
-          (setq ispell-program-name "aspell" ; use aspell instead of ispell
-                ispell-extra-args '("--sug-mode=ultra"))
-          ;; Make spell check on right click.
-          (define-key flyspell-mouse-map [down-mouse-3] 'flyspell-correct-word)
-          (define-key flyspell-mouse-map [mouse-3] 'undefined)))
+        (setq flyspell-issue-welcome-flag nil)
+        (setq flyspell-issue-message-flag nil)
+        (setq ispell-program-name "aspell"    ; use aspell instead of ispell
+              ispell-extra-args '("--sug-mode=ultra"))
+        ;; Make spell check on right click.
+        (define-key flyspell-mouse-map [down-mouse-3] 'flyspell-correct-word)
+        (define-key flyspell-mouse-map [mouse-3] 'undefined))
 
     #+END_SRC
 
@@ -725,11 +731,9 @@
             (global-flycheck-mode +1)
           (add-hook 'prog-mode-hook 'flycheck-mode))
         :config
-        (progn
-          ;; disable the annoying doc checker
-          (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
-          (setq flycheck-indication-mode 'left-fringe)
-          (setq flycheck-completion-system 'ido)))
+        (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+        (setq flycheck-indication-mode 'left-fringe)
+        (setq flycheck-completion-system 'ido))
     #+END_SRC
 
 *** Pop Win
@@ -753,6 +757,36 @@
                ("C-c C-<" . mc/mark-all-like-this)
                ("C-c C->" . mc/mark-more-like-this-extended)))
     #+END_SRC
+
+*** Move-text
+
+    Move lines or a region up or down.
+
+    #+BEGIN_SRC emacs-lisp
+          (req-package move-text
+            :bind (("<C-S-up>" . move-text-up)
+                   ("<C-S-down>" . move-text-down)))
+    #+END_SRC
+
+*** Guide-key
+
+    [[https://github.com/kbkbkbkb1/guide-key][Guide-key.el]] displays the available key bindings automatically and
+    dynamically.
+
+    #+BEGIN_SRC emacs-lisp
+      (req-package guide-key
+        :diminish guide-key-mode ""
+        :config
+        (guide-key-mode 1)
+        (setq guide-key/guide-key-sequence
+              '("C-x r" "C-x c" "C-x 4" "C-x 5"))
+        (setq guide-key/popup-window-position 'bottom)
+        (setq guide-key/highlight-command-regexp
+              '(("rectangle" . font-lock-warning-face)
+                ("register"  . font-lock-type-face))))
+    #+END_SRC
+
+
 
 * Finish Requirements
   All done with  =req-package=.
