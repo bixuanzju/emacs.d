@@ -374,7 +374,26 @@
         ;; Let the exporter use the -shell-escape option to let latex
         ;; execute external programs.
         (setq org-latex-pdf-process
-              '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")))
+              '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+
+        (org-babel-do-load-languages
+         (quote org-babel-load-languages)
+         (quote ((emacs-lisp . t)
+                 (dot . t)
+                 (ditaa . t)
+                 (R . t)
+                 (python . t)
+                 (ruby . t)
+                 (gnuplot . t)
+                 (clojure . t)
+                 (sh . t)
+                 (ledger . t)
+                 (haskell . t)
+                 (org . t)
+                 (plantuml . t)
+                 (scala . t)
+                 (latex . t))))
+        (setq org-confirm-babel-evaluate nil))
     #+END_SRC
 
 *** Dired and dired+
@@ -403,7 +422,17 @@
       (req-package dired+)
     #+END_SRC
 
-*** TODO Scala-mode
+*** Scala-mode
+
+    #+BEGIN_SRC emacs-lisp
+      (req-package scala-mode2
+        :config
+        (add-hook 'scala-mode-hook 'subword-mode)
+        (setq scala-indent:align-forms t
+              scala-indent:align-parameters t
+              scala-indent:default-run-on-strategy 0))
+    #+END_SRC
+
 *** TODO Geiser/Scheme
 
 *** TODO Markdown
@@ -809,6 +838,18 @@
         :if (eq system-type 'darwin)
         :bind
         ("C-c o" . reveal-in-finder))
+    #+END_SRC
+
+*** Color-identifiers-mode
+
+    [[https://github.com/ankurdave/color-identifiers-mode][Color Identifiers]] is a minor mode for Emacs that highlights each
+    source code identifier uniquely based on its name.
+
+    #+BEGIN_SRC emacs-lisp
+      (req-package color-identifiers-mode
+        :diminish (color-identifiers-mode . "")
+        :init
+        (add-hook 'after-init-hook #'global-color-identifiers-mode))
     #+END_SRC
 
 *** Eyebrowse
