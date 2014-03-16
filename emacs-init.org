@@ -1,3 +1,6 @@
+#+AUTHOR: Jeremy Bi
+#+TITLE: My Emacs Configuration
+
 * Emacs Org Configuration
 
   This file is tangled using =org-babel-load-file=. What this does is
@@ -302,6 +305,7 @@
 
     #+BEGIN_SRC emacs-lisp
       (req-package tex-site
+        :require latex-extra
         :config
         (setq TeX-auto-save t)
         (setq TeX-parse-self t)
@@ -327,6 +331,7 @@
 
         (defun prelude-latex-mode-defaults ()
           (turn-on-auto-fill)
+          (latex/setup-keybinds)
           (abbrev-mode +1))
 
         (setq prelude-latex-mode-hook 'prelude-latex-mode-defaults)
@@ -348,6 +353,8 @@
         (require 'org-bullets)
         ;; Show org-mode bullets as UTF-8 characters.
         (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+        (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
 
         ;; Fontify org-mode code blocks
         (setq org-src-fontify-natively t)
@@ -892,9 +899,11 @@
     #+BEGIN_SRC emacs-lisp
       (req-package eyebrowse
         :diminish ""
+        :init
+        (setq eyebrowse-keymap-prefix (kbd "C-c C-v"))
         :config
-        (eyebrowse-mode t)
-        (setq eyebrowse-wrap-around-p t))
+        (setq eyebrowse-wrap-around-p t)
+        (eyebrowse-mode t))
     #+END_SRC
 
 *** Lexbind-mode
@@ -991,6 +1000,12 @@
                                 'kill-region
                               'backward-kill-word)))
     #+END_SRC
+*** Re-builder
+
+    #+BEGIN_SRC emacs-lisp
+      (setq reb-re-syntax 'string)
+    #+END_SRC
+
 *** Search
 
     #+BEGIN_SRC emacs-lisp
