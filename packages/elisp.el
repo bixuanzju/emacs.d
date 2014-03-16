@@ -36,41 +36,6 @@
   :config
   (dash-enable-font-lock))
 
-(defun goto-line-with-feedback ()
-  "Show line numbers temporarily, while prompting for the line number input."
-  (interactive)
-  (unwind-protect
-      (progn
-        (linum-mode 1)
-        (call-interactively 'goto-line))
-    (linum-mode -1)))
-
-(defun toggle-window-split ()
-  "Toggle window splitting between horizontal to vertical."
-  (interactive)
-  (if (= (count-windows) 2)
-      (let* ((this-win-buffer (window-buffer))
-             (next-win-buffer (window-buffer (next-window)))
-             (this-win-edges (window-edges (selected-window)))
-             (next-win-edges (window-edges (next-window)))
-             (this-win-2nd (not (and (<= (car this-win-edges)
-                                         (car next-win-edges))
-                                     (<= (cadr this-win-edges)
-                                         (cadr next-win-edges)))))
-             (splitter
-              (if (= (car this-win-edges)
-                     (car (window-edges (next-window))))
-                  'split-window-horizontally
-                'split-window-vertically)))
-        (delete-other-windows)
-        (let ((first-win (selected-window)))
-          (funcall splitter)
-          (if this-win-2nd (other-window 1))
-          (set-window-buffer (selected-window) this-win-buffer)
-          (set-window-buffer (next-window) next-win-buffer)
-          (select-window first-win)
-          (if this-win-2nd (other-window 1))))))
-
 ;; (add-hook 'isearch-mode-end-hook 'my-goto-match-beginning)
 ;; (defun my-goto-match-beginning ()
 ;;   (when (and isearch-forward isearch-other-end)
@@ -80,13 +45,6 @@
 ;;   "Go to beginning of match."
 ;;   (when (and isearch-forward isearch-other-end)
 ;;     (goto-char isearch-other-end)))
-
-(defun backward-kill-word-or-kill-region ()
-  "Kill region if there's one, otherwise kill the a word backward."
-  (interactive)
-  (call-interactively (if (region-active-p)
-                          'kill-region
-                        'backward-kill-word)))
 
 ;; (defmacro after-load (feature &rest body)
 ;;   "After FEATURE is loaded, evaluate BODY."
@@ -125,19 +83,19 @@
 ;;     ad-do-it))
 
 ;; toggel shell escape using C-c C-t C-x
-(defun TeX-toggle-escape ()
-  "Toggle Shell Escape."
-  (interactive)
-  (setq LaTeX-command
-        (if (string= LaTeX-command "latex") "latex -shell-escape"
-          "latex"))
-  (message (concat "shell escape "
-                   (if (string= LaTeX-command "latex -shell-escape")
-                       "enabled"
-                     "disabled"))))
-(add-hook 'LaTeX-mode-hook
-          (lambda nil
-            (local-set-key (kbd "C-c C-t x") 'TeX-toggle-escape)))
+;; (defun TeX-toggle-escape ()
+;;   "Toggle Shell Escape."
+;;   (interactive)
+;;   (setq LaTeX-command
+;;         (if (string= LaTeX-command "latex") "latex -shell-escape"
+;;           "latex"))
+;;   (message (concat "shell escape "
+;;                    (if (string= LaTeX-command "latex -shell-escape")
+;;                        "enabled"
+;;                      "disabled"))))
+;; (add-hook 'LaTeX-mode-hook
+;;           (lambda nil
+;;             (local-set-key (kbd "C-c C-t x") 'TeX-toggle-escape)))
 
 ;; (defun my-find-user-custom-file ()
 ;;   "Edit the `custom-file', in another window."
@@ -196,23 +154,6 @@ point reaches the beginning or end of the buffer, stop there."
   "Join the current line with the line beneath it."
   (interactive)
   (delete-indentation 1))
-
-(defun prelude-indent-buffer ()
-  "Indent the currently visited buffer."
-  (interactive)
-  (indent-region (point-min) (point-max)))
-
-(defun prelude-untabify-buffer ()
-  "Remove all tabs from the current buffer."
-  (interactive)
-  (untabify (point-min) (point-max)))
-
-(defun prelude-cleanup-buffer ()
-  "Perform a bunch of operations on the whitespace content of a buffer."
-  (interactive)
-  (prelude-indent-buffer)
-  (prelude-untabify-buffer)
-  (whitespace-cleanup))
 
 (provide 'elisp)
 

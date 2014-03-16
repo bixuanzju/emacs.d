@@ -166,6 +166,7 @@
      (bind-key "C-c x" 'sunrise-cd)
      (bind-key "C-c X" 'sunrise)
      (bind-key "C-c t" 'toggle-window-split)
+     (bind-key "C-M-\\" 'prelude-indent-buffer)
      (bind-key "C-S-l" 'package-list-packages)
      (bind-key "C-c q" 'auto-fill-mode)
      (bind-key "M-'" 'next-error)
@@ -806,9 +807,9 @@
     Move lines or a region up or down.
 
     #+BEGIN_SRC emacs-lisp
-          (req-package move-text
-            :bind (("<C-S-up>" . move-text-up)
-                   ("<C-S-down>" . move-text-down)))
+      (req-package move-text
+        :bind (("<C-S-up>" . move-text-up)
+               ("<C-S-down>" . move-text-down)))
     #+END_SRC
 
 *** Guide-key
@@ -838,6 +839,36 @@
         :if (eq system-type 'darwin)
         :bind
         ("C-c o" . reveal-in-finder))
+    #+END_SRC
+
+*** Sbt-mode
+
+    [[https://github.com/hvesalai/sbt-mode][Sbt-mode]] is an emacs mode for interacting with sbt, scala console
+    (aka REPL) and sbt projects.
+
+    #+BEGIN_SRC emacs-lisp
+      (req-package sbt-mode
+        :config
+        (add-hook 'scala-mode-hook
+                  '(lambda ()
+                     (local-set-key (kbd "M-.") 'sbt-find-definitions)
+                     (local-set-key (kbd "C-x '") 'sbt-run-previous-command)))
+        (add-hook 'sbt-mode-hook
+                  '(lambda ()
+                     (setq compilation-skip-threshold 1)
+                     (local-set-key (kbd "C-a") 'comint-bol)
+                     (local-set-key (kbd "M-RET") 'comint-accumulate))))
+    #+END_SRC
+
+*** Ensime
+
+    [[https://github.com/ensime/ensime-src][ENSIME]] is the ENhanced Scala Interaction Mode for Emacs.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (req-package ensime
+        :config
+        (progn (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
+               (add-hook 'scala-mode-hook (lambda () (company-mode -1)))))
     #+END_SRC
 
 *** Color-identifiers-mode
@@ -877,7 +908,112 @@
         :config
         (add-hook 'emacs-lisp-mode-hook 'lexbind-mode))
     #+END_SRC
+** Buffer
 
+*** Toggle Windows
+
+    #+BEGIN_SRC emacs-lisp
+      (defun toggle-window-split ()
+        "Toggle window splitting between horizontal to vertical."
+        (interactive)
+        (if (= (count-windows) 2)
+            (let* ((this-win-buffer (window-buffer))
+                   (next-win-buffer (window-buffer (next-window)))
+                   (this-win-edges (window-edges (selected-window)))
+                   (next-win-edges (window-edges (next-window)))
+                   (this-win-2nd (not (and (<= (car this-win-edges)
+                                               (car next-win-edges))
+                                           (<= (cadr this-win-edges)
+                                               (cadr next-win-edges)))))
+                   (splitter
+                    (if (= (car this-win-edges)
+                           (car (window-edges (next-window))))
+                        'split-window-horizontally
+                      'split-window-vertically)))
+              (delete-other-windows)
+              (let ((first-win (selected-window)))
+                (funcall splitter)
+                (if this-win-2nd (other-window 1))
+                (set-window-buffer (selected-window) this-win-buffer)
+                (set-window-buffer (next-window) next-win-buffer)
+                (select-window first-win)
+                (if this-win-2nd (other-window 1))))))
+    #+END_SRC
+
+*** Untabify Buffer
+
+    #+BEGIN_SRC emacs-lisp
+      (defun prelude-untabify-buffer ()
+        "Remove all tabs from the current buffer."
+        (interactive)
+        (untabify (point-min) (point-max)))
+    #+END_SRC
+
+*** Indent Buffer
+
+    #+BEGIN_SRC emacs-lisp
+      (defun prelude-indent-buffer ()
+        "Indent the currently visited buffer."
+        (interactive)
+        (indent-region (point-min) (point-max)))
+    #+END_SRC
+
+*** Cleanup Buffer
+
+    #+BEGIN_SRC emacs-lisp
+      (defun prelude-cleanup-buffer ()
+        "Perform a bunch of operations on the whitespace content of a buffer."
+        (interactive)
+        (prelude-indent-buffer)
+        (prelude-untabify-buffer)
+        (whitespace-cleanup))
+    #+END_SRC
+** Miscellaneous
+*** Go to line with feedback
+
+    #+BEGIN_SRC emacs-lisp
+      (defun goto-line-with-feedback ()
+        "Show line numbers temporarily, while prompting for the line number input."
+        (interactive)
+        (unwind-protect
+            (progn
+              (linum-mode 1)
+              (call-interactively 'goto-line))
+          (linum-mode -1)))
+    #+END_SRC
+*** Backward kill
+
+    #+BEGIN_SRC emacs-lisp
+      (defun backward-kill-word-or-kill-region ()
+        "Kill region if there's one, otherwise kill the a word backward."
+        (interactive)
+        (call-interactively (if (region-active-p)
+                                'kill-region
+                              'backward-kill-word)))
+    #+END_SRC
+*** Search
+
+    #+BEGIN_SRC emacs-lisp
+      (defun prelude-search (query-url prompt)
+        "Open the search url constructed with the QUERY-URL.
+      PROMPT sets the `read-string prompt."
+        (browse-url
+         (concat query-url
+                 (url-hexify-string
+                  (if mark-active
+                      (buffer-substring (region-beginning) (region-end))
+                    (read-string prompt))))))
+
+      (defmacro prelude-install-search-engine (search-engine-name search-engine-url search-engine-prompt)
+        "Given some information regarding a search engine, install the interactive command to search through them"
+        `(defun ,(intern (format "prelude-%s" search-engine-name)) ()
+           ,(format "Search %s with a query or region if any." search-engine-name)
+           (interactive)
+           (prelude-search ,search-engine-url ,search-engine-prompt)))
+
+      (prelude-install-search-engine "google" "http://www.google.com/search?q=" "Google: ")
+      (prelude-install-search-engine "github" "https://github.com/search?q=" "Search GitHub: ")
+    #+END_SRC
 
 * Finish Requirements
   All done with  =req-package=.

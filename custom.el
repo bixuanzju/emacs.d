@@ -11,7 +11,7 @@
  '(max-lisp-eval-depth 2000)
  '(set-mark-command-repeat-pop t)
  '(shell-pop-shell-type (quote ("eshell" "*eshell*" (lambda nil (eshell)))))
- '(shell-pop-universal-key "C-c '")
+ '(shell-pop-universal-key "C-c \"")
  '(shift-select-mode nil)
  '(split-height-threshold nil)
  '(split-width-threshold 100)
