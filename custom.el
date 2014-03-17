@@ -4,7 +4,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
- '(ebib-preload-bib-files (quote ("~/research/refs.bib")))
+ '(ebib-preload-bib-files (quote ("~/Desktop/毕业论文开题报告/data/zjubib.bib")))
  '(history-length 1000)
  '(indicate-empty-lines t)
  '(load-prefer-newer t)

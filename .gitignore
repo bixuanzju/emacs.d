@@ -16,3 +16,4 @@ projectile-bookmarks.eld
 session*
 .cask
 /.mc-lists.el
+/url/
