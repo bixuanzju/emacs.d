@@ -9,11 +9,13 @@
   This emacs.d is currently  designed for Emacs 24.3 and above.
 
 *** Credits:
+
     This emacs.d was heavily inspired by the following configurations.
 
     [[https://github.com/daschwa/dotfiles/tree/master/emacs.d][daschwa's emacs.d]]
 
     [[https://github.com/bbatsov/prelude][Bozhidar Batsov's prelude]]
+
 
 * Package Management
 
@@ -35,6 +37,7 @@
      (require 'pallet)
    #+END_SRC
 
+
 * Packages, Modes, and Extensions
 
 ** Dependency Management with =req-package=
@@ -49,6 +52,7 @@
    #+BEGIN_SRC emacs-lisp
      (require 'req-package)
    #+END_SRC
+
 
 * Essentials
 
@@ -121,7 +125,9 @@
     (put 'erase-buffer 'disabled nil)
   #+END_SRC
 
+
 * Appearance
+
 ** Theme
 
    Set custom theme path and load theme
@@ -131,6 +137,7 @@
        (load-theme 'zenburn t))
    #+END_SRC
 
+
 ** Mode Line
 
    #+BEGIN_SRC emacs-lisp
@@ -139,6 +146,7 @@
        (setq sml/theme 'dark)
        (sml/setup))
    #+END_SRC
+
 
 * Keybindings
 
@@ -151,6 +159,7 @@
      (bind-key "C-x r q" 'save-buffers-kill-terminal)
      (bind-key "C-x C-c" 'delete-frame)
    #+END_SRC
+
 
 ** Improvements
    #+BEGIN_SRC emacs-lisp
@@ -207,6 +216,7 @@
                     (regexp-quote isearch-string))))))
    #+END_SRC
 
+
 ** Key-chord
 
    Key-chord maps pairs of simultaneously pressed keys to commands.
@@ -228,12 +238,15 @@
        (key-chord-define-global "xm" 'helm-M-x))
    #+END_SRC
 
+
 ** Unbind keys
 
    #+BEGIN_SRC emacs-lisp
      (unbind-key "C-o")
      (unbind-key "C-x f")
    #+END_SRC
+
+
 * Setups
 
   All packages and modes are configured here.
@@ -248,6 +261,7 @@
       (req-package magit
         :bind ("C-x g" . magit-status))
     #+END_SRC
+
 
 *** Lisp
 
@@ -299,6 +313,7 @@
 
      #+END_SRC
 
+
 *** LaTex
 
     Sane setup for LaTeX writers.
@@ -340,6 +355,7 @@
                                      (run-hooks 'prelude-latex-mode-hook))))
 
     #+END_SRC
+
 
 *** Org Mode
 
@@ -404,6 +420,7 @@
         (setq org-confirm-babel-evaluate nil))
     #+END_SRC
 
+
 *** Dired and dired+
 
     Dired Plus is an extension to the =dired= file manager in Emacs.  My
@@ -430,6 +447,7 @@
       (req-package dired+)
     #+END_SRC
 
+
 *** Scala-mode
 
     #+BEGIN_SRC emacs-lisp
@@ -441,7 +459,9 @@
               scala-indent:default-run-on-strategy 0))
     #+END_SRC
 
+
 *** TODO Geiser/Scheme
+
 
 *** TODO Markdown
 
@@ -459,6 +479,8 @@
           (erase-buffer)))
 
     #+END_SRC
+
+
 ** Minor Modes
 
 *** Pallet
@@ -466,6 +488,7 @@
     #+BEGIN_SRC emacs-lisp
       (req-package pallet)
     #+END_SRC
+
 
 *** Wgrep
 
@@ -476,6 +499,7 @@
       (req-package wgrep-ag
         :require wgrep)
     #+END_SRC
+
 
 *** Helm
 
@@ -489,6 +513,7 @@
         (require 'helm-config)
         :bind ("C-x C-f" . helm-find-files))
     #+END_SRC
+
 
 *** Helm-swoop
 
@@ -509,6 +534,7 @@
         (bind-key "M-i" 'helm-multi-swoop-all-from-helm-swoop helm-swoop-map))
     #+END_SRC
 
+
 *** Helm-descbinds
 
     [[https://github.com/emacs-helm/helm-descbinds][Helm Descbinds]] provides an interface to emacs' =describe-bindings=
@@ -522,6 +548,7 @@
         (helm-descbinds-mode 1))
     #+END_SRC
 
+
 *** Fulframe
 
     [[https://github.com/tomterl/fullframe][Fullframe]] advises commands to execute fullscreen, restoring the window
@@ -533,6 +560,7 @@
         (fullframe magit-status magit-mode-quit-window)
         (fullframe ibuffer ibuffer-quit))
     #+END_SRC
+
 
 *** Mykie
 
@@ -558,6 +586,7 @@
           :minibuff (backward-kill-word 1)))
     #+END_SRC
 
+
 *** Switch-window
 
     [[https://github.com/dimitri/switch-win][Switch-window]] provides window switching, the visual way.
@@ -566,6 +595,7 @@
       (req-package switch-window
         :bind ("C-x o" . switch-window))
     #+END_SRC
+
 
 *** Rainbow mode
 
@@ -579,6 +609,7 @@
         (add-hook 'prog-mode-hook 'rainbow-mode))
     #+END_SRC
 
+
 *** Rainbow-delimiter
 
     [[https://github.com/jlr/rainbow-delimiters][Rainbow Delimiters]] is a “rainbow parentheses”-like mode which
@@ -589,6 +620,7 @@
         :config
         (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
     #+END_SRC
+
 
 *** Elisp-slime-nav
 
@@ -604,6 +636,7 @@
           (add-hook hook 'elisp-slime-nav-mode)))
     #+END_SRC
 
+
 *** Expand-region
 
     [[https://github.com/magnars/expand-region.el][Expand-region]] increases the selected region by semantic units. Just
@@ -613,6 +646,7 @@
       (req-package expand-region
         :bind ("C-=" . er/expand-region))
     #+END_SRC
+
 
 *** Whitespace
 
@@ -635,6 +669,7 @@
 
     #+END_SRC
 
+
 *** Ag
 
     [[https://github.com/Wilfred/ag.el][Ag.el]] is a simple ag frontend, loosely based on ack-and-half.el.
@@ -644,6 +679,7 @@
         :config
         (setq ag-highlight-search t))
     #+END_SRC
+
 
 *** Projectile
 
@@ -659,6 +695,7 @@
         (setq projectile-cache-file
               (expand-file-name  "projectile.cache" savefile-dir)))
     #+END_SRC
+
 
 *** Lispy
 
@@ -682,6 +719,7 @@
                    ("G" . special-lispy-goto)))
     #+END_SRC
 
+
 *** Yasnippets
 
     Snippets are keys.
@@ -702,6 +740,7 @@
         (bind-key "<return>" 'yas-exit-all-snippets yas-keymap))
     #+END_SRC
 
+
 *** Undo-Tree
 
     More natural undo or redo. Undo with =C-/= and redo with =C-?=.
@@ -712,6 +751,7 @@
         :config
         (global-undo-tree-mode 1))
     #+END_SRC
+
 
 *** Company
 
@@ -734,6 +774,7 @@
              (add-to-list 'company-dabbrev-code-modes mode))))
     #+END_SRC
 
+
 *** Shell-pop
 
     [[https://github.com/kyagi/shell-pop-el][Shell-pop.el]] helps you to use shell easily on Emacs. Only one key
@@ -742,6 +783,7 @@
     #+BEGIN_SRC emacs-lisp
       (req-package shell-pop)
     #+END_SRC
+
 
 *** Flyspell
 
@@ -770,6 +812,7 @@
 **** Helpful Default Keybindings
      =C-.= corrects word at point.  =C-,​= to jump to next misspelled word.
 
+
 *** Flycheck
 
     A great syntax checker.
@@ -787,6 +830,7 @@
         (setq flycheck-completion-system 'ido))
     #+END_SRC
 
+
 *** Pop Win
 
     [[https://github.com/m2ym/popwin-el][popwin]] is used to manage the size of "popup" buffers.
@@ -796,6 +840,7 @@
         :config
         (popwin-mode 1))
     #+END_SRC
+
 
 *** Multiple Cursors
 
@@ -809,6 +854,7 @@
                ("C-c C->" . mc/mark-more-like-this-extended)))
     #+END_SRC
 
+
 *** Move-text
 
     Move lines or a region up or down.
@@ -818,6 +864,7 @@
         :bind (("<C-S-up>" . move-text-up)
                ("<C-S-down>" . move-text-down)))
     #+END_SRC
+
 
 *** Guide-key
 
@@ -837,6 +884,7 @@
                 ("register"  . font-lock-type-face))))
     #+END_SRC
 
+
 *** Reveal-in-finder
 
     Open file in Finder
@@ -847,6 +895,7 @@
         :bind
         ("C-c o" . reveal-in-finder))
     #+END_SRC
+
 
 *** Sbt-mode
 
@@ -867,6 +916,7 @@
                      (local-set-key (kbd "M-RET") 'comint-accumulate))))
     #+END_SRC
 
+
 *** Ensime
 
     [[https://github.com/ensime/ensime-src][ENSIME]] is the ENhanced Scala Interaction Mode for Emacs.
@@ -877,6 +927,7 @@
         (progn (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
                (add-hook 'scala-mode-hook (lambda () (company-mode -1)))))
     #+END_SRC
+
 
 *** Color-identifiers-mode
 
@@ -889,6 +940,7 @@
         :init
         (add-hook 'after-init-hook #'global-color-identifiers-mode))
     #+END_SRC
+
 
 *** Eyebrowse
 
@@ -906,6 +958,7 @@
         (eyebrowse-mode t))
     #+END_SRC
 
+
 *** Lexbind-mode
 
     [[https://github.com/spacebat/lexbind-mode][Lexbind-mode]] is an Emacs minor mode to display the value of the
@@ -917,6 +970,8 @@
         :config
         (add-hook 'emacs-lisp-mode-hook 'lexbind-mode))
     #+END_SRC
+
+
 ** Buffer
 
 *** Toggle Windows
@@ -949,6 +1004,7 @@
                 (if this-win-2nd (other-window 1))))))
     #+END_SRC
 
+
 *** Untabify Buffer
 
     #+BEGIN_SRC emacs-lisp
@@ -958,6 +1014,7 @@
         (untabify (point-min) (point-max)))
     #+END_SRC
 
+
 *** Indent Buffer
 
     #+BEGIN_SRC emacs-lisp
@@ -966,6 +1023,7 @@
         (interactive)
         (indent-region (point-min) (point-max)))
     #+END_SRC
+
 
 *** Cleanup Buffer
 
@@ -977,6 +1035,8 @@
         (prelude-untabify-buffer)
         (whitespace-cleanup))
     #+END_SRC
+
+
 ** Miscellaneous
 *** Go to line with feedback
 
@@ -1029,6 +1089,7 @@
       (prelude-install-search-engine "google" "http://www.google.com/search?q=" "Google: ")
       (prelude-install-search-engine "github" "https://github.com/search?q=" "Search GitHub: ")
     #+END_SRC
+
 
 * Finish Requirements
   All done with  =req-package=.
