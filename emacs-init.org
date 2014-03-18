@@ -860,7 +860,8 @@
         :config
         (guide-key-mode 1)
         (setq guide-key/guide-key-sequence
-              '("C-x r" "C-x c" "C-x 4" "C-x 5"))
+              '("C-x r" "C-x c" "C-x 4" "C-x 5"
+                (org-mode "C-c C-x")))
         (setq guide-key/popup-window-position 'bottom)
         (setq guide-key/highlight-command-regexp
               '(("rectangle" . font-lock-warning-face)
@@ -988,6 +989,27 @@
                 (if this-win-2nd (other-window 1))))))
     #+END_SRC
 
+*** Swap windowns
+
+    #+BEGIN_SRC emacs-lisp
+      (defun prelude-swap-windows ()
+        "If you have 2 windows, it swaps them."
+        (interactive)
+        (if (/= (count-windows) 2)
+            (message "You need exactly 2 windows to do this.")
+          (let* ((w1 (car (window-list)))
+                 (w2 (cadr (window-list)))
+                 (b1 (window-buffer w1))
+                 (b2 (window-buffer w2))
+                 (s1 (window-start w1))
+                 (s2 (window-start w2)))
+            (set-window-buffer w1 b2)
+            (set-window-buffer w2 b1)
+            (set-window-start w1 s2)
+            (set-window-start w2 s1)))
+        (other-window 1))
+    #+END_SRC
+
 *** Untabify Buffer
 
     #+BEGIN_SRC emacs-lisp
@@ -1096,27 +1118,6 @@
       (prelude-install-search-engine "google" "http://www.google.com/search?q=" "Google: ")
       (prelude-install-search-engine "github" "https://github.com/search?q=" "Search GitHub: ")
     #+END_SRC
-*** Swap windowns
-
-    #+BEGIN_SRC emacs-lisp
-      (defun prelude-swap-windows ()
-        "If you have 2 windows, it swaps them."
-        (interactive)
-        (if (/= (count-windows) 2)
-            (message "You need exactly 2 windows to do this.")
-          (let* ((w1 (car (window-list)))
-                 (w2 (cadr (window-list)))
-                 (b1 (window-buffer w1))
-                 (b2 (window-buffer w2))
-                 (s1 (window-start w1))
-                 (s2 (window-start w2)))
-            (set-window-buffer w1 b2)
-            (set-window-buffer w2 b1)
-            (set-window-start w1 s2)
-            (set-window-start w2 s1)))
-        (other-window 1))
-    #+END_SRC
-
 *** Duplicate and comment
 
     #+BEGIN_SRC emacs-lisp
