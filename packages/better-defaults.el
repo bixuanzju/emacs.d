@@ -140,6 +140,23 @@
 ;; keep in mind known issues with zsh - see emacs wiki
 (setq tramp-default-method "ssh")
 
+;; ediff - don't start another frame
+(require 'ediff)
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+
+;; make a shell script executable automatically on save
+(add-hook 'after-save-hook
+          'executable-make-buffer-file-executable-if-script-p)
+
+;; .zsh file is shell script too
+(add-to-list 'auto-mode-alist '("\\.zsh\\'" . shell-script-mode))
+
+;; enable winner-mode to manage window configurations
+(winner-mode +1)
+
+(setq semanticdb-default-save-directory
+      (expand-file-name "semanticdb" savefile-dir))
+
 ;; Ido-related config
 (setq ido-enable-prefix nil
       ido-enable-flex-matching t
