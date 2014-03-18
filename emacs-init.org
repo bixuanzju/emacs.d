@@ -109,6 +109,12 @@
           savehist-file (expand-file-name "savehist" savefile-dir))
     (savehist-mode +1)
 
+    ;; save recent files
+    (require 'recentf)
+    (setq recentf-save-file (expand-file-name "recentf" savefile-dir)
+          recentf-max-saved-items 500
+          recentf-max-menu-items 15)
+
     ;; enable auto-pair
     (electric-pair-mode)
 
@@ -467,10 +473,8 @@
     Type =clear= to clear the buffer like in other terminal emulators.
 
     #+BEGIN_SRC emacs-lisp
-      (req-package eshell
-        :config
-        (setq eshell-directory-name
-              (expand-file-name "eshell" savefile-dir)))
+      (setq eshell-directory-name
+              (expand-file-name "eshell" savefile-dir))
 
       (defun eshell/clear ()
         "Clears the shell buffer ala Unix's clear."
