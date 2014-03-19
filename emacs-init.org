@@ -262,6 +262,7 @@
 
     #+BEGIN_SRC emacs-lisp
       (req-package magit
+        :diminish (magit-auto-revert-mode . "")
         :bind ("C-x g" . magit-status))
     #+END_SRC
 
@@ -473,6 +474,7 @@
     Type =clear= to clear the buffer like in other terminal emulators.
 
     #+BEGIN_SRC emacs-lisp
+      (require 'eshell)
       (setq eshell-directory-name
               (expand-file-name "eshell" savefile-dir))
 
