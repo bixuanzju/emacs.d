@@ -157,6 +157,10 @@
 (setq semanticdb-default-save-directory
       (expand-file-name "semanticdb" savefile-dir))
 
+;; saner regex syntax
+(require 're-builder)
+(setq reb-re-syntax 'string)
+
 ;; Ido-related config
 (setq ido-enable-prefix nil
       ido-enable-flex-matching t
