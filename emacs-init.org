@@ -160,7 +160,7 @@
    I don't like to quite Emacs on accident, and I find closing frames are
    more useful.
 
-   #+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp :tangle no
      ;; The mnemonic is C-t REALLY QUIT
      (bind-key "C-x r q" 'save-buffers-kill-terminal)
      (bind-key "C-x C-c" 'delete-frame)
@@ -331,7 +331,7 @@
         (setq-default TeX-master nil)
 
         ;; use pdflatex
-        (setq TeX-PDF-mode t)
+        (TeX-global-PDF-mode 1)
 
         ;; sensible defaults for OS X, other OSes should be covered out-of-the-box
         (when (eq system-type 'darwin)
