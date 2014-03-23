@@ -398,17 +398,22 @@
         ;; set up latex
         (setq org-latex-create-formula-image-program 'imagemagick)
 
-        ;; Add minted to the defaults packages to include when exporting.
-        (add-to-list 'org-latex-packages-alist '("" "minted"))
+        (setq org-latex-pdf-process
+              (quote ("pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
+                      "bibtex $(basename %b)"
+                      "pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
+                      "pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f")))
 
         ;; Tell the latex export to use the minted package for source
         ;; code coloration.
+        (add-to-list 'org-latex-packages-alist '("" "minted"))
         (setq org-latex-listings 'minted)
-        ;; Let the exporter use the -shell-escape option to let latex
-        ;; execute external programs.
-        (setq org-latex-pdf-process
-              '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
 
+        (setq org-latex-minted-options
+              '(("bgcolor" "mintedbg") ("frame" "single") ("framesep" "6pt")
+                ("mathescape" "true") ("fontsize" "\\small")))
+
+        ;; execute external programs.
         (org-babel-do-load-languages
          (quote org-babel-load-languages)
          (quote ((emacs-lisp . t)
@@ -426,6 +431,7 @@
                  (plantuml . t)
                  (scala . t)
                  (latex . t))))
+
         (setq org-confirm-babel-evaluate nil))
     #+END_SRC
 
@@ -660,7 +666,8 @@
           (add-hook 'before-save-hook 'whitespace-cleanup nil t)
           (whitespace-mode +1))
 
-        (add-hook 'text-mode-hook 'prelude-enable-whitespace))
+        (add-hook 'text-mode-hook 'prelude-enable-whitespace)
+        (add-hook 'prog-mode-hook 'prelude-enable-whitespace))
 
     #+END_SRC
 
@@ -950,7 +957,30 @@
     [[https://github.com/joostkremers/ebib][Ebib]] is a BibTeX database manager that runs in GNU Emacs.
 
     #+BEGIN_SRC emacs-lisp
-      (req-package ebib)
+      (req-package ebib
+        :config
+        (org-add-link-type
+         "ebib" 'ebib
+         (lambda (path desc format)
+           (cond
+            ((eq format 'html)
+             (format "(<cite>%s</cite>)" path))
+            ((eq format 'latex)
+             (if (or (not desc) (equal 0 (search "cite:" desc)))
+                 (format "\\cite{%s}" path)
+               (format "\\cite[%s][%s]{%s}"
+                       (cadr (split-string desc ";"))
+                       (car (split-string desc ";")) path))))))
+        (setq ebib-citation-commands
+            '((any
+               (("cite" "\\cite%<[%A]%>{%K}")))
+              (org-mode
+               (("ebib1" "[[ebib:%K]]")
+                ("ebib2" "[[ebib:%K][%D]]")))
+              (markdown-mode
+               (("text" "@%K%< [%A]%>")
+                ("paren" "[%(%<%A %>@%K%<, %A%>%; )]")
+                ("year" "[-@%K%< %A%>]"))))))
     #+END_SRC
 
 *** Lexbind-mode
@@ -1177,3 +1207,4 @@
   #+BEGIN_SRC emacs-lisp
     (req-package-finish)
   #+END_SRC
+

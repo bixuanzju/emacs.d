@@ -99,12 +99,15 @@
 ;; disable annoying blink-matching-paren
 (setq blink-matching-paren nil)
 
-;; meaningful names for buffers with the same name
-;; (require 'uniquify)
-;; (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
-;; (setq uniquify-separator "/")
-;; (setq uniquify-after-kill-buffer-p t)
-;; (setq uniquify-ignore-buffers-re "^\\*")
+;; automatically save buffers associated with files on buffer
+(defun prelude-auto-save-command ()
+  "Save the current buffer if `prelude-auto-save' is not nil."
+  (when (and buffer-file-name
+             (buffer-modified-p (current-buffer))
+             (file-writable-p buffer-file-name))
+    (save-buffer)))
+
+(add-hook 'focus-out-hook 'prelude-auto-save-command)
 
 ;; Nic says eval-expression-print-level needs to be set to nil (turned off) so
 ;; that you can always see what's happening.
