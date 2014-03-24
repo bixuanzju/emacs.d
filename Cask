@@ -1,7 +1,7 @@
-(source org)
-(source marmalade)
-(source melpa)
 (source gnu)
+(source melpa)
+(source marmalade)
+(source org)
 
 (depends-on "ace-jump-mode")
 (depends-on "ag")
