@@ -237,7 +237,7 @@
        (key-chord-define-global "jl" 'ace-jump-line-mode)
        (key-chord-define-global "JJ" 'prelude-switch-to-previous-buffer)
        (key-chord-define-global "x1" 'delete-other-windows)
-       (key-chord-define-global "xk" 'switch-window)
+       (key-chord-define-global "xk" 'ace-window)
        (key-chord-define-global "0o" 'delete-window)
        (key-chord-define-global "xn" 'helm-mini)
        (key-chord-define-global "jk" 'magit-status)
@@ -598,7 +598,7 @@
 
     #+BEGIN_SRC emacs-lisp
       (req-package ace-window
-        :bind ("M-p" . ace-window)
+        :bind ("C-x o" . ace-window)
         :config
         (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
     #+END_SRC
