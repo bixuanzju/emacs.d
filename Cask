@@ -4,6 +4,7 @@
 (source org)
 
 (depends-on "ace-jump-mode")
+(depends-on "ace-window")
 (depends-on "ag")
 (depends-on "auctex")
 (depends-on "auto-complete")
@@ -64,7 +65,6 @@
 (depends-on "shut-up")
 (depends-on "smart-mode-line")
 (depends-on "smartparens")
-(depends-on "switch-window")
 (depends-on "undo-tree")
 (depends-on "use-package")
 (depends-on "wgrep")

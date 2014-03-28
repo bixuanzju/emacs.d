@@ -468,8 +468,7 @@
         :config
         (add-hook 'scala-mode-hook 'subword-mode)
         (setq scala-indent:align-forms t
-              scala-indent:align-parameters t
-              scala-indent:default-run-on-strategy 0))
+              scala-indent:align-parameters t))
     #+END_SRC
 
 *** TODO Geiser/Scheme
@@ -593,13 +592,15 @@
           :minibuff (backward-kill-word 1)))
     #+END_SRC
 
-*** Switch-window
+*** Ace-window
 
-    [[https://github.com/dimitri/switch-win][Switch-window]] provides window switching, the visual way.
+    [[https://github.com/abo-abo/ace-window][Switch-window]] provides window switching, the visual way.
 
     #+BEGIN_SRC emacs-lisp
-      (req-package switch-window
-        :bind ("C-x o" . switch-window))
+      (req-package ace-window
+        :bind ("M-p" . ace-window)
+        :config
+        (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
     #+END_SRC
 
 *** Rainbow mode
