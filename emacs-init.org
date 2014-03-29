@@ -598,7 +598,7 @@
 
 *** Ace-window
 
-    [[https://github.com/abo-abo/ace-window][Switch-window]] provides window switching, the visual way.
+    [[https://github.com/abo-abo/ace-window][Ace-window]] provides window switching, the visual way.
 
     #+BEGIN_SRC emacs-lisp
       (req-package ace-window
