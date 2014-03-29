@@ -28,6 +28,7 @@
 (depends-on "flx-ido")
 (depends-on "flycheck")
 (depends-on "fullframe")
+(depends-on "geiser")
 (depends-on "git-commit-mode")
 (depends-on "git-rebase-mode")
 (depends-on "guide-key")

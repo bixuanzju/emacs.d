@@ -115,9 +115,6 @@
           recentf-max-saved-items 500
           recentf-max-menu-items 15)
 
-    ;; enable auto-pair
-    (electric-pair-mode)
-
     ;; reduce the frequency of garbage collection by making it happen on
     (setq gc-cons-threshold (* 1024 1024 20))
 
@@ -317,6 +314,18 @@
 
      #+END_SRC
 
+*** Geiser/Scheme
+
+#+BEGIN_SRC emacs-lisp
+  (req-package geiser
+    :config
+    (setq geiser-active-implementations '(racket)))
+
+  (add-hook 'scheme-mode-hook
+            (lambda ()
+              (push '("lambda" . 955) prettify-symbols-alist)))
+#+END_SRC
+
 *** LaTex
 
     Sane setup for LaTeX writers.
@@ -368,11 +377,8 @@
         :config
         (require 'ox-md)
         (require 'ox-latex)
-        (require 'org-bullets)
 
         (defun org-mode-defaults ()
-          ;; Show org-mode bullets as UTF-8 characters.
-          (org-bullets-mode 1)
           (turn-on-org-cdlatex)
           (turn-on-auto-fill)
           (bind-key "C-c b" 'ebib-insert-bibtex-key org-mode-map))
@@ -470,8 +476,6 @@
         (setq scala-indent:align-forms t
               scala-indent:align-parameters t))
     #+END_SRC
-
-*** TODO Geiser/Scheme
 
 *** TODO Markdown
 
@@ -995,6 +999,22 @@
         :config
         (add-hook 'emacs-lisp-mode-hook 'lexbind-mode))
     #+END_SRC
+
+*** Smartparens
+
+Show matching and unmatched delimiters, and auto-close them as well.
+
+#+BEGIN_SRC emacs-lisp
+  (req-package smartparens
+    :config
+    (require 'smartparens-config)
+    (smartparens-global-mode t)
+    ;; highlights matching pairs
+    (show-smartparens-global-mode t)
+    (bind-key "C-M-f" 'sp-forward-sexp sp-keymap)
+    (bind-key "C-M-b" 'sp-backward-sexp sp-keymap)
+    (bind-key "C-M-k" 'sp-kill-sexp sp-keymap))
+#+END_SRC
 
 ** Buffer
 

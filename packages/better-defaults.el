@@ -120,8 +120,6 @@
 ;; highlight the current line
 (global-hl-line-mode +1)
 
-(show-paren-mode 1)
-
 ;; add the ability to copy and cut the current line, without marking it
 (defadvice kill-ring-save (before smart-copy activate compile)
   "When called interactively with no active region, copy a single line instead."
