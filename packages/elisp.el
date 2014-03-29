@@ -46,12 +46,6 @@
 ;;   (when (and isearch-forward isearch-other-end)
 ;;     (goto-char isearch-other-end)))
 
-;; (defmacro after-load (feature &rest body)
-;;   "After FEATURE is loaded, evaluate BODY."
-;;   (declare (indent defun))
-;;   `(eval-after-load ,feature
-;;      '(progn ,@body)))
-
 ;; (defmacro rename-modeline (package-name mode new-name)
 ;;   "Rename PACKAGE-NAME MODE to NEW-NAME."
 ;;   `(eval-after-load ,package-name
@@ -77,38 +71,8 @@
 ;;   "Create a new repl before reload the file."
 ;;   (isml))
 
-;; (defadvice delete-frame
-;;   (around avoid-accidently-delete-frame activate)
-;;   (when (yes-or-no-p "Quit Emacs? ")
-;;     ad-do-it))
-
-;; toggel shell escape using C-c C-t C-x
-;; (defun TeX-toggle-escape ()
-;;   "Toggle Shell Escape."
-;;   (interactive)
-;;   (setq LaTeX-command
-;;         (if (string= LaTeX-command "latex") "latex -shell-escape"
-;;           "latex"))
-;;   (message (concat "shell escape "
-;;                    (if (string= LaTeX-command "latex -shell-escape")
-;;                        "enabled"
-;;                      "disabled"))))
-;; (add-hook 'LaTeX-mode-hook
-;;           (lambda nil
-;;             (local-set-key (kbd "C-c C-t x") 'TeX-toggle-escape)))
-
-;; (defun my-find-user-custom-file ()
-;;   "Edit the `custom-file', in another window."
-;;   (interactive)
-;;   (find-file custom-file))
-
-;; (defun my-recompile-personal-file ()
-;;   "Byte-compile all your dotfiles again."
-;;   (interactive)
-;;   (byte-recompile-directory prelude-vendor-dir 0))
-
-(defmacro delq-multi (list &rest elems)
-  "Delete members of LIST, which are in ELEMS."
+(defmacro my-delq-multi (list &rest elems)
+  "Delete ELEMS from LIST."
   (let ((result (mapcar (lambda (elem)
                           `(setq ,list (delq ,elem ,list)))
                         elems)))
