@@ -1,8 +1,9 @@
-(source gnu)
-(source melpa)
-(source marmalade)
 (source org)
+(source marmalade)
+(source melpa)
+(source gnu)
 
+(depends-on "2048-game")
 (depends-on "ace-jump-mode")
 (depends-on "ace-window")
 (depends-on "ag")
