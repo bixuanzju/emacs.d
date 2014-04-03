@@ -56,21 +56,6 @@
 ;; (rename-modeline "clojure-mode" clojure-mode "Clj")
 ;; (rename-modeline "haskell-mode" haskell-mode "HS")
 
-;; (defun isml ()
-;;   "If sml repl exists, then restart it else create a new repl."
-;;   (interactive)
-;;   (when (get-buffer "*sml*")
-;;     (with-current-buffer "*sml*"
-;;       (when (process-live-p "sml")
-;;         (comint-send-eof)))
-;;     (sleep-for 0.2))
-;;   (sml-run "sml" ""))
-
-;; (defadvice sml-prog-proc-load-file
-;;   (before fresh-sml-repl-then-load-file activate)
-;;   "Create a new repl before reload the file."
-;;   (isml))
-
 (defmacro my-delq-multi (list &rest elems)
   "Delete ELEMS from LIST."
   (let ((result (mapcar (lambda (elem)

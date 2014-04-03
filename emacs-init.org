@@ -431,7 +431,6 @@
                  (gnuplot . t)
                  (clojure . t)
                  (sh . t)
-                 (ledger . t)
                  (haskell . t)
                  (org . t)
                  (plantuml . t)
@@ -496,6 +495,53 @@
           (erase-buffer)))
 
     #+END_SRC
+
+*** Haskell Mode
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  (req-package haskell-mode
+    :config
+    (defun prelude-haskell-mode-defaults ()
+      (subword-mode +1)
+      (turn-on-haskell-doc-mode)
+      (turn-on-haskell-simple-indent))
+    (add-hook 'haskell-mode-hook
+              (lambda ()
+                (run-hooks 'prelude-haskell-mode-hook)))
+    (setq haskell-tags-on-save t
+          haskell-process-suggest-hoogle-imports t
+          haskell-process-suggest-remove-import-lines t
+          haskell-process-auto-import-loaded-modules t
+          haskell-process-log t)
+    (define-key haskell-mode-map (kbd "C-x C-d") nil)
+    (define-key haskell-mode-map (kbd "C-c C-z") 'haskell-interactive-switch)
+    (define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-file)
+    (define-key haskell-mode-map (kbd "C-c C-b") 'haskell-interactive-switch)
+    (define-key haskell-mode-map (kbd "C-c C-t") 'haskell-process-do-type)
+    (define-key haskell-mode-map (kbd "C-c C-i") 'haskell-process-do-info)
+    (define-key haskell-mode-map (kbd "C-c M-.") nil)
+    (define-key haskell-mode-map (kbd "C-c C-d") nil))
+#+END_SRC
+
+*** SML Mode
+
+#+BEGIN_SRC emacs-lisp
+  (req-package sml-mode
+    :mode "\\.sml\\'"
+    :config
+    (defun my-sml-prog-proc-send-buffer ()
+      "If sml repl exists, then restart it else create a new repl."
+      (interactive)
+      (when (get-buffer "*sml*")
+        (with-current-buffer "*sml*"
+          (when (get-process "sml")
+            (comint-send-eof)))
+        (sleep-for 0.2)
+        (sml-run "sml" ""))
+      (sml-prog-proc-send-buffer t))
+    (bind-key "C-c C-b" 'my-sml-prog-proc-send-buffer sml-mode-map))
+
+#+END_SRC
 
 ** Minor Modes
 *** Pallet
@@ -767,7 +813,7 @@
         :diminish (company-mode . "")
         :config
         ;; repomacs problematic
-        ;; (delq 'company-ropemacs 'company-backends)
+        (my-delq-multi company-backends 'company-ropemacs)
         (setq company-idle-delay .3)
         (setq company-dabbrev-ignore-case nil)
         (setq company-dabbrev-downcase nil)
@@ -805,7 +851,9 @@
               ispell-extra-args '("--sug-mode=ultra"))
         ;; Make spell check on right click.
         (define-key flyspell-mouse-map [down-mouse-3] 'flyspell-correct-word)
-        (define-key flyspell-mouse-map [mouse-3] 'undefined))
+        (define-key flyspell-mouse-map [mouse-3] 'undefined)
+        (define-key flyspell-mode-map (kbd "C-M-i") nil)
+        (define-key flyspell-mode-map (kbd "C-;") nil))
 
     #+END_SRC
 
@@ -1014,6 +1062,23 @@ Show matching and unmatched delimiters, and auto-close them as well.
     (bind-key "C-M-f" 'sp-forward-sexp sp-keymap)
     (bind-key "C-M-b" 'sp-backward-sexp sp-keymap)
     (bind-key "C-M-k" 'sp-kill-sexp sp-keymap))
+#+END_SRC
+
+*** Ghc-mode
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  (req-package ghc
+    :config
+    (autoload 'ghc-init "ghc" nil t)
+    (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
+#+END_SRC
+
+*** Ace-link
+
+#+BEGIN_SRC emacs-lisp
+  (req-package ace-link
+    :config
+    (ace-link-setup-default))
 #+END_SRC
 
 ** Buffer
