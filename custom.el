@@ -14,7 +14,7 @@
  '(shell-pop-universal-key "C-c \"")
  '(shift-select-mode nil)
  '(split-height-threshold nil)
- '(split-width-threshold 100)
+ '(split-width-threshold 130)
  '(user-mail-address "bixuanzju@qq.com"))
 (custom-set-faces
  '(cursor ((t (:background "gray78" :foreground "#DCDCCC"))))

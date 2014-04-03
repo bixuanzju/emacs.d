@@ -1,7 +1,7 @@
-(source gnu)
-(source melpa)
-(source marmalade)
 (source org)
+(source marmalade)
+(source melpa)
+(source gnu)
 
 (depends-on "2048-game")
 (depends-on "ace-jump-mode")
@@ -67,6 +67,7 @@
 (depends-on "sbt-mode")
 (depends-on "scala-mode2")
 (depends-on "shell-pop")
+(depends-on "shm")
 (depends-on "shut-up")
 (depends-on "smart-mode-line")
 (depends-on "smartparens")

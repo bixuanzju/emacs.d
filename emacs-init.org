@@ -498,7 +498,7 @@
 
 *** Haskell Mode
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp
   (req-package haskell-mode
     :config
     (defun prelude-haskell-mode-defaults ()
@@ -1056,7 +1056,6 @@ Show matching and unmatched delimiters, and auto-close them as well.
   (req-package smartparens
     :config
     (require 'smartparens-config)
-    (smartparens-global-mode t)
     ;; highlights matching pairs
     (show-smartparens-global-mode t)
     (bind-key "C-M-f" 'sp-forward-sexp sp-keymap)
@@ -1071,6 +1070,17 @@ Show matching and unmatched delimiters, and auto-close them as well.
     :config
     (autoload 'ghc-init "ghc" nil t)
     (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
+#+END_SRC
+
+*** Structured-haskell-mode
+
+[[https://github.com/chrisdone/structured-haskell-mode][Structured-haskell-mode]] is a minor mode providing structured editing
+operations based on the syntax of Haskell.
+
+#+BEGIN_SRC emacs-lisp
+  (req-package shm
+    :config
+    (add-hook 'haskell-mode-hook 'structured-haskell-mode))
 #+END_SRC
 
 *** Ace-link
