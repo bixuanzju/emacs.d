@@ -294,10 +294,7 @@
          (add-hook 'eval-expression-minibuffer-setup-hook 'eldoc-mode)
          (prelude-conditional-emacs-lisp-checker))
 
-       (setq prelude-emacs-lisp-mode-hook 'prelude-emacs-lisp-mode-defaults)
-
-       (add-hook 'emacs-lisp-mode-hook (lambda ()
-                                         (run-hooks 'prelude-emacs-lisp-mode-hook)))
+       (add-hook 'emacs-lisp-mode-hook 'prelude-emacs-lisp-mode-defaults)
 
        ;; ielm is an interactive Emacs Lisp shell
        (defun prelude-ielm-mode-defaults ()
@@ -305,10 +302,7 @@
          (whitespace-mode -1)
          (turn-on-eldoc-mode))
 
-       (setq prelude-ielm-mode-hook 'prelude-ielm-mode-defaults)
-
-       (add-hook 'ielm-mode-hook (lambda ()
-                                   (run-hooks 'prelude-ielm-mode-hook)))
+       (add-hook 'ielm-mode-hook 'prelude-ielm-mode-defaults)
 
        (add-to-list 'auto-mode-alist '("Cask\\'" . emacs-lisp-mode))
 
@@ -361,10 +355,7 @@
           (latex/setup-keybinds)
           (abbrev-mode +1))
 
-        (setq prelude-latex-mode-hook 'prelude-latex-mode-defaults)
-
-        (add-hook 'LaTeX-mode-hook (lambda ()
-                                     (run-hooks 'prelude-latex-mode-hook))))
+        (add-hook 'LaTeX-mode-hook 'prelude-latex-mode-defaults))
 
     #+END_SRC
 
@@ -383,9 +374,7 @@
           (turn-on-auto-fill)
           (bind-key "C-c b" 'ebib-insert-bibtex-key org-mode-map))
 
-        (setq my-org-mode-hook 'org-mode-defaults)
-
-        (add-hook 'org-mode-hook (lambda () (run-hooks 'my-org-mode-hook)))
+        (add-hook 'org-mode-hook 'org-mode-defaults)
 
         ;; Fontify org-mode code blocks
         (setq org-src-fontify-natively t)
@@ -506,8 +495,7 @@
       (turn-on-haskell-doc-mode)
       (turn-on-haskell-simple-indent))
     (add-hook 'haskell-mode-hook
-              (lambda ()
-                (run-hooks 'prelude-haskell-mode-hook)))
+              'prelude-haskell-mode-defaults)
     (setq haskell-tags-on-save t
           haskell-process-suggest-hoogle-imports t
           haskell-process-suggest-remove-import-lines t
