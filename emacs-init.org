@@ -369,6 +369,11 @@
         (require 'ox-md)
         (require 'ox-latex)
 
+        (require 'org-velocity)
+        (setq org-velocity-bucket
+              (expand-file-name "emacs-init.org" user-emacs-directory))
+        (bind-key "C-c v" 'org-velocity)
+
         (defun org-mode-defaults ()
           (turn-on-org-cdlatex)
           (turn-on-auto-fill)
@@ -460,9 +465,12 @@
     #+BEGIN_SRC emacs-lisp
       (req-package scala-mode2
         :config
-        (add-hook 'scala-mode-hook 'subword-mode)
         (setq scala-indent:align-forms t
-              scala-indent:align-parameters t))
+              scala-indent:align-parameters t)
+        (defun scala-mode-hook-defaults ()
+          (company-mode -1)
+          (subword-mode +1))
+        (add-hook 'scala-mode-hook 'scala-mode-hook-defaults))
     #+END_SRC
 
 *** TODO Markdown
@@ -940,7 +948,7 @@
     [[https://github.com/hvesalai/sbt-mode][Sbt-mode]] is an emacs mode for interacting with sbt, scala console
     (aka REPL) and sbt projects.
 
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (req-package sbt-mode
         :config
         (add-hook 'scala-mode-hook
@@ -958,11 +966,11 @@
 
     [[https://github.com/ensime/ensime-src][ENSIME]] is the ENhanced Scala Interaction Mode for Emacs.
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp
       (req-package ensime
         :config
-        (progn (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
-               (add-hook 'scala-mode-hook (lambda () (company-mode -1)))))
+        (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
+        (setq ensime-auto-connect 'always))
     #+END_SRC
 
 *** Color-identifiers-mode

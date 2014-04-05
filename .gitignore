@@ -17,3 +17,4 @@ session*
 .cask
 /.mc-lists.el
 /url/
+/ac-comphist.dat

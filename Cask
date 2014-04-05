@@ -1,7 +1,7 @@
-(source org)
-(source marmalade)
-(source melpa)
 (source gnu)
+(source melpa)
+(source marmalade)
+(source org)
 
 (depends-on "2048-game")
 (depends-on "ace-jump-mode")
@@ -21,6 +21,7 @@
 (depends-on "dired+")
 (depends-on "ebib")
 (depends-on "elisp-slime-nav")
+(depends-on "ensime")
 (depends-on "epl")
 (depends-on "exec-path-from-shell")
 (depends-on "expand-region")
