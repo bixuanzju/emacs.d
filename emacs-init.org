@@ -118,6 +118,9 @@
     ;; reduce the frequency of garbage collection by making it happen on
     (setq gc-cons-threshold (* 1024 1024 20))
 
+    ;; autopair
+    (electric-pair-mode)
+
     ;; enable narrowing commands
     (put 'narrow-to-region 'disabled nil)
     (put 'narrow-to-page 'disabled nil)
@@ -537,6 +540,13 @@
       (sml-prog-proc-send-buffer t))
     (bind-key "C-c C-b" 'my-sml-prog-proc-send-buffer sml-mode-map))
 
+#+END_SRC
+
+*** Js2 Mode
+
+#+BEGIN_SRC emacs-lisp
+  (req-package js2-mode
+    :mode "\\.js\\'")
 #+END_SRC
 
 ** Minor Modes
@@ -970,7 +980,7 @@
       (req-package ensime
         :config
         (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
-        (setq ensime-auto-connect 'always))
+        (setq ensime-auto-connect 'ask))
     #+END_SRC
 
 *** Color-identifiers-mode
@@ -1085,6 +1095,16 @@ operations based on the syntax of Haskell.
   (req-package ace-link
     :config
     (ace-link-setup-default))
+#+END_SRC
+
+*** Easy-kill
+
+[[https://github.com/leoliu/easy-kill][easy-kill]] provides commands to let users kill or mark things easily.
+
+#+BEGIN_SRC emacs-lisp
+  (req-package easy-kill
+    :config
+    (global-set-key [remap kill-ring-save] 'easy-kill))
 #+END_SRC
 
 ** Buffer
