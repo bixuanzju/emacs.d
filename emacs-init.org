@@ -176,6 +176,8 @@
      (bind-key "C-M-s" 'isearch-forward)
      (bind-key "C-M-r" 'isearch-backward)
      (bind-key "C-x C-b" 'ibuffer)
+     (bind-key "C-s" 'isearch-forward-regexp)
+     (bind-key "C-r" 'isearch-backward-regexp)
      (bind-key "C-:" 'eval-expression)
      (bind-key "M-SPC" 'cycle-spacing)
      (bind-key "C-c x" 'sunrise-cd)
@@ -1113,7 +1115,8 @@ Manager. [[https://github.com/stanaka/dash-at-point][dash-at-point]] make it eas
 Dash.
 
 #+BEGIN_SRC emacs-lisp
-  (req-package dash-at-point)
+  (req-package dash-at-point
+    :if (eq system-type 'darwin))
 #+END_SRC
 
 *** Visual-regexp-steroids
@@ -1123,9 +1126,7 @@ more escaped group parentheses, and other goodies!).
 
 #+BEGIN_SRC emacs-lisp
   (req-package visual-regexp-steroids
-    :bind (("C-c r" . vr/replace)
-           ("C-r" . vr/isearch-backward)
-           ("C-s" . vr/isearch-forward)))
+    :bind (("C-c r" . vr/replace)))
 #+END_SRC
 
 *** Pcre2el
