@@ -173,8 +173,6 @@
 
      ;; From better defaults
      (bind-key "M-/" 'hippie-expand)
-     (bind-key "C-s" 'isearch-forward-regexp)
-     (bind-key "C-r" 'isearch-backward-regexp)
      (bind-key "C-M-s" 'isearch-forward)
      (bind-key "C-M-r" 'isearch-backward)
      (bind-key "C-x C-b" 'ibuffer)
@@ -190,7 +188,8 @@
      (bind-key "M-'" 'next-error)
      (bind-key "C-c n" 'prelude-cleanup-buffer)
      (bind-key "C-M-h" 'backward-kill-word)
-     (bind-key "C-x [" 'enlarge-window)
+     (bind-key "C-x [" 'shrink-window)
+     (bind-key "C-x ]" 'enlarge-window)
      (bind-key "C-c M-d" 'prelude-duplicate-and-comment-current-line-or-region)
      (bind-key "C-c d" 'prelude-duplicate-current-line-or-region)
 
@@ -1105,6 +1104,37 @@ operations based on the syntax of Haskell.
   (req-package easy-kill
     :config
     (global-set-key [remap kill-ring-save] 'easy-kill))
+#+END_SRC
+
+*** Dash-at-point
+
+[[Dash][http://kapeli.com/]] is an API Documentation Browser and Code Snippet
+Manager. [[https://github.com/stanaka/dash-at-point][dash-at-point]] make it easy to search the word at point with
+Dash.
+
+#+BEGIN_SRC emacs-lisp
+  (req-package dash-at-point)
+#+END_SRC
+
+*** Visual-regexp-steroids
+
+[[https://github.com/benma/visual-regexp-steroids.el/][visual-regexp-steroids]] enables the use of modern regexp engines (no
+more escaped group parentheses, and other goodies!).
+
+#+BEGIN_SRC emacs-lisp
+  (req-package visual-regexp-steroids
+    :bind (("C-c r" . vr/replace)
+           ("C-r" . vr/isearch-backward)
+           ("C-s" . vr/isearch-forward)))
+#+END_SRC
+
+*** Pcre2el
+
+[[https://github.com/joddie/pcre2el][pcre2el]] is a utility for working with regular expressions in Emacs,
+based on a recursive-descent parser for regexp syntax.
+
+#+BEGIN_SRC emacs-lisp
+  (req-package pcre2el)
 #+END_SRC
 
 ** Buffer
