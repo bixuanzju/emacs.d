@@ -79,6 +79,7 @@
 (depends-on "sml-mode")
 (depends-on "undo-tree")
 (depends-on "use-package")
+(depends-on "visual-regexp")
 (depends-on "visual-regexp-steroids")
 (depends-on "wgrep")
 (depends-on "wgrep-ag")
