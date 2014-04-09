@@ -7,7 +7,6 @@
  '(ebib-preload-bib-files (quote ("~/research/refs.bib")))
  '(history-length 1000)
  '(indicate-empty-lines t)
- '(load-prefer-newer t)
  '(max-lisp-eval-depth 2000)
  '(set-mark-command-repeat-pop t)
  '(shell-pop-shell-type (quote ("eshell" "*eshell*" (lambda nil (eshell)))))

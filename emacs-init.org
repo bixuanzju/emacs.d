@@ -60,6 +60,9 @@
     (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
     (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
+    ;; Always load newest byte code
+    (setq load-prefer-newer t)
+
     (defvar savefile-dir (expand-file-name "savefile" user-emacs-directory)
       "This folder stores all the automatically generated save/history-files.")
 
