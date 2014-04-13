@@ -83,5 +83,6 @@
 (depends-on "visual-regexp-steroids")
 (depends-on "wgrep")
 (depends-on "wgrep-ag")
+(depends-on "worf")
 (depends-on "yasnippet")
 (depends-on "zenburn-theme")

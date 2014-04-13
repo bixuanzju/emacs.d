@@ -817,7 +817,6 @@
         :config
         ;; repomacs problematic
         (my-delq-multi company-backends 'company-ropemacs)
-        (setq company-idle-delay .3)
         (setq company-dabbrev-ignore-case nil)
         (setq company-dabbrev-downcase nil)
         (eval-after-load 'company-dabbrev-code
@@ -976,8 +975,7 @@
     #+BEGIN_SRC emacs-lisp
       (req-package ensime
         :config
-        (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
-        (setq ensime-auto-connect 'ask))
+        (add-hook 'scala-mode-hook 'ensime-scala-mode-hook))
     #+END_SRC
 
 *** Color-identifiers-mode
@@ -1132,6 +1130,14 @@ based on a recursive-descent parser for regexp syntax.
 
 #+BEGIN_SRC emacs-lisp
   (req-package pcre2el)
+#+END_SRC
+
+*** Worf Mode
+
+#+BEGIN_SRC emacs-lisp
+  (req-package worf
+    :config
+    (add-hook 'org-mode-hook 'worf-mode))
 #+END_SRC
 
 ** Buffer
