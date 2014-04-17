@@ -1,6 +1,6 @@
 (source gnu)
-(source melpa)
 (source marmalade)
+(source melpa)
 (source org)
 
 (depends-on "2048-game")
@@ -46,6 +46,7 @@
 (depends-on "ido-vertical-mode")
 (depends-on "iedit")
 (depends-on "js2-mode")
+(depends-on "jump-char")
 (depends-on "key-chord")
 (depends-on "latex-extra")
 (depends-on "lexbind-mode")

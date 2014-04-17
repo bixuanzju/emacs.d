@@ -176,11 +176,7 @@
 
      ;; From better defaults
      (bind-key "M-/" 'hippie-expand)
-     (bind-key "C-M-s" 'isearch-forward)
-     (bind-key "C-M-r" 'isearch-backward)
      (bind-key "C-x C-b" 'ibuffer)
-     (bind-key "C-s" 'isearch-forward-regexp)
-     (bind-key "C-r" 'isearch-backward-regexp)
      (bind-key "C-:" 'eval-expression)
      (bind-key "M-SPC" 'cycle-spacing)
      (bind-key "C-c x" 'sunrise-cd)
@@ -1138,6 +1134,14 @@ based on a recursive-descent parser for regexp syntax.
   (req-package worf
     :config
     (add-hook 'org-mode-hook 'worf-mode))
+#+END_SRC
+
+*** Jump-char Mode
+
+#+BEGIN_SRC emacs-lisp
+  (req-package jump-char
+    :bind (("C-s" . jump-char-forward)
+           ("C-r" . jump-char-backward)))
 #+END_SRC
 
 ** Buffer

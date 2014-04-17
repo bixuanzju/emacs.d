@@ -99,15 +99,13 @@
 ;; disable annoying blink-matching-paren
 (setq blink-matching-paren nil)
 
-;; automatically save buffers associated with files on buffer
-(defun prelude-auto-save-command ()
-  "Save the current buffer if `prelude-auto-save' is not nil."
-  (when (and buffer-file-name
-             (buffer-modified-p (current-buffer))
-             (file-writable-p buffer-file-name))
-    (save-buffer)))
+;; Autosave buffers when focus is lost
+(defun prelude-save-all-buffers ()
+  "Save all modified buffers, without prompts."
+  (save-some-buffers 'dont-ask))
 
-(add-hook 'focus-out-hook 'prelude-auto-save-command)
+(when (version<= "24.4" emacs-version)
+  (add-hook 'focus-out-hook 'prelude-save-all-buffers))
 
 ;; Nic says eval-expression-print-level needs to be set to nil (turned off) so
 ;; that you can always see what's happening.
@@ -145,6 +143,12 @@
 ;; saner regex syntax
 (require 're-builder)
 (setq reb-re-syntax 'string)
+
+(require 'desktop)
+(setq desktop-save t)
+(setq desktop-path (list savefile-dir))
+(setq desktop-dirname savefile-dir)
+(desktop-save-mode +1)
 
 ;; Ido-related config
 (setq ido-enable-prefix nil
