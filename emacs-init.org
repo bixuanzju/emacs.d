@@ -282,11 +282,11 @@
 
        (defun prelude-emacs-lisp-mode-defaults ()
          "Sensible defaults for `emacs-lisp-mode'."
-         (turn-on-eldoc-mode)
+         (eldoc-mode +1)
          (diminish 'eldoc-mode "")
          (prelude-recompile-elc-on-save)
          (setq mode-name "EL")
-         (turn-on-prettify-symbols-mode)
+         (prettify-symbols-mode +1)
          (add-hook 'eval-expression-minibuffer-setup-hook 'eldoc-mode)
          (prelude-conditional-emacs-lisp-checker))
 
@@ -296,7 +296,7 @@
        (defun prelude-ielm-mode-defaults ()
          "Sensible defaults for `ielm'."
          (whitespace-mode -1)
-         (turn-on-eldoc-mode))
+         (eldoc-mode +1))
 
        (add-hook 'ielm-mode-hook 'prelude-ielm-mode-defaults)
 
@@ -1299,6 +1299,32 @@ based on a recursive-descent parser for regexp syntax.
       (prelude-install-search-engine "google" "http://www.google.com/search?q=" "Google: ")
       (prelude-install-search-engine "github" "https://github.com/search?q=" "Search GitHub: ")
     #+END_SRC
+*** Colorize compilation buffers
+
+#+BEGIN_SRC emacs-lisp
+  ;; Compilation from Emacs
+  (defun prelude-colorize-compilation-buffer ()
+    "Colorize a compilation mode buffer."
+    (interactive)
+    ;; we don't want to mess with child modes such as grep-mode, ack, ag, etc
+    (when (eq major-mode 'compilation-mode)
+      (let ((inhibit-read-only t))
+        (ansi-color-apply-on-region (point-min) (point-max)))))
+
+  (require 'compile)
+  (setq compilation-ask-about-save nil  ; Just save before compiling
+        compilation-always-kill t       ; Just kill old compile processes before
+                                        ; starting the new one
+        compilation-scroll-output 'first-error ; Automatically scroll to first
+                                               ; error
+        )
+
+  ;; Colorize output of Compilation Mode, see
+  ;; http://stackoverflow.com/a/3072831/355252
+  (require 'ansi-color)
+  (add-hook 'compilation-filter-hook #'prelude-colorize-compilation-buffer)
+#+END_SRC
+
 *** Duplicate
 
     #+BEGIN_SRC emacs-lisp
@@ -1348,7 +1374,6 @@ based on a recursive-descent parser for regexp syntax.
               (setq end (point))))
           (goto-char (+ origin (* (length region) arg) arg))))
     #+END_SRC
-
 
 
 * Finish Requirements

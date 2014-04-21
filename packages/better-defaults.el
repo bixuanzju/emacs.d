@@ -144,11 +144,11 @@
 (require 're-builder)
 (setq reb-re-syntax 'string)
 
-(require 'desktop)
-(setq desktop-save t)
-(setq desktop-path (list savefile-dir))
-(setq desktop-dirname savefile-dir)
-(desktop-save-mode +1)
+;; (require 'desktop)
+;; (setq desktop-save t)
+;; (setq desktop-path (list savefile-dir))
+;; (setq desktop-dirname savefile-dir)
+;; (desktop-save-mode +1)
 
 ;; Ido-related config
 (setq ido-enable-prefix nil
