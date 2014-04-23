@@ -1152,12 +1152,12 @@ based on a recursive-descent parser for regexp syntax.
 
 #+END_SRC
 
-*** Jump-char Mode
+*** Anzu Mode
 
 #+BEGIN_SRC emacs-lisp
-  (req-package jump-char
-    :bind (("C-s" . jump-char-forward)
-           ("C-r" . jump-char-backward)))
+  (req-package anzu
+    :config
+    (global-anzu-mode +1))
 #+END_SRC
 
 ** Buffer
