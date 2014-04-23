@@ -75,6 +75,7 @@
 (depends-on "shell-pop")
 (depends-on "shm")
 (depends-on "shut-up")
+(depends-on "skeletor")
 (depends-on "smart-mode-line")
 (depends-on "smartparens")
 (depends-on "sml-mode")

@@ -1,0 +1,7 @@
+target/
+/project/
+/.project
+/.classpath
+/.ensime
+/.ensime_lucene/
+/.history

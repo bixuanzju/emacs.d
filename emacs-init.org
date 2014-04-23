@@ -970,6 +970,7 @@
 
     #+BEGIN_SRC emacs-lisp
       (req-package ensime
+        :require scala-mode2
         :config
         (add-hook 'scala-mode-hook 'ensime-scala-mode-hook))
     #+END_SRC
@@ -1134,6 +1135,21 @@ based on a recursive-descent parser for regexp syntax.
   (req-package worf
     :config
     (add-hook 'org-mode-hook 'worf-mode))
+#+END_SRC
+
+*** Skeletor
+
+#+BEGIN_SRC emacs-lisp
+  (req-package skeletor
+    :config
+    (skeletor-define-template "scala-project"
+      :title "Scala Project"
+      :after-creation
+      (lambda (dir)
+        (skeletor-async-shell-command dir "sbt \"ensime generate\" && sbt eclipse"))
+      :requires-executables
+      '(("sbt" . "https://github.com/sbt/sbt"))))
+
 #+END_SRC
 
 *** Jump-char Mode
