@@ -11,6 +11,7 @@
  '(set-mark-command-repeat-pop t)
  '(shell-pop-shell-type (quote ("eshell" "*eshell*" (lambda nil (eshell)))))
  '(shell-pop-universal-key "C-c \"")
+ '(eyebrowse-keymap-prefix (kbd "C-c C-q"))
  '(shift-select-mode nil)
  '(split-height-threshold nil)
  '(split-width-threshold 130)

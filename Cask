@@ -35,7 +35,6 @@
 (depends-on "flycheck")
 (depends-on "fullframe")
 (depends-on "geiser")
-(depends-on "ghc")
 (depends-on "git-commit-mode")
 (depends-on "git-rebase-mode")
 (depends-on "guide-key")

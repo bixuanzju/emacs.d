@@ -372,6 +372,7 @@
 
         (defun org-mode-defaults ()
           (turn-on-org-cdlatex)
+          (diminish 'org-cdlatex-mode "")
           (turn-on-auto-fill)
           (bind-key "C-c b" 'ebib-insert-bibtex-key org-mode-map))
 
@@ -1000,7 +1001,11 @@
         (setq eyebrowse-keymap-prefix (kbd "C-c C-v"))
         :config
         (setq eyebrowse-wrap-around-p t)
-        (eyebrowse-mode t))
+        (eyebrowse-mode t)
+        (setq-default header-line-format
+                      '((eyebrowse-mode (:eval (eyebrowse-update-mode-line)))))
+        (setq mode-line-misc-info
+              (remove '(:eval (eyebrowse-update-mode-line)) mode-line-misc-info)))
     #+END_SRC
 
 *** Ebib
@@ -1059,15 +1064,6 @@ Show matching and unmatched delimiters, and auto-close them as well.
     (bind-key "C-M-f" 'sp-forward-sexp sp-keymap)
     (bind-key "C-M-b" 'sp-backward-sexp sp-keymap)
     (bind-key "C-M-k" 'sp-kill-sexp sp-keymap))
-#+END_SRC
-
-*** Ghc-mode
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (req-package ghc
-    :config
-    (autoload 'ghc-init "ghc" nil t)
-    (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
 #+END_SRC
 
 *** Structured-haskell-mode
@@ -1156,6 +1152,7 @@ based on a recursive-descent parser for regexp syntax.
 
 #+BEGIN_SRC emacs-lisp
   (req-package anzu
+    :diminish (anzu-mode . "")
     :config
     (global-anzu-mode +1))
 #+END_SRC
