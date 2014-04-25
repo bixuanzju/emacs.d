@@ -12,7 +12,7 @@ This emacs.d is currently  designed for Emacs 24.3 and above.
 
 This emacs.d was heavily inspired by the following configurations.
 
-[[https://github.com/daschwa/dotfiles/tree/master/emacs.d][daschwa's emacs.d]]
+[[https://github.com/daschwa/dotfiles/tree/master/emacs.d][Adam Schwartz's emacs.d]]
 
 [[https://github.com/bbatsov/prelude][Bozhidar Batsov's prelude]]
 
