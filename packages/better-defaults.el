@@ -150,7 +150,28 @@
 ;; (setq desktop-dirname savefile-dir)
 ;; (desktop-save-mode +1)
 
+(defun prelude-local-comment-auto-fill ()
+  (set (make-local-variable 'comment-auto-fill-only-comments) t))
+
+(defun prelude-font-lock-comment-annotations ()
+  "Highlight a bunch of well known comment annotations.
+
+This functions should be added to the hooks of major modes for programming."
+  (font-lock-add-keywords
+   nil '(("\\<\\(\\(FIX\\(ME\\)?\\|TODO\\|OPTIMIZE\\|HACK\\|REFACTOR\\):\\)"
+          1 font-lock-warning-face t))))
+
+(defun prelude-prog-mode-defaults ()
+  "Default coding hook, useful with any programming language."
+  (eval-after-load "subword"
+    '(diminish 'subword-mode))
+  (prelude-local-comment-auto-fill)
+  (prelude-font-lock-comment-annotations))
+
+(add-hook 'prog-mode-hook 'prelude-prog-mode-defaults)
+
 ;; Ido-related config
+(require 'ido)
 (setq ido-enable-prefix nil
       ido-enable-flex-matching t
       ido-create-new-buffer 'always

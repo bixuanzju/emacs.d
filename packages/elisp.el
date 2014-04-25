@@ -32,29 +32,8 @@
 ;;; Code:
 
 (use-package dash-functional
-  :ensure dash-functional
   :config
   (dash-enable-font-lock))
-
-;; (add-hook 'isearch-mode-end-hook 'my-goto-match-beginning)
-;; (defun my-goto-match-beginning ()
-;;   (when (and isearch-forward isearch-other-end)
-;;     (goto-char isearch-other-end)))
-
-;; (defadvice isearch-exit (after my-goto-match-beginning activate)
-;;   "Go to beginning of match."
-;;   (when (and isearch-forward isearch-other-end)
-;;     (goto-char isearch-other-end)))
-
-;; (defmacro rename-modeline (package-name mode new-name)
-;;   "Rename PACKAGE-NAME MODE to NEW-NAME."
-;;   `(eval-after-load ,package-name
-;;      '(defadvice ,mode (after rename-modeline activate)
-;;         (setq mode-name ,new-name))))
-
-;; (rename-modeline "js2-mode" js2-mode "JS2")
-;; (rename-modeline "clojure-mode" clojure-mode "Clj")
-;; (rename-modeline "haskell-mode" haskell-mode "HS")
 
 (defmacro my-delq-multi (list &rest elems)
   "Delete ELEMS from LIST."
