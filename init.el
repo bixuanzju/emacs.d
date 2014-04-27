@@ -4,5 +4,4 @@
 
 (require 'ob-tangle)
 (org-babel-load-file
- (expand-file-name "emacs-init.org"
-                   user-emacs-directory))
+ (expand-file-name "emacs-init.org" user-emacs-directory))

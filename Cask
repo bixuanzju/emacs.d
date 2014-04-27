@@ -56,6 +56,7 @@
 (depends-on "mykie")
 (depends-on "noflet")
 (depends-on "org-plus-contrib")
+(depends-on "ov")
 (depends-on "package-build")
 (depends-on "pallet")
 (depends-on "pcre2el")

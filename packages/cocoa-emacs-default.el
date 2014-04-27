@@ -50,6 +50,8 @@
 (when (string= user-login-name "jeremybi")
   (add-to-list 'default-frame-alist
                '(font . "DejaVu Sans Mono-17"))
+  (setq display-time-world-list '(("Asia/Shanghai" "Shanghai")
+                                ("America/Vancouver" "Vancouver")))
   ;; Use GNU ls - install with:
   (setq insert-directory-program "/usr/local/opt/coreutils/libexec/gnubin/ls")
   ;; ProofGeneral
