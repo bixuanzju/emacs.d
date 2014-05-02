@@ -55,7 +55,11 @@
   ;; Use GNU ls - install with:
   (setq insert-directory-program "/usr/local/opt/coreutils/libexec/gnubin/ls")
   ;; ProofGeneral
-  (load-file "/usr/local/share/emacs/site-lisp/ProofGeneral/generic/proof-site.el"))
+  (load-file "/usr/local/share/emacs/site-lisp/ProofGeneral/generic/proof-site.el")
+  ;; Paradox
+  (if (f-exists? "~/.paradox.el")
+      (load-file "~/.paradox.el")
+    (message "Remember installing Paradox?")))
 
 (provide 'cocoa-emacs-default)
 

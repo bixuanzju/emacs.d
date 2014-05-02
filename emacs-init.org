@@ -187,7 +187,7 @@ more useful.
   (bind-key "C-c X" 'sunrise)
   (bind-key "C-c t" 'toggle-window-split)
   (bind-key "C-M-\\" 'prelude-indent-region-or-buffer)
-  (bind-key "C-S-l" 'package-list-packages)
+  (bind-key "C-S-l" 'paradox-list-packages)
   (bind-key "C-c q" 'auto-fill-mode)
   (bind-key "C-c k" 'prelude-kill-other-buffers)
   (bind-key "M-'" 'next-error)
@@ -840,10 +840,8 @@ Enable spell-checking in Emacs.
 
 #+BEGIN_SRC emacs-lisp
   (req-package flyspell
-    :require flyspell-lazy
     :diminish (flyspell-mode . "")
     :init
-    (flyspell-lazy-mode 1)
     ;; Enable spell check in only plaintext
     (add-hook 'text-mode-hook 'flyspell-mode)
     ;; Enable spell check in comments
@@ -1069,6 +1067,15 @@ Show matching and unmatched delimiters, and auto-close them as well.
     (bind-key "C-M-f" 'sp-forward-sexp sp-keymap)
     (bind-key "C-M-b" 'sp-backward-sexp sp-keymap)
     (bind-key "C-M-k" 'sp-kill-sexp sp-keymap))
+#+END_SRC
+
+*** GHC
+
+#+BEGIN_SRC emacs-lisp
+  (req-package ghc
+    :config
+    (autoload 'ghc-init "ghc" nil t)
+    (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
 #+END_SRC
 
 *** Structured-haskell-mode
