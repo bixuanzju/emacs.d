@@ -81,6 +81,7 @@
 (depends-on "smart-mode-line")
 (depends-on "smartparens")
 (depends-on "sml-mode")
+(depends-on "tabulated-list")
 (depends-on "undo-tree")
 (depends-on "use-package")
 (depends-on "visual-regexp")

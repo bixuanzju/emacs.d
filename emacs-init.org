@@ -187,7 +187,6 @@ more useful.
   (bind-key "C-c X" 'sunrise)
   (bind-key "C-c t" 'toggle-window-split)
   (bind-key "C-M-\\" 'prelude-indent-region-or-buffer)
-  (bind-key "C-S-l" 'paradox-list-packages)
   (bind-key "C-c q" 'auto-fill-mode)
   (bind-key "C-c k" 'prelude-kill-other-buffers)
   (bind-key "M-'" 'next-error)
@@ -369,11 +368,6 @@ If you are not using it, you need to start.
     (require 'ox-md)
     (require 'ox-latex)
 
-    (require 'org-velocity)
-    (setq org-velocity-bucket
-          (expand-file-name "emacs-init.org" user-emacs-directory))
-    (bind-key "C-c v" 'org-velocity)
-
     (defun org-mode-defaults ()
       (turn-on-org-cdlatex)
       (diminish 'org-cdlatex-mode "")
@@ -510,6 +504,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
           haskell-process-suggest-remove-import-lines t
           haskell-process-auto-import-loaded-modules t
           haskell-process-log t)
+    (define-key haskell-mode-map (kbd "M-.") 'haskell-mode-tag-find)
     (define-key haskell-mode-map (kbd "C-x C-d") nil)
     (define-key haskell-mode-map (kbd "C-c C-z") 'haskell-interactive-switch)
     (define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-file)
@@ -1158,6 +1153,13 @@ based on a recursive-descent parser for regexp syntax.
       :requires-executables
       '(("sbt" . "https://github.com/sbt/sbt"))))
 
+#+END_SRC
+
+*** Paradox
+
+#+BEGIN_SRC emacs-lisp
+  (req-package paradox
+    :bind ("C-S-l" . paradox-list-packages))
 #+END_SRC
 
 *** Anzu Mode
