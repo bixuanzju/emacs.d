@@ -230,14 +230,12 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
     :config
     (key-chord-mode +1)
     (setq key-chord-two-keys-delay 0.05)
-    (key-chord-define-global "jl" 'ace-jump-line-mode)
     (key-chord-define-global "JJ" 'prelude-switch-to-previous-buffer)
     (key-chord-define-global "x1" 'delete-other-windows)
     (key-chord-define-global "xk" 'ace-window)
     (key-chord-define-global "0o" 'delete-window)
     (key-chord-define-global "xn" 'helm-mini)
     (key-chord-define-global "jk" 'magit-status)
-    (key-chord-define-global "jh" 'ace-jump-word-mode)
     (key-chord-define-global "xm" 'helm-M-x))
 #+END_SRC
 
@@ -640,15 +638,24 @@ single keybind.
       :minibuff (backward-kill-word 1)))
 #+END_SRC
 
+*** Ace-jump-mode
+
+#+BEGIN_SRC emacs-lisp
+  (req-package ace-jump-mode
+    :bind ("C-c SPC" . ace-jump-mode))
+#+END_SRC
+
 *** Ace-window
 
 [[https://github.com/abo-abo/ace-window][Ace-window]] provides window switching, the visual way.
 
 #+BEGIN_SRC emacs-lisp
   (req-package ace-window
+    :require ace-jump-mode
     :bind ("C-x o" . ace-window)
     :config
-    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+    (setq aw-scope 'frame))
 #+END_SRC
 
 *** Rainbow mode
@@ -1433,9 +1440,8 @@ based on a recursive-descent parser for regexp syntax.
 
 
 * Finish Requirements
-All done with  =req-package=, and run server mode.
+All done with  =req-package=.
 #+BEGIN_SRC emacs-lisp
   (req-package-finish)
-  (server-start)
 #+END_SRC
 

@@ -56,12 +56,11 @@
 
 ;; more useful frame title, that show either a file or a
 ;; buffer name (if the buffer isn't visiting a file)
-(when window-system
-  (setq frame-title-format
-        '("" " Jeremy - "
-          (:eval (if (buffer-file-name)
-                     (abbreviate-file-name (buffer-file-name))
-                   "%b")))))
+(setq frame-title-format
+      '("" " Jeremy - "
+        (:eval (if (buffer-file-name)
+                   (abbreviate-file-name (buffer-file-name))
+                 "%b"))))
 
 ;; Show keystrokes in progress
 (setq echo-keystrokes 0.1)

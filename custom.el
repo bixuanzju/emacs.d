@@ -25,5 +25,5 @@
  '(cursor ((t (:background "gray78" :foreground "#DCDCCC"))))
  '(flyspell-duplicate ((t nil)))
  '(flyspell-incorrect ((t (:inherit nil :underline (:color "yellow" :style wave)))))
- '(shm-current-face ((t (:background "gray22"))))
+ '(shm-current-face ((t (:background "#2B2B2B"))))
  '(sr-active-path-face ((t (:weight bold :height 180)))))
