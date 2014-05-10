@@ -238,7 +238,6 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
     (key-chord-define-global "xn" 'helm-mini)
     (key-chord-define-global "jk" 'magit-status)
     (key-chord-define-global "jh" 'ace-jump-word-mode)
-    (key-chord-define-global "xl" 'kill-this-buffer)
     (key-chord-define-global "xm" 'helm-M-x))
 #+END_SRC
 
@@ -405,7 +404,7 @@ If you are not using it, you need to start.
     (setq org-latex-listings 'minted)
 
     (setq org-latex-minted-options
-          '(("bgcolor" "mintedbg") ("frame" "single") ("framesep" "6pt")
+          '(("frame" "lines") ("framesep" "6pt")
             ("mathescape" "true") ("fontsize" "\\small")))
 
     ;; execute external programs.
@@ -1162,6 +1161,19 @@ based on a recursive-descent parser for regexp syntax.
     :bind ("C-S-l" . paradox-list-packages))
 #+END_SRC
 
+*** ggtags
+
+#+BEGIN_SRC emacs-lisp
+  (req-package ggtags
+    :config
+    (add-hook 'c-mode-common-hook
+              (lambda ()
+                (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+                  (ggtags-mode 1)
+                  (eldoc-mode +1)
+                  (setq-local eldoc-documentation-function #'ggtags-eldoc-function)))))
+#+END_SRC
+
 *** Anzu Mode
 
 #+BEGIN_SRC emacs-lisp
@@ -1421,8 +1433,9 @@ based on a recursive-descent parser for regexp syntax.
 
 
 * Finish Requirements
-All done with  =req-package=.
+All done with  =req-package=, and run server mode.
 #+BEGIN_SRC emacs-lisp
   (req-package-finish)
+  (server-start)
 #+END_SRC
 
