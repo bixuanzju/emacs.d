@@ -465,7 +465,12 @@ favorite feature is that pressing =F= will open all marked files.
     (add-hook 'scala-mode-hook 'scala-mode-hook-defaults))
 #+END_SRC
 
-*** TODO Markdown
+*** Markdown
+
+#+BEGIN_SRC emacs-lisp
+  (req-package markdown-mode
+    :mode "\\.md\\'")
+#+END_SRC
 
 *** Eshell
 

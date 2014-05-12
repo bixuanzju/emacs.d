@@ -53,6 +53,7 @@
 (depends-on "lexbind-mode")
 (depends-on "lispy")
 (depends-on "magit")
+(depends-on "markdown-mode")
 (depends-on "move-text")
 (depends-on "multiple-cursors")
 (depends-on "mykie")
