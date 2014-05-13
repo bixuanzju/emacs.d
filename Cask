@@ -64,6 +64,8 @@
 (depends-on "pallet")
 (depends-on "paradox")
 (depends-on "pcre2el")
+(depends-on "persp-projectile")
+(depends-on "perspective")
 (depends-on "pkg-info")
 (depends-on "popup")
 (depends-on "popwin")

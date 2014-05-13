@@ -758,13 +758,26 @@ Whitespace-mode configuration.
   (req-package projectile
     :diminish ""
     :bind (("s-p" . projectile-switch-project)
+           ("s-d" . projectile-find-dir)
            ("s-f" . projectile-find-file)
            ("s-g" . projectile-ag))
     :init
-    (projectile-global-mode t)
+    (projectile-global-mode)
     :config
     (setq projectile-cache-file
           (expand-file-name  "projectile.cache" savefile-dir)))
+#+END_SRC
+
+*** Persp-projectile
+
+#+BEGIN_SRC emacs-lisp
+  (req-package persp-projectile
+    :require (projectile perspective)
+    :bind ("s-s" . projectile-persp-switch-project)
+    :config
+    (setq persp-show-modestring 'header)
+    (persp-mode))
+
 #+END_SRC
 
 *** Lispy
@@ -1013,7 +1026,7 @@ source code identifier uniquely based on its name.
 manage your window configurations in a simple manner. It displays
 their current state in the modeline by default.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (req-package eyebrowse
     :diminish ""
     :init
