@@ -124,6 +124,9 @@ Some quick essential customizations.
   ;; reduce the frequency of garbage collection by making it happen on
   (setq gc-cons-threshold (* 1024 1024 20))
 
+  ;; warn when opening files bigger than 100MB
+  (setq large-file-warning-threshold 100000000)
+
   ;; autopair
   (electric-pair-mode)
 
@@ -421,6 +424,7 @@ If you are not using it, you need to start.
              (org . t)
              (plantuml . t)
              (scala . t)
+             (sql . t)
              (latex . t))))
 
     (setq org-confirm-babel-evaluate nil))
@@ -440,6 +444,8 @@ favorite feature is that pressing =F= will open all marked files.
     ;; always delete and copy recursively
     (setq dired-recursive-deletes 'always)
     (setq dired-recursive-copies 'always)
+    ;; show readable size
+    (setq dired-listing-switches "-alh")
 
     (setq dired-dwim-target t)
 
@@ -768,15 +774,26 @@ Whitespace-mode configuration.
           (expand-file-name  "projectile.cache" savefile-dir)))
 #+END_SRC
 
+*** Perspective
+
+#+BEGIN_SRC emacs-lisp
+  (req-package perspective
+    :config
+    (setq persp-show-modestring 'header)
+    (add-hook 'after-init-hook #'(lambda () (persp-mode 1)))
+    (defun custom-persp-last ()
+      (interactive)
+      (persp-switch (persp-name persp-last)))
+    ;; Easily switch to your last perspective
+    (define-key persp-mode-map (kbd "C-x x '") 'custom-persp-last))
+#+END_SRC
+
 *** Persp-projectile
 
 #+BEGIN_SRC emacs-lisp
   (req-package persp-projectile
     :require (projectile perspective)
-    :bind ("s-s" . projectile-persp-switch-project)
-    :config
-    (setq persp-show-modestring 'header)
-    (persp-mode))
+    :bind ("s-s" . projectile-persp-switch-project))
 
 #+END_SRC
 
@@ -1209,6 +1226,24 @@ based on a recursive-descent parser for regexp syntax.
                   (setq-local eldoc-documentation-function #'ggtags-eldoc-function)))))
 #+END_SRC
 
+*** Org-reveal
+
+#+BEGIN_SRC emacs-lisp
+  (req-package ox-reveal
+    :require htmlize)
+#+END_SRC
+
+*** VLFI
+
+View Large Files in Emacs
+
+#+BEGIN_SRC emacs-lisp
+  (req-package vlf
+    :init
+    (require 'vlf-integrate)
+    :config
+    (setq vlf-batch-size 10240))
+#+END_SRC
 *** Anzu Mode
 
 #+BEGIN_SRC emacs-lisp
