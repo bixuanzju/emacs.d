@@ -18,3 +18,4 @@ session*
 /.mc-lists.el
 /url/
 /ac-comphist.dat
+tramp
