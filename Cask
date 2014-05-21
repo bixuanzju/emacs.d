@@ -59,6 +59,7 @@
 (depends-on "multiple-cursors")
 (depends-on "mykie")
 (depends-on "noflet")
+(depends-on "operate-on-number")
 (depends-on "org-plus-contrib")
 (depends-on "ov")
 (depends-on "owdriver")

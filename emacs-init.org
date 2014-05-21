@@ -186,8 +186,8 @@ more useful.
   (bind-key "C-x C-b" 'ibuffer)
   (bind-key "C-:" 'eval-expression)
   (bind-key "M-SPC" 'cycle-spacing)
-  (bind-key "C-c x" 'sunrise-cd)
-  (bind-key "C-c X" 'sunrise)
+  ;; (bind-key "C-c x" 'sunrise-cd)
+  ;; (bind-key "C-c X" 'sunrise)
   (bind-key "C-c t" 'toggle-window-split)
   (bind-key "C-M-\\" 'prelude-indent-region-or-buffer)
   (bind-key "C-c q" 'auto-fill-mode)
@@ -233,7 +233,7 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
     :config
     (key-chord-mode +1)
     (setq key-chord-two-keys-delay 0.05)
-    (key-chord-define-global "JJ" 'prelude-switch-to-previous-buffer)
+    (key-chord-define-global "jl" 'prelude-switch-to-previous-buffer)
     (key-chord-define-global "x1" 'delete-other-windows)
     (key-chord-define-global "xk" 'ace-window)
     (key-chord-define-global "0o" 'delete-window)
@@ -714,6 +714,25 @@ point (using =M-.=), and the ability to pop back to previous marks
     :config
     (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
       (add-hook hook 'elisp-slime-nav-mode)))
+#+END_SRC
+
+*** Operate-on-numbes
+
+#+BEGIN_SRC emacs-lisp
+  (req-package operate-on-number
+    :require smartrep
+    :config
+    (setq smartrep-mode-line-active-bg nil)
+    (smartrep-define-key global-map "C-c"
+      '(("+" . apply-operation-to-number-at-point)
+        ("-" . apply-operation-to-number-at-point)
+        ("*" . apply-operation-to-number-at-point)
+        ("/" . apply-operation-to-number-at-point)
+        ("^" . apply-operation-to-number-at-point)
+        ("<" . apply-operation-to-number-at-point)
+        (">" . apply-operation-to-number-at-point)
+        ("'" . operate-on-number-at-point))))
+
 #+END_SRC
 
 *** Expand-region
