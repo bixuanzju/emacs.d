@@ -723,7 +723,7 @@ point (using =M-.=), and the ability to pop back to previous marks
     :require smartrep
     :config
     (setq smartrep-mode-line-active-bg nil)
-    (smartrep-define-key global-map "C-c"
+    (smartrep-define-key global-map "C-c ."
       '(("+" . apply-operation-to-number-at-point)
         ("-" . apply-operation-to-number-at-point)
         ("*" . apply-operation-to-number-at-point)
@@ -732,7 +732,6 @@ point (using =M-.=), and the ability to pop back to previous marks
         ("<" . apply-operation-to-number-at-point)
         (">" . apply-operation-to-number-at-point)
         ("'" . operate-on-number-at-point))))
-
 #+END_SRC
 
 *** Expand-region
@@ -791,6 +790,13 @@ Whitespace-mode configuration.
     :config
     (setq projectile-cache-file
           (expand-file-name  "projectile.cache" savefile-dir)))
+#+END_SRC
+
+*** Discover-my-major
+
+#+BEGIN_SRC emacs-lisp
+  (req-package discover-my-major
+    :bind ("C-h C-m" . discover-my-major))
 #+END_SRC
 
 *** Perspective
