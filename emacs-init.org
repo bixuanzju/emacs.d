@@ -213,10 +213,10 @@ more useful.
   ;; A complementary binding to the apropos-command (C-h a)
   (define-key 'help-command "A" 'apropos)
 
-  (bind-key "C-h C-f" 'find-function)
-  (bind-key "C-h C-k" 'find-function-on-key)
-  (bind-key "C-h C-v" 'find-variable)
-  (bind-key "C-h C-l" 'find-library)
+  (bind-key "C-f" 'find-function 'help-command)
+  (bind-key "C-k" 'find-function-on-key 'help-command)
+  (bind-key "C-v" 'find-variable 'help-command)
+  (bind-key "C-l" 'find-library 'help-command)
 
   (global-set-key [remap kill-whole-line] 'prelude-kill-whole-line)
   (global-set-key [remap move-beginning-of-line]
@@ -789,14 +789,16 @@ Whitespace-mode configuration.
     (projectile-global-mode)
     :config
     (setq projectile-cache-file
-          (expand-file-name  "projectile.cache" savefile-dir)))
+          (expand-file-name  "projectile.cache" savefile-dir))
+    (setq projectile-sort-order 'modification-time))
 #+END_SRC
 
 *** Discover-my-major
 
 #+BEGIN_SRC emacs-lisp
   (req-package discover-my-major
-    :bind ("C-h C-m" . discover-my-major))
+    :config
+    (bind-key "C-m" 'discover-my-major 'help-command))
 #+END_SRC
 
 *** Perspective
@@ -1267,7 +1269,8 @@ View Large Files in Emacs
     :init
     (require 'vlf-integrate)
     :config
-    (setq vlf-batch-size 10240))
+    (setq vlf-batch-size 10240)
+    (setq vlf-application 'dont-ask))
 #+END_SRC
 *** Anzu Mode
 

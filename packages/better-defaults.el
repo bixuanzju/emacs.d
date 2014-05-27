@@ -169,6 +169,9 @@ This functions should be added to the hooks of major modes for programming."
 
 (add-hook 'prog-mode-hook 'prelude-prog-mode-defaults)
 
+;; Newline at end of file
+(setq require-final-newline t)
+
 ;; Ido-related config
 (require 'ido)
 (setq ido-enable-prefix nil
