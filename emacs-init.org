@@ -305,6 +305,9 @@ All packages and modes are configured here.
 
   (add-to-list 'auto-mode-alist '("Cask\\'" . emacs-lisp-mode))
 
+  (define-key emacs-lisp-mode-map (kbd "C-c C-c") 'eval-defun)
+  (define-key emacs-lisp-mode-map (kbd "C-c C-b") 'eval-buffer)
+
 #+END_SRC
 
 *** Geiser/Scheme
@@ -664,6 +667,50 @@ single keybind.
 #+BEGIN_SRC emacs-lisp
   (req-package ace-jump-mode
     :bind ("C-c SPC" . ace-jump-mode))
+#+END_SRC
+
+*** Alert
+
+[[https://github.com/jwiegley/alert][Alert]] is a Growl-workalike for Emacs which uses a common notification
+interface.
+
+#+BEGIN_SRC emacs-lisp
+  (req-package alert
+    :config
+    (defvar terminal-notifier-command (executable-find "terminal-notifier")
+    "The path to terminal-notifier.")
+    (alert-define-style 'timed-notification :title "Notify using terminal-notifier"
+                        :notifier
+                        (lambda (info)
+                          (if terminal-notifier-command
+                              (let ((args
+                                     (list "-title" (alert-encode-string (plist-get info :title))
+                                           "-message" (alert-encode-string (plist-get info :message))
+                                           "-sound" "default"
+                                           "-sender" "org.gnu.Emacs")))
+                                (apply #'call-process terminal-notifier-command nil nil nil args))
+                            (alert-message-notify info))))
+    (setq alert-default-style 'timed-notification)
+
+    ;; To reminder me to stand up from long time coding
+    (defvar my-timer-obj nil
+      "For canceling if I cannot bear")
+
+    (defun start-my-timer (arg)
+      "Timer for long time coding."
+      (interactive "p")
+      (cl-case arg
+        (4 (progn
+             (cancel-timer my-timer-obj)
+             (alert "Stop timing!" :title "Emacs")))
+        (t (progn
+             (if my-timer-obj (cancel-timer my-timer-obj))
+             (setq my-timer-obj
+                   (run-at-time "52 minutes" 2600
+                                (lambda () (alert "Stand up, stretch out!" :title "Stop Watering"))))
+             (alert "Start timing!" :title "Emacs")))))
+    (bind-key* "C-c C-z" 'start-my-timer))
+
 #+END_SRC
 
 *** Ace-window
@@ -1062,26 +1109,6 @@ source code identifier uniquely based on its name.
     :diminish (color-identifiers-mode . "")
     :init
     (add-hook 'after-init-hook #'global-color-identifiers-mode))
-#+END_SRC
-
-*** Eyebrowse
-
-[[https://github.com/wasamasa/eyebrowse][Eyebrowse]] is a global minor mode for Emacs that allows you to
-manage your window configurations in a simple manner. It displays
-their current state in the modeline by default.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (req-package eyebrowse
-    :diminish ""
-    :init
-    (setq eyebrowse-keymap-prefix (kbd "C-c C-v"))
-    :config
-    (setq eyebrowse-wrap-around-p t)
-    (eyebrowse-mode t)
-    (setq-default header-line-format
-                  '((eyebrowse-mode (:eval (eyebrowse-update-mode-line)))))
-    (setq mode-line-misc-info
-          (remove '(:eval (eyebrowse-update-mode-line)) mode-line-misc-info)))
 #+END_SRC
 
 *** Ebib
