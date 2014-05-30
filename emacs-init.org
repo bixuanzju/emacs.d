@@ -1164,9 +1164,9 @@ Show matching and unmatched delimiters, and auto-close them as well.
     (require 'smartparens-config)
     ;; highlights matching pairs
     (show-smartparens-global-mode t)
-    (bind-key "C-M-f" 'sp-forward-sexp sp-keymap)
-    (bind-key "C-M-b" 'sp-backward-sexp sp-keymap)
-    (bind-key "C-M-k" 'sp-kill-sexp sp-keymap))
+    (bind-key "C-M-f" 'sp-forward-sexp)
+    (bind-key "C-M-b" 'sp-backward-sexp)
+    (bind-key "C-M-k" 'sp-kill-sexp))
 #+END_SRC
 
 *** GHC
