@@ -188,11 +188,11 @@ more useful.
   (bind-key "M-SPC" 'cycle-spacing)
   ;; (bind-key "C-c x" 'sunrise-cd)
   ;; (bind-key "C-c X" 'sunrise)
-  (bind-key "C-M-\\" 'prelude-indent-region-or-buffer)
+  (bind-key "C-M-\\" 'prelude-indent-buffer-or-region)
   (bind-key "C-c q" 'auto-fill-mode)
   (bind-key "C-c k" 'prelude-kill-other-buffers)
   (bind-key "M-'" 'next-error)
-  (bind-key "C-c n" 'prelude-cleanup-buffer)
+  (bind-key "C-c n" 'prelude-cleanup-buffer-or-region)
   (bind-key "C-M-h" 'backward-kill-word)
   (bind-key "C-x [" 'shrink-window)
   (bind-key "C-x ]" 'enlarge-window)
@@ -660,27 +660,6 @@ single keybind.
       :minibuff (backward-kill-word 1)))
 #+END_SRC
 
-*** Multi-term
-
-Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Multi-term]] for setup probelm.
-
-#+BEGIN_SRC emacs-lisp
-  (req-package multi-term
-    :bind (("C-c t" . multi-term)
-           ("C-c \"" . multi-term-dedicated-toggle))
-    :config
-    (setq multi-term-program (getenv "SHELL")
-          multi-term-buffer-name "term"
-          multi-term-dedicated-select-after-open-p t)
-    (add-hook 'term-mode-hook
-              (lambda ()
-                (add-to-list 'term-bind-key-alist '("M-[" . multi-term-prev))
-                (add-to-list 'term-bind-key-alist '("M-]" . multi-term-next))
-                ;; conflict with yasnippet
-                (yas-minor-mode -1)
-                (company-mode -1))))
-#+END_SRC
-
 *** Ace-jump-mode
 
 #+BEGIN_SRC emacs-lisp
@@ -1000,7 +979,6 @@ Enable spell-checking in Emacs.
 
 **** Helpful Default Keybindings
 =C-.= corrects word at point.  =C-,​= to jump to next misspelled word.
-
 *** Browse-kill-ring
 
 #+BEGIN_SRC emacs-lisp
@@ -1327,8 +1305,28 @@ View Large Files in Emacs
     (global-anzu-mode +1))
 #+END_SRC
 
-** Buffer
+*** Multi-term
 
+Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Multi-term]] for setup probelm.
+
+#+BEGIN_SRC emacs-lisp
+  (req-package multi-term
+    :bind (("C-c t" . multi-term)
+           ("C-c \"" . multi-term-dedicated-toggle))
+    :config
+    (setq multi-term-program (getenv "SHELL")
+          multi-term-buffer-name "term"
+          multi-term-dedicated-select-after-open-p t)
+    (add-hook 'term-mode-hook
+              (lambda ()
+                (add-to-list 'term-bind-key-alist '("M-[" . multi-term-prev))
+                (add-to-list 'term-bind-key-alist '("M-]" . multi-term-next))
+                ;; conflict with yasnippet
+                (yas-minor-mode -1)
+                (company-mode -1))))
+#+END_SRC
+
+** Buffer
 *** Toggle Windows
 
 #+BEGIN_SRC emacs-lisp
@@ -1366,6 +1364,18 @@ View Large Files in Emacs
     "Remove all tabs from the current buffer."
     (interactive)
     (untabify (point-min) (point-max)))
+
+  (defun prelude-untabify-buffer-or-region ()
+    "Untabify a region if selected, otherwise the whole buffer."
+    (interactive)
+    (save-excursion
+      (if (region-active-p)
+          (progn
+            (untabify (region-beginning) (region-end))
+            (message "Untabify selected region."))
+        (progn
+          (prelude-untabify-buffer)
+          (message "Untabify buffer.")))))
 #+END_SRC
 
 *** Indent Buffer
@@ -1376,7 +1386,7 @@ View Large Files in Emacs
     (interactive)
     (indent-region (point-min) (point-max)))
 
-  (defun prelude-indent-region-or-buffer ()
+  (defun prelude-indent-buffer-or-region ()
     "Indent a region if selected, otherwise the whole buffer."
     (interactive)
     (save-excursion
@@ -1393,11 +1403,25 @@ View Large Files in Emacs
 
 #+BEGIN_SRC emacs-lisp
   (defun prelude-cleanup-buffer ()
-    "Perform a bunch of operations on the whitespace content of a
-  buffer."
+    "Perform a bunch of operations on the whitespace content of a buffer."
     (interactive)
-    (prelude-indent-buffer)
     (prelude-untabify-buffer)
+    (prelude-indent-buffer)
+    (whitespace-cleanup))
+
+  (defun prelude-cleanup-buffer-or-region ()
+    "Cleanup a region if selected, otherwise the whole buffer."
+    (interactive)
+    (save-excursion
+      (if (region-active-p)
+          (progn
+            (untabify (region-beginning) (region-end))
+            (indent-region (region-beginning) (region-end))
+            (message "Cleanup selected region."))
+        (progn
+          (prelude-untabify-buffer)
+          (prelude-indent-buffer)
+          (message "Cleanup buffer."))))
     (whitespace-cleanup))
 #+END_SRC
 
