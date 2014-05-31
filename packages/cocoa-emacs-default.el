@@ -37,6 +37,11 @@
   :config
   (exec-path-from-shell-initialize))
 
+;; proced-mode doesn't work on OS X so we use vkill instead
+(use-package vkill
+  :ensure vkill
+  :bind ("C-x p" . vkill))
+
 (setq delete-by-moving-to-trash t
       trash-directory "~/.Trash")
 (bind-key "M-ƒ" 'toggle-frame-fullscreen)

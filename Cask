@@ -99,6 +99,7 @@
 (depends-on "use-package")
 (depends-on "visual-regexp")
 (depends-on "visual-regexp-steroids")
+(depends-on "vkill")
 (depends-on "vlf")
 (depends-on "wgrep")
 (depends-on "wgrep-ag")
