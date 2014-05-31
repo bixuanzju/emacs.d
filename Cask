@@ -59,6 +59,7 @@
 (depends-on "makey")
 (depends-on "markdown-mode")
 (depends-on "move-text")
+(depends-on "multi-term")
 (depends-on "multiple-cursors")
 (depends-on "mykie")
 (depends-on "noflet")
