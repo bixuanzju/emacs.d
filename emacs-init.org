@@ -423,6 +423,7 @@ If you are not using it, you need to start.
              (clojure . t)
              (sh . t)
              (haskell . t)
+             (octave . t)
              (org . t)
              (plantuml . t)
              (scala . t)
