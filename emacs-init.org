@@ -923,6 +923,7 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
   (req-package company
     :init
     (add-hook 'after-init-hook #'global-company-mode)
+    :bind ("C-c y" . company-yasnippet)
     :diminish (company-mode . "")
     :config
     ;; repomacs problematic
@@ -931,7 +932,11 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
     (setq company-dabbrev-downcase nil)
     (eval-after-load 'company-dabbrev-code
       '(dolist (mode '(coq-mode oz-mode))
-         (add-to-list 'company-dabbrev-code-modes mode))))
+         (add-to-list 'company-dabbrev-code-modes mode)))
+    ;; invert the navigation direction if the the completion popup-isearch-match
+    ;; is displayed on top (happens near the bottom of windows)
+    (setq company-tooltip-flip-when-above t)
+    (setq company-dabbrev-code-other-buffers 'code))
 #+END_SRC
 
 *** Shell-pop
