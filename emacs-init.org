@@ -128,7 +128,7 @@ Some quick essential customizations.
   (setq large-file-warning-threshold 100000000)
 
   ;; autopair
-  (electric-pair-mode)
+  ;; (electric-pair-mode)
 
   ;; enable narrowing commands
   (put 'narrow-to-region 'disabled nil)
@@ -165,17 +165,6 @@ Set custom theme path and load theme
 
 * Keybindings
 
-** Exiting
-
-I don't like to quite Emacs on accident, and I find closing frames are
-more useful.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  ;; The mnemonic is C-t REALLY QUIT
-  (bind-key "C-x r q" 'save-buffers-kill-terminal)
-  (bind-key "C-x C-c" 'delete-frame)
-#+END_SRC
-
 ** Improvements
 #+BEGIN_SRC emacs-lisp
   ;; convenient line number showing
@@ -194,6 +183,7 @@ more useful.
   (bind-key "M-'" 'next-error)
   (bind-key "C-c n" 'prelude-cleanup-buffer-or-region)
   (bind-key "C-M-h" 'backward-kill-word)
+  (bind-key [(control shift return)] 'prelude-smart-open-line-above)
   (bind-key "C-x [" 'shrink-window)
   (bind-key "C-x ]" 'enlarge-window)
   (bind-key "C-c M-d" 'prelude-duplicate-and-comment-current-line-or-region)
@@ -1024,7 +1014,9 @@ A great syntax checker.
     :bind (("C->" . mc/mark-next-like-this)
            ("C-<" . mc/mark-previous-like-this)
            ("C-c C-<" . mc/mark-all-like-this)
-           ("C-c C->" . mc/mark-more-like-this-extended)))
+           ("C-c C->" . mc/mark-more-like-this-extended))
+    :init
+    (setq mc/list-file (expand-file-name "mc-lists.el" savefile-dir)))
 #+END_SRC
 
 *** Move-text
@@ -1162,9 +1154,10 @@ Show matching and unmatched delimiters, and auto-close them as well.
     (require 'smartparens-config)
     ;; highlights matching pairs
     (show-smartparens-global-mode t)
-    (bind-key "C-M-f" 'sp-forward-sexp)
-    (bind-key "C-M-b" 'sp-backward-sexp)
-    (bind-key "C-M-k" 'sp-kill-sexp))
+    (setq sp-base-key-bindings 'paredit)
+    (setq sp-autoskip-closing-pair 'always)
+    (setq sp-hybrid-kill-entire-symbol nil)
+    (sp-use-paredit-bindings))
 #+END_SRC
 
 *** GHC

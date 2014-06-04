@@ -164,6 +164,10 @@ This functions should be added to the hooks of major modes for programming."
   "Default coding hook, useful with any programming language."
   (eval-after-load "subword"
     '(diminish 'subword-mode))
+  (smartparens-mode 1)
+  (sp-pair "{" nil :post-handlers
+           '(((lambda (&rest _ignored)
+                (prelude-smart-open-line-above)) "RET")))
   (prelude-local-comment-auto-fill)
   (prelude-font-lock-comment-annotations))
 
