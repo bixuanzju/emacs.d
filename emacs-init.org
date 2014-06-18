@@ -1185,6 +1185,7 @@ Show matching and unmatched delimiters, and auto-close them as well.
   (req-package smartparens-config
     :require smartparens
     :config
+    (setq sp-show-pair-from-inside t)
     ;; highlights matching pairs
     (setq sp-base-key-bindings 'paredit)
     (setq sp-autoskip-closing-pair 'always)
