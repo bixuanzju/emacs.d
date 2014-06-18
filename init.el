@@ -2,6 +2,12 @@
 (require 'cask "~/.cask/cask.el")
 (cask-initialize)
 
-(require 'ob-tangle)
-(org-babel-load-file
- (expand-file-name "emacs-init.org" user-emacs-directory))
+;; Load customization
+(defvar my-init-file (expand-file-name "emacs-init.el" user-emacs-directory)
+  "All configurations stored in this file.")
+
+(if (file-exists-p my-init-file)
+    (load-file my-init-file)
+  (progn
+    (org-babel-load-file
+     (expand-file-name "emacs-init.org" user-emacs-directory))))

@@ -16,6 +16,8 @@ This emacs.d was heavily inspired by the following configurations.
 
 [[https://github.com/bbatsov/prelude][Bozhidar Batsov's prelude]]
 
+[[https://github.com/larstvei/dot-emacs][larstvei's dot-emacs]]
+
 * Package Management
 
 [[https://github.com/rdallasgray/pallet][Pallet]] is a very helpful package management tool for Emacs.  It
@@ -34,7 +36,7 @@ Cask is initialized in =init.el= with the following:
 
 You can download all packages in your =Cask= file by using =M-x
 pallet-install=. However, this should not be necessary.
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (require 'pallet)
 #+END_SRC
 
@@ -50,15 +52,32 @@ Another nice thing about =req-package=, is that you no longer not need
 to specify the =:ensure= keyword, as it is added by default.
 
 Start using =req-package=
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; Add the personal packages directory to the load-path
+  (add-to-list 'load-path (concat user-emacs-directory "packages/"))
   (require 'req-package)
+#+END_SRC
+* Meta
+
+We add a function to the =after-save-hook= ensuring to always tangle
+and byte-compile the =org=-document after changes.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defun my-init-hook ()
+    "If the current buffer is 'init.org' the code-blocks are
+  tangled, and the tangled file is compiled."
+    (let ((my-org-file (expand-file-name (concat user-emacs-directory "emacs-init.org"))))
+      (when (equal (buffer-file-name) my-org-file)
+        (org-babel-tangle)
+        (byte-compile-file my-init-file))))
+  (add-hook 'after-save-hook 'my-init-hook)
 #+END_SRC
 
 * Essentials
 
 Some quick essential customizations.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   ;; Turn off mouse interface early in startup to avoid momentary display
   (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
   (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
@@ -71,9 +90,6 @@ Some quick essential customizations.
 
   (unless (file-exists-p savefile-dir)
     (make-directory savefile-dir))
-
-  ;; Add the personal packages directory to the load-path
-  (add-to-list 'load-path (concat user-emacs-directory "packages/"))
 
   ;; Load elisp bits collected from everywhere
   (require 'elisp)
@@ -148,7 +164,7 @@ Some quick essential customizations.
 ** Theme
 
 Set custom theme path and load theme
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package zenburn-theme
     :config
     (load-theme 'zenburn t))
@@ -156,7 +172,7 @@ Set custom theme path and load theme
 
 ** Mode Line
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package smart-mode-line
     :config
     (sml/setup))
@@ -165,7 +181,7 @@ Set custom theme path and load theme
 * Keybindings
 
 ** Improvements
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   ;; convenient line number showing
   (global-set-key [remap goto-line] 'goto-line-with-feedback)
 
@@ -216,7 +232,7 @@ Set custom theme path and load theme
 
 Key-chord maps pairs of simultaneously pressed keys to commands.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package key-chord
     :config
     (key-chord-mode +1)
@@ -232,7 +248,7 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
 
 ** Unbind keys
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (unbind-key "C-o")
   (unbind-key "C-x f")
 #+END_SRC
@@ -245,8 +261,8 @@ All packages and modes are configured here.
 
 [[https://github.com/magit/magit][Magit]] is the ultimate =git= interface for Emacs.
 
-#+BEGIN_SRC emacs-lisp
-  (req-package magit
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (req-package-force magit
     :diminish (magit-auto-revert-mode . "")
     :bind ("C-x g" . magit-status))
 #+END_SRC
@@ -255,7 +271,7 @@ All packages and modes are configured here.
 
 **** Emacs lisp
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (defun prelude-recompile-elc-on-save ()
     "Recompile your elc when saving an elisp file."
     (add-hook 'after-save-hook
@@ -300,8 +316,8 @@ All packages and modes are configured here.
 
 *** Geiser/Scheme
 
-#+BEGIN_SRC emacs-lisp
-  (req-package geiser
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (req-package-force geiser
     :config
     (setq geiser-active-implementations '(racket)))
 
@@ -314,7 +330,7 @@ All packages and modes are configured here.
 
 Sane setup for LaTeX writers.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package tex-site
     :require latex-extra
     :config
@@ -353,8 +369,8 @@ Sane setup for LaTeX writers.
 
 If you are not using it, you need to start.
 
-#+BEGIN_SRC emacs-lisp
-  (req-package org
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (req-package-force org
     :config
     (require 'ox-md)
     (require 'ox-latex)
@@ -427,7 +443,7 @@ If you are not using it, you need to start.
 Dired Plus is an extension to the =dired= file manager in Emacs.  My
 favorite feature is that pressing =F= will open all marked files.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package dired
     :commands dired-jump
     :config
@@ -452,7 +468,7 @@ favorite feature is that pressing =F= will open all marked files.
 
 *** Scala-mode
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package scala-mode2
     :config
     (setq scala-indent:align-forms t
@@ -465,7 +481,7 @@ favorite feature is that pressing =F= will open all marked files.
 
 *** Markdown
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package markdown-mode
     :mode "\\.md\\'")
 #+END_SRC
@@ -474,7 +490,7 @@ favorite feature is that pressing =F= will open all marked files.
 
 Type =clear= to clear the buffer like in other terminal emulators.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (require 'eshell)
   (setq eshell-directory-name
         (expand-file-name "eshell" savefile-dir))
@@ -489,7 +505,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
 *** Haskell Mode
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package haskell-mode
     :config
     (defun prelude-haskell-mode-defaults ()
@@ -526,7 +542,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
 *** SML Mode
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package sml-mode
     :mode "\\.sml\\'"
     :config
@@ -546,16 +562,26 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
 *** Js2 Mode
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package js2-mode
     :mode "\\.js\\'")
 #+END_SRC
 
 ** Minor Modes
-*** Pallet
+*** Ido-related
 
-#+BEGIN_SRC emacs-lisp
-  (req-package pallet)
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (req-package-force ido-ubiquitous
+    :config
+    (ido-ubiquitous-mode +1))
+
+  (req-package-force flx-ido
+    :config
+    (flx-ido-mode +1))
+
+  (req-package-force ido-vertical-mode
+    :config
+    (ido-vertical-mode +1))
 #+END_SRC
 
 *** Wgrep
@@ -563,7 +589,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
 [[https://github.com/mhayashi1120/Emacs-wgrep][Wgrep]] allows you to edit a grep buffer and apply those changes to the
 file buffer.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package wgrep-ag
   :require wgrep)
 #+END_SRC
@@ -574,9 +600,9 @@ file buffer.
 recent files using =recentf=.  It is a great way to manage many open
 files.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package helm
-    :init
+    :config
     (require 'helm-config)
     :bind ("C-x C-f" . helm-find-files))
 #+END_SRC
@@ -586,7 +612,7 @@ files.
 [[https://github.com/ShingoFukuyama/helm-swoop][Helm-swoop]], efficiently hopping squeezed lines powered by Emacs
 helm interface.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package helm-swoop
     :require helm
     :bind (("M-i" . helm-swoop)
@@ -606,7 +632,7 @@ helm interface.
 making the currently active key bindings interactively searchable
 with helm.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package helm-descbinds
     :require helm
     :config
@@ -618,7 +644,7 @@ with helm.
 [[https://github.com/tomterl/fullframe][Fullframe]] advises commands to execute fullscreen, restoring the window
 setup when exiting.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package fullframe
     :config
     (fullframe magit-status magit-mode-quit-window)
@@ -631,7 +657,7 @@ setup when exiting.
 [[https://github.com/yuutayamada/mykie-el][Mykie]] is a command multiplexer, which can add other functions to a
 single keybind.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package mykie
     :config
     (setq mykie:use-major-mode-key-override 'global)
@@ -652,9 +678,12 @@ single keybind.
 
 *** Ace-jump-mode
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package ace-jump-mode
-    :bind ("C-c SPC" . ace-jump-mode))
+    :bind ("C-c SPC" . ace-jump-mode)
+    :config
+    (setq ace-jump-mode-move-keys
+        '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?q ?w ?e ?r ?t ?y ?u ?i ?o ?p ?z ?x ?c ?v ?b ?n ?m)))
 #+END_SRC
 
 *** Alert
@@ -662,7 +691,7 @@ single keybind.
 [[https://github.com/jwiegley/alert][Alert]] is a Growl-workalike for Emacs which uses a common notification
 interface.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package alert
     :config
     (defvar terminal-notifier-command (executable-find "terminal-notifier")
@@ -705,7 +734,7 @@ interface.
 
 [[https://github.com/abo-abo/ace-window][Ace-window]] provides window switching, the visual way.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package ace-window
     :require ace-jump-mode
     :bind ("C-x o" . ace-window)
@@ -719,7 +748,7 @@ interface.
 =rainbow-mode= displays hexadecimal colors with the color they
 represent as their background.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package rainbow-mode
     :diminish (rainbow-mode . "")
     :config
@@ -731,7 +760,7 @@ represent as their background.
 [[https://github.com/jlr/rainbow-delimiters][Rainbow Delimiters]] is a “rainbow parentheses”-like mode which
 highlights parentheses, brackets, and braces according to their depth
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package rainbow-delimiters
     :config
     (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
@@ -743,7 +772,7 @@ highlights parentheses, brackets, and braces according to their depth
 point (using =M-.=), and the ability to pop back to previous marks
 (using =M-,=).
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package elisp-slime-nav
     :diminish (elisp-slime-nav-mode . "")
     :config
@@ -753,7 +782,7 @@ point (using =M-.=), and the ability to pop back to previous marks
 
 *** Operate-on-numbes
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package operate-on-number
     :require smartrep
     :config
@@ -774,7 +803,7 @@ point (using =M-.=), and the ability to pop back to previous marks
 [[https://github.com/magnars/expand-region.el][Expand-region]] increases the selected region by semantic units. Just
 keep pressing the key until it selects what you want.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package expand-region
     :bind ("C-=" . er/expand-region))
 #+END_SRC
@@ -783,7 +812,7 @@ keep pressing the key until it selects what you want.
 
 Whitespace-mode configuration.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
 
   (req-package whitespace
     :diminish (whitespace-mode . "")
@@ -805,7 +834,7 @@ Whitespace-mode configuration.
 
 [[https://github.com/Wilfred/ag.el][Ag.el]] is a simple ag frontend, loosely based on ack-and-half.el.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package ag
     :config
     (setq ag-highlight-search t))
@@ -813,7 +842,7 @@ Whitespace-mode configuration.
 
 *** Projectile
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package projectile
     :diminish ""
     :bind (("s-p" . projectile-switch-project)
@@ -830,7 +859,7 @@ Whitespace-mode configuration.
 
 *** Discover-my-major
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package discover-my-major
     :config
     (bind-key "C-m" 'discover-my-major 'help-command))
@@ -838,7 +867,7 @@ Whitespace-mode configuration.
 
 *** Perspective
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package perspective
     :config
     (setq persp-show-modestring 'header)
@@ -852,7 +881,7 @@ Whitespace-mode configuration.
 
 *** Persp-projectile
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package persp-projectile
     :require (projectile perspective)
     :bind ("s-s" . projectile-persp-switch-project))
@@ -864,7 +893,7 @@ Whitespace-mode configuration.
 [[https://github.com/abo-abo/lispy][Lispy]] implements various vi-like commands for navigating and editing
 Lisp code.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package lispy
     :init
     (dolist (hook '(emacs-lisp-mode-hook
@@ -885,7 +914,7 @@ Lisp code.
 
 Snippets are keys.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package yasnippet
     :idle
     (yas-global-mode 1)
@@ -906,7 +935,7 @@ Snippets are keys.
 
 More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package undo-tree
     :diminish (undo-tree-mode . "")
     :config
@@ -918,7 +947,7 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 [[https://github.com/company-mode/company-mode][Company]] is a code completion framework for Emacs. The name stands for
 "complete anything".
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package company
     :init
     (add-hook 'after-init-hook #'global-company-mode)
@@ -951,7 +980,7 @@ action to work.
 
 Enable spell-checking in Emacs.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package flyspell
     :diminish (flyspell-mode . "")
     :init
@@ -976,7 +1005,7 @@ Enable spell-checking in Emacs.
 =C-.= corrects word at point.  =C-,​= to jump to next misspelled word.
 *** Browse-kill-ring
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package browse-kill-ring
     :config
     (browse-kill-ring-default-keybindings))
@@ -986,7 +1015,7 @@ Enable spell-checking in Emacs.
 
 A great syntax checker.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package flycheck
     :bind ("C-c L" . flycheck-list-errors)
     :init
@@ -1003,7 +1032,7 @@ A great syntax checker.
 
 [[https://github.com/m2ym/popwin-el][popwin]] is used to manage the size of "popup" buffers.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package popwin
     :config
     (popwin-mode 1))
@@ -1013,7 +1042,7 @@ A great syntax checker.
 
 [[https://github.com/emacsmirror/multiple-cursors][Multiple Cursors]] brings you seemingly unlimited power.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package multiple-cursors
     :bind (("C->" . mc/mark-next-like-this)
            ("C-<" . mc/mark-previous-like-this)
@@ -1027,7 +1056,7 @@ A great syntax checker.
 
 Move lines or a region up or down.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package move-text
     :bind (("<C-S-up>" . move-text-up)
            ("<C-S-down>" . move-text-down)))
@@ -1038,7 +1067,7 @@ Move lines or a region up or down.
 [[https://github.com/kbkbkbkb1/guide-key][Guide-key.el]] displays the available key bindings automatically and
 dynamically.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package guide-key
     :diminish (guide-key-mode . "")
     :config
@@ -1056,7 +1085,7 @@ dynamically.
 
 Open file in Finder
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package reveal-in-finder
     :if (eq system-type 'darwin)
     :bind
@@ -1086,7 +1115,7 @@ Open file in Finder
 
 [[https://github.com/ensime/ensime-src][ENSIME]] is the ENhanced Scala Interaction Mode for Emacs.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package ensime
     :require scala-mode2
     :config
@@ -1098,7 +1127,7 @@ Open file in Finder
 [[https://github.com/ankurdave/color-identifiers-mode][Color Identifiers]] is a minor mode for Emacs that highlights each
 source code identifier uniquely based on its name.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package color-identifiers-mode
     :diminish (color-identifiers-mode . "")
     :init
@@ -1109,7 +1138,7 @@ source code identifier uniquely based on its name.
 
 [[https://github.com/joostkremers/ebib][Ebib]] is a BibTeX database manager that runs in GNU Emacs.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package ebib
     :config
     (org-add-link-type
@@ -1142,7 +1171,7 @@ source code identifier uniquely based on its name.
 lexical-binding variable which determines the behaviour of
 variable binding forms in Emacs Lisp.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package lexbind-mode
     :config
     (add-hook 'emacs-lisp-mode-hook 'lexbind-mode))
@@ -1152,21 +1181,24 @@ variable binding forms in Emacs Lisp.
 
 Show matching and unmatched delimiters, and auto-close them as well.
 
-#+BEGIN_SRC emacs-lisp
-  (req-package smartparens
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (req-package smartparens-config
+    :require smartparens
     :config
-    (require 'smartparens-config)
     ;; highlights matching pairs
-    (show-smartparens-global-mode t)
     (setq sp-base-key-bindings 'paredit)
     (setq sp-autoskip-closing-pair 'always)
     (setq sp-hybrid-kill-entire-symbol nil)
-    (sp-use-paredit-bindings))
+    (sp-use-paredit-bindings)
+    (sp-pair "{" nil :post-handlers
+             '(((lambda (&rest _ignored)
+                  (prelude-smart-open-line-above)) "RET")))
+    (show-smartparens-global-mode t))
 #+END_SRC
 
 *** GHC
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package ghc
     :config
     (autoload 'ghc-init "ghc" nil t)
@@ -1186,7 +1218,7 @@ operations based on the syntax of Haskell.
 
 *** Ace-link
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package ace-link
     :config
     (ace-link-setup-default))
@@ -1196,7 +1228,7 @@ operations based on the syntax of Haskell.
 
 [[https://github.com/leoliu/easy-kill][easy-kill]] provides commands to let users kill or mark things easily.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package easy-kill
     :config
     (global-set-key [remap kill-ring-save] 'easy-kill))
@@ -1208,7 +1240,7 @@ operations based on the syntax of Haskell.
 Manager. [[https://github.com/stanaka/dash-at-point][dash-at-point]] make it easy to search the word at point with
 Dash.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package dash-at-point
     :if (eq system-type 'darwin))
 #+END_SRC
@@ -1218,7 +1250,7 @@ Dash.
 [[https://github.com/benma/visual-regexp-steroids.el/][visual-regexp-steroids]] enables the use of modern regexp engines (no
 more escaped group parentheses, and other goodies!).
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package visual-regexp-steroids
     :bind (("C-c r" . vr/replace)))
 #+END_SRC
@@ -1228,13 +1260,13 @@ more escaped group parentheses, and other goodies!).
 [[https://github.com/joddie/pcre2el][pcre2el]] is a utility for working with regular expressions in Emacs,
 based on a recursive-descent parser for regexp syntax.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
 (req-package pcre2el)
 #+END_SRC
 
 *** Worf Mode
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package worf
     :config
     (add-hook 'org-mode-hook 'worf-mode))
@@ -1242,7 +1274,7 @@ based on a recursive-descent parser for regexp syntax.
 
 *** Skeletor
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package skeletor
     :config
     (skeletor-define-template "scala-project"
@@ -1257,14 +1289,14 @@ based on a recursive-descent parser for regexp syntax.
 
 *** Paradox
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package paradox
     :bind ("C-S-l" . paradox-list-packages))
 #+END_SRC
 
 *** ggtags
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package ggtags
     :config
     (add-hook 'c-mode-common-hook
@@ -1277,7 +1309,7 @@ based on a recursive-descent parser for regexp syntax.
 
 *** Org-reveal
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package ox-reveal
     :require htmlize)
 #+END_SRC
@@ -1286,7 +1318,7 @@ based on a recursive-descent parser for regexp syntax.
 
 View Large Files in Emacs
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package vlf
     :init
     (require 'vlf-integrate)
@@ -1296,7 +1328,7 @@ View Large Files in Emacs
 #+END_SRC
 *** Anzu Mode
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package anzu
     :diminish (anzu-mode . "")
     :config
@@ -1307,7 +1339,7 @@ View Large Files in Emacs
 
 Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Multi-term]] for setup probelm.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package multi-term
     :bind (("C-c t" . multi-term)
            ("C-c \"" . multi-term-dedicated-toggle))
@@ -1327,7 +1359,7 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
 ** Buffer
 *** Toggle Windows
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (defun toggle-window-split ()
     "Toggle window splitting between horizontal to vertical."
     (interactive)
@@ -1357,7 +1389,7 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
 
 *** Untabify Buffer
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (defun prelude-untabify-buffer ()
     "Remove all tabs from the current buffer."
     (interactive)
@@ -1378,7 +1410,7 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
 
 *** Indent Buffer
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (defun prelude-indent-buffer ()
     "Indent the currently visited buffer."
     (interactive)
@@ -1399,7 +1431,7 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
 
 *** Cleanup Buffer
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (defun prelude-cleanup-buffer ()
     "Perform a bunch of operations on the whitespace content of a buffer."
     (interactive)
@@ -1425,7 +1457,7 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
 
 *** Kill other buffers
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (defun prelude-kill-other-buffers ()
     "Kill all buffers but the current one.
   Doesn't mess with special buffers."
@@ -1441,7 +1473,7 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
 ** Miscellaneous
 *** Go to line with feedback
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (defun goto-line-with-feedback ()
     "Show line numbers temporarily, while prompting for the line
   number input."
@@ -1454,7 +1486,7 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
 #+END_SRC
 *** Backward kill
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (defun backward-kill-word-or-kill-region ()
     "Kill region if there's one, otherwise kill the a word
   backward."
@@ -1465,7 +1497,7 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
 #+END_SRC
 *** Search
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (defun prelude-search (query-url prompt)
     "Open the search url constructed with the QUERY-URL.
   PROMPT sets the `read-string prompt."
@@ -1489,7 +1521,7 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
 #+END_SRC
 *** Colorize compilation buffers
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   ;; Compilation from Emacs
   (defun prelude-colorize-compilation-buffer ()
     "Colorize a compilation mode buffer."
@@ -1516,7 +1548,7 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
 
 *** Annotate TODOs
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package ov
     :config
     (defun prelude-todo-ov-evaporate (_ov _after _beg _end &optional _length)
@@ -1534,7 +1566,7 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
 
 *** Rename Mode Line
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (defmacro rename-modeline (package-name mode new-name)
     `(eval-after-load ,package-name
        '(defadvice ,mode (after rename-modeline activate)
@@ -1548,7 +1580,7 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
 
 *** Duplicate
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (defun prelude-get-positions-of-line-or-region ()
     "Return positions (beg . end) of the current line or region."
     (let (beg end)
@@ -1600,7 +1632,7 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
 
 * Finish Requirements
 All done with  =req-package=.
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package-finish)
 #+END_SRC
 

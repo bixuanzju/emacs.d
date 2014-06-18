@@ -32,14 +32,12 @@
 ;;; Code:
 
 ;; PATH setup
-(use-package exec-path-from-shell
-  :ensure exec-path-from-shell
+(req-package-force exec-path-from-shell
   :config
   (exec-path-from-shell-initialize))
 
 ;; proced-mode doesn't work on OS X so we use vkill instead
-(use-package vkill
-  :ensure vkill
+(req-package-force vkill
   :bind ("C-x p" . vkill))
 
 (setq delete-by-moving-to-trash t

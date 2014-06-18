@@ -31,7 +31,7 @@
 
 ;;; Code:
 
-(use-package dash-functional
+(req-package-force dash-functional
   :config
   (dash-enable-font-lock))
 
