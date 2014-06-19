@@ -24,6 +24,7 @@
 (depends-on "discover-my-major")
 (depends-on "easy-kill")
 (depends-on "ebib")
+(depends-on "electric-spacing")
 (depends-on "elisp-slime-nav")
 (depends-on "ensime")
 (depends-on "epl")

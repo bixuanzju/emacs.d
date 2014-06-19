@@ -1308,6 +1308,18 @@ based on a recursive-descent parser for regexp syntax.
                   (setq-local eldoc-documentation-function #'ggtags-eldoc-function)))))
 #+END_SRC
 
+*** electric-spacing
+
+#+begin_src emacs-lisp :tangle yes
+  (req-package electric-spacing
+    :config
+    (add-hook 'org-mode-hook 'electric-spacing-mode)
+    (add-to-list 'electric-spacing-regexp-pairs
+                 '("\\cA\\|\\cC\\|\\ck\\|\\cK\\|\\cH" . "[0-9A-Za-z]"))
+    (add-to-list 'electric-spacing-regexp-pairs
+                 '("[0-9A-Za-z]" . "\\cA\\|\\cC\\|\\ck\\|\\cK\\|\\cH")))
+#+end_src
+
 *** Org-reveal
 
 #+BEGIN_SRC emacs-lisp :tangle yes
