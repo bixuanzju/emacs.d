@@ -165,7 +165,7 @@ Some quick essential customizations.
 
 Set custom theme path and load theme
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (req-package zenburn-theme
+  (req-package-force zenburn-theme
     :config
     (load-theme 'zenburn t))
 #+END_SRC
@@ -173,7 +173,7 @@ Set custom theme path and load theme
 ** Mode Line
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (req-package smart-mode-line
+  (req-package-force smart-mode-line
     :config
     (sml/setup))
 #+END_SRC
@@ -232,7 +232,7 @@ Set custom theme path and load theme
 Key-chord maps pairs of simultaneously pressed keys to commands.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (req-package key-chord
+  (req-package-force key-chord
     :config
     (key-chord-mode +1)
     (setq key-chord-two-keys-delay 0.05)
@@ -599,7 +599,7 @@ file buffer.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package wgrep-ag
-  :require wgrep)
+    :require wgrep)
 #+END_SRC
 
 *** Helm
@@ -610,9 +610,9 @@ files.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package helm
-    :config
-    (require 'helm-config)
-    :bind ("C-x C-f" . helm-find-files))
+    :bind ("C-x C-f" . helm-find-files)
+    :init
+    (require 'helm-config))
 #+END_SRC
 
 *** Helm-swoop
@@ -822,7 +822,7 @@ Whitespace-mode configuration.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
 
-  (req-package whitespace
+  (req-package-force whitespace
     :diminish (whitespace-mode . "")
     :config
     (setq whitespace-line-column 80) ;; limit line length
@@ -1159,28 +1159,7 @@ source code identifier uniquely based on its name.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package ebib
     :config
-    (org-add-link-type
-     "ebib" 'ebib
-     (lambda (path desc format)
-       (cond
-        ((eq format 'html)
-         (format "(<cite>%s</cite>)" path))
-        ((eq format 'latex)
-         (if (or (not desc) (equal 0 (search "cite:" desc)))
-             (format "\\cite{%s}" path)
-           (format "\\cite[%s][%s]{%s}"
-                   (cadr (split-string desc ";"))
-                   (car (split-string desc ";")) path))))))
-    (setq ebib-citation-commands
-          '((any
-             (("cite" "\\cite%<[%A]%>{%K}")))
-            (org-mode
-             (("ebib1" "[[ebib:%K]]")
-              ("ebib2" "[[ebib:%K][%D]]")))
-            (markdown-mode
-             (("text" "@%K%< [%A]%>")
-              ("paren" "[%(%<%A %>@%K%<, %A%>%; )]")
-              ("year" "[-@%K%< %A%>]"))))))
+    (setq ebib-preload-bib-files (quote ("~/research/refs.bib"))))
 #+END_SRC
 
 *** Lexbind-mode
@@ -1336,13 +1315,6 @@ based on a recursive-descent parser for regexp syntax.
     (add-to-list 'electric-spacing-regexp-pairs
                  '("[0-9A-Za-z]" . "\\cA\\|\\cC\\|\\ck\\|\\cK\\|\\cH")))
 #+end_src
-
-*** Org-reveal
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (req-package ox-reveal
-    :require htmlize)
-#+END_SRC
 
 *** VLFI
 
