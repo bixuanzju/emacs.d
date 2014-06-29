@@ -107,12 +107,12 @@
              (file-writable-p buffer-file-name))
     (save-buffer)))
 
-(defmacro advise-commands (advice-name commands &rest body)
+(defmacro advise-commands (advice-name commands class &rest body)
   "Apply advice named ADVICE-NAME to multiple COMMANDS.
 The body of the advice is in BODY."
   `(progn
      ,@(mapcar (lambda (command)
-                 `(defadvice ,command (before ,(intern (concat (symbol-name command) "-" advice-name)) activate)
+                 `(defadvice ,command (,class ,(intern (concat (symbol-name command) "-" advice-name)) activate)
                     ,@body))
                commands)))
 
@@ -121,6 +121,7 @@ The body of the advice is in BODY."
                  (ace-window
                   switch-to-buffer
                   other-window)
+                 before
                  (prelude-auto-save-command))
 
 (add-hook 'mouse-leave-buffer-hook 'prelude-auto-save-command)
@@ -132,6 +133,22 @@ The body of the advice is in BODY."
 
 (when (version<= "24.4" emacs-version)
   (add-hook 'focus-out-hook 'prelude-save-all-buffers))
+
+;; automatically indenting yanked text if in programming-modes
+(defun yank-advised-indent-function (beg end)
+  "Do indentation, as long as the region isn't too large."
+  (if (<= (- end beg) prelude-yank-indent-threshold)
+      (indent-region beg end nil)))
+
+(advise-commands "indent" (yank yank-pop) after
+  "If current mode is one of `prelude-yank-indent-modes',
+indent yanked text (with prefix arg don't indent)."
+  (if (and (not (ad-get-arg 0))
+           (not (member major-mode prelude-indent-sensitive-modes))
+           (or (derived-mode-p 'prog-mode)
+               (member major-mode prelude-yank-indent-modes)))
+      (let ((transient-mark-mode nil))
+        (yank-advised-indent-function (region-beginning) (region-end)))))
 
 ;; Nic says eval-expression-print-level needs to be set to nil (turned off) so
 ;; that you can always see what's happening.
@@ -153,6 +170,14 @@ The body of the advice is in BODY."
 (require 'ediff)
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
+;; clean up obsolete buffers automatically
+(require 'midnight)
+
+(defadvice exchange-point-and-mark (before deactivate-mark activate compile)
+  "When called with no active region, do not activate mark."
+  (interactive
+   (list (not (region-active-p)))))
+
 ;; make a shell script executable automatically on save
 (add-hook 'after-save-hook
           'executable-make-buffer-file-executable-if-script-p)
@@ -162,9 +187,6 @@ The body of the advice is in BODY."
 
 ;; enable winner-mode to manage window configurations
 (winner-mode +1)
-
-(setq semanticdb-default-save-directory
-      (expand-file-name "semanticdb" savefile-dir))
 
 ;; saner regex syntax
 (require 're-builder)

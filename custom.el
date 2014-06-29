@@ -1,16 +1,37 @@
+;; Define vars here
+(defvar my-init-file (expand-file-name "emacs-init.el" user-emacs-directory)
+  "All configurations stored in this file.")
+
+(defvar org-load-path (list (concat user-emacs-directory "packages/"))
+  "List of directories to search for org files to load.")
+
+(defvar savefile-dir (expand-file-name "savefile" user-emacs-directory)
+  "This folder stores all the automatically generated save/history-files.")
+
+(defvar prelude-indent-sensitive-modes
+  '(coffee-mode python-mode slim-mode haml-mode)
+  "Modes for which auto-indenting is suppressed.")
+
+(defvar prelude-yank-indent-modes '(LaTeX-mode TeX-mode)
+  "Modes in which to indent regions that are yanked (or yank-popped).
+Only modes that don't derive from `prog-mode' should be listed here.")
+
+(defvar prelude-yank-indent-threshold 1000
+  "Threshold (# chars) over which indentation does not automatically occur.")
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
- '(custom-safe-themes
-   (quote
-    ("025354235e98db5e7fd9c1a74622ff53ad31b7bde537d290ff68d85665213d85" "6fe6ab4abe97a4f13533e47ae59fbba7f2919583f9162b440dd06707b01f7794" default)))
  '(history-length 1000)
  '(indicate-empty-lines t)
+ '(load-prefer-newer t)
  '(max-lisp-eval-depth 2000)
  '(paradox-automatically-star t)
+ '(semanticdb-default-save-directory
+   (expand-file-name "semanticdb" savefile-dir))
  '(set-mark-command-repeat-pop t)
  '(shift-select-mode nil)
  '(split-height-threshold nil)

@@ -3,8 +3,9 @@
 (cask-initialize)
 
 ;; Load customization
-(defvar my-init-file (expand-file-name "emacs-init.el" user-emacs-directory)
-  "All configurations stored in this file.")
+;; Keep emacs custom-settings in separate file
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(load-file custom-file)
 
 (if (file-exists-p my-init-file)
     (load-file my-init-file)

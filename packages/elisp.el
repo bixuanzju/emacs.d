@@ -104,9 +104,6 @@ With a prefix ARG open line above the current line."
       (move-end-of-line nil)
       (newline-and-indent))))
 
-(defvar org-load-path (list (concat user-emacs-directory "packages/"))
-  "List of directories to search for org files to load.")
-
 (defun org-require (orgfile)
   "orgfile is a symbol to be loaded"
   (let ((org-file (concat (symbol-name orgfile) ".org"))

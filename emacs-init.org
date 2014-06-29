@@ -82,21 +82,11 @@ Some quick essential customizations.
   (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
   (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
-  ;; Always load newest byte code
-  (setq load-prefer-newer t)
-
-  (defvar savefile-dir (expand-file-name "savefile" user-emacs-directory)
-    "This folder stores all the automatically generated save/history-files.")
-
   (unless (file-exists-p savefile-dir)
     (make-directory savefile-dir))
 
   ;; Load elisp bits collected from everywhere
   (require 'elisp)
-
-  ;; Keep emacs custom-settings in separate file
-  (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-  (load custom-file)
 
   ;; Start off with some sanity.
   (require 'better-defaults)
@@ -174,6 +164,8 @@ Set custom theme path and load theme
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package-force smart-mode-line
+    :init
+    (setq sml/no-confirm-load-theme t)
     :config
     (sml/setup))
 #+END_SRC
@@ -441,10 +433,12 @@ If you are not using it, you need to start.
 references to figures, tables and sections in org-mode.
 
 #+begin_src emacs-lisp :tangle yes
-  (org-require 'org-ref)
-  (setq org-ref-default-bibliography '("/Users/jeremybi/research/refs.bib")
-          org-ref-pdf-directory "/Users/jeremybi/research/papers/"
-          org-ref-bibliography-notes "/Users/jeremybi/research/notes.org")
+  (eval-after-load "org"
+    '(progn
+      (org-require 'org-ref)
+      (setq org-ref-default-bibliography '("/Users/jeremybi/research/refs.bib")
+            org-ref-pdf-directory "/Users/jeremybi/research/papers/"
+            org-ref-bibliography-notes "/Users/jeremybi/research/notes.org")))
 #+end_src
 
 *** Dired and dired+
@@ -702,8 +696,7 @@ interface.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package alert
     :config
-    (defvar terminal-notifier-command (executable-find "terminal-notifier")
-    "The path to terminal-notifier.")
+    (setq terminal-notifier-command (executable-find "terminal-notifier"))
     (alert-define-style 'timed-notification :title "Notify using terminal-notifier"
                         :notifier
                         (lambda (info)
@@ -1411,7 +1404,8 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
     "Cleanup a region if selected, otherwise the whole buffer."
     (interactive)
     (call-interactively 'untabify)
-    (call-interactively 'indent-region)
+    (unless (member major-mode prelude-indent-sensitive-modes)
+      (call-interactively 'indent-region))
     (whitespace-cleanup))
 #+END_SRC
 
