@@ -5,7 +5,7 @@
 (defvar org-load-path (list (concat user-emacs-directory "packages/"))
   "List of directories to search for org files to load.")
 
-(defvar savefile-dir (expand-file-name "savefile" user-emacs-directory)
+(defvar savefile-dir (expand-file-name "savefile/" user-emacs-directory)
   "This folder stores all the automatically generated save/history-files.")
 
 (defvar prelude-indent-sensitive-modes
@@ -30,8 +30,6 @@ Only modes that don't derive from `prog-mode' should be listed here.")
  '(load-prefer-newer t)
  '(max-lisp-eval-depth 2000)
  '(paradox-automatically-star t)
- '(semanticdb-default-save-directory
-   (expand-file-name "semanticdb" savefile-dir))
  '(set-mark-command-repeat-pop t)
  '(shift-select-mode nil)
  '(split-height-threshold nil)

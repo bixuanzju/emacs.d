@@ -188,6 +188,9 @@ indent yanked text (with prefix arg don't indent)."
 ;; enable winner-mode to manage window configurations
 (winner-mode +1)
 
+(setq semanticdb-default-save-directory
+      (expand-file-name "semanticdb" savefile-dir))
+
 ;; saner regex syntax
 (require 're-builder)
 (setq reb-re-syntax 'string)

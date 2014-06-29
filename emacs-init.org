@@ -1126,9 +1126,15 @@ Open file in Finder
 
 [[https://github.com/ensime/ensime-src][ENSIME]] is the ENhanced Scala Interaction Mode for Emacs.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (req-package ensime
     :require scala-mode2
+    :init
+    (setq ensime-typecheck-when-idle nil)
+    (setq ensime-default-java-home
+          "Library/Java/JavaVirtualMachines/jdk1.8.0_05.jdk/Contents/Home")
+    (setq ensime-default-server-root
+          (expand-file-name "ensime-servers/" savefile-dir))
     :config
     (add-hook 'scala-mode-hook 'ensime-scala-mode-hook))
 #+END_SRC
