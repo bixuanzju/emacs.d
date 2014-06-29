@@ -98,6 +98,33 @@
 ;; disable annoying blink-matching-paren
 (setq blink-matching-paren nil)
 
+;; automatically save buffers associated with files on buffer switch
+;; and on windows switch
+(defun prelude-auto-save-command ()
+  "Save the current buffer if `prelude-auto-save' is not nil."
+  (when (and buffer-file-name
+             (buffer-modified-p (current-buffer))
+             (file-writable-p buffer-file-name))
+    (save-buffer)))
+
+(defmacro advise-commands (advice-name commands &rest body)
+  "Apply advice named ADVICE-NAME to multiple COMMANDS.
+The body of the advice is in BODY."
+  `(progn
+     ,@(mapcar (lambda (command)
+                 `(defadvice ,command (before ,(intern (concat (symbol-name command) "-" advice-name)) activate)
+                    ,@body))
+               commands)))
+
+;; advise all window switching functions
+(advise-commands "auto-save"
+                 (ace-window
+                  switch-to-buffer
+                  other-window)
+                 (prelude-auto-save-command))
+
+(add-hook 'mouse-leave-buffer-hook 'prelude-auto-save-command)
+
 ;; Autosave buffers when focus is lost
 (defun prelude-save-all-buffers ()
   "Save all modified buffers, without prompts."
@@ -164,7 +191,6 @@ This functions should be added to the hooks of major modes for programming."
   "Default coding hook, useful with any programming language."
   (eval-after-load "subword"
     '(diminish 'subword-mode))
-  (smartparens-mode 1)
   (prelude-local-comment-auto-fill)
   (prelude-font-lock-comment-annotations))
 

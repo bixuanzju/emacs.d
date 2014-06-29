@@ -19,3 +19,5 @@ session*
 /url/
 /ac-comphist.dat
 tramp
+/packages/org-ref.el
+/packages/upload_bibtex_citeulike.py

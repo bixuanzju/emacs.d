@@ -192,17 +192,16 @@ Set custom theme path and load theme
   (bind-key "M-SPC" 'cycle-spacing)
   ;; (bind-key "C-c x" 'sunrise-cd)
   ;; (bind-key "C-c X" 'sunrise)
-  (bind-key "C-M-\\" 'prelude-indent-buffer-or-region)
   (bind-key "C-c q" 'auto-fill-mode)
-  (bind-key "C-c k" 'prelude-kill-other-buffers)
   (bind-key "M-'" 'next-error)
+  (bind-key "C-c k" 'prelude-kill-other-buffers)
   (bind-key "C-c n" 'prelude-cleanup-buffer-or-region)
-  (bind-key "C-M-h" 'backward-kill-word)
-  (bind-key [(control shift return)] 'prelude-smart-open-line-above)
-  (bind-key "C-x [" 'shrink-window)
-  (bind-key "C-x ]" 'enlarge-window)
   (bind-key "C-c M-d" 'prelude-duplicate-and-comment-current-line-or-region)
   (bind-key "C-c d" 'prelude-duplicate-current-line-or-region)
+  (bind-key [(control shift return)] 'prelude-smart-open-line-above)
+  (bind-key "C-M-h" 'backward-kill-word)
+  ;; (bind-key "C-x [" 'shrink-window)
+  ;; (bind-key "C-x ]" 'enlarge-window)
 
   ;; Set Regexp Alignment
   (bind-key "C-x \\" 'align-regexp)
@@ -438,6 +437,16 @@ If you are not using it, you need to start.
     (setq org-confirm-babel-evaluate nil))
 #+END_SRC
 
+[[https://github.com/jkitchin/jmax/blob/master/org-ref.org][Org-ref]] is an emacs-lisp module to handle bibliographic citations, and
+references to figures, tables and sections in org-mode.
+
+#+begin_src emacs-lisp :tangle yes
+  (org-require 'org-ref)
+  (setq org-ref-default-bibliography '("/Users/jeremybi/research/refs.bib")
+          org-ref-pdf-directory "/Users/jeremybi/research/papers/"
+          org-ref-bibliography-notes "/Users/jeremybi/research/notes.org")
+#+end_src
+
 *** Dired and dired+
 
 Dired Plus is an extension to the =dired= file manager in Emacs.  My
@@ -510,8 +519,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
     :config
     (defun prelude-haskell-mode-defaults ()
       (subword-mode +1)
-      (turn-on-haskell-doc-mode)
-      (turn-on-haskell-indent))
+      (turn-on-haskell-doc-mode))
     (add-hook 'haskell-mode-hook
               'prelude-haskell-mode-defaults)
     (setq haskell-tags-on-save t
@@ -529,7 +537,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
     (define-key haskell-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
     (define-key haskell-mode-map (kbd "C-c c") 'haskell-process-cabal)
     (define-key haskell-mode-map (kbd "SPC") 'haskell-mode-contextual-space)
-    (define-key haskell-mode-map (kbd "M-.") 'haskell-mode-tag-find)
+    (define-key haskell-mode-map (kbd "M-.") 'haskell-mode-jump-to-def-or-tag)
 
     ;; Cabal-mode bindings
     (eval-after-load 'haskell-cabal
@@ -956,6 +964,7 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
     :config
     ;; repomacs problematic
     (my-delq-multi company-backends 'company-ropemacs)
+    (setq company-tooltip-align-annotations t)
     (setq company-dabbrev-ignore-case nil)
     (setq company-dabbrev-downcase nil)
     (eval-after-load 'company-dabbrev-code
@@ -966,6 +975,15 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
     (setq company-tooltip-flip-when-above t)
     (setq company-dabbrev-code-other-buffers 'code))
 #+END_SRC
+
+*** Company-ghc
+
+#+begin_src emacs-lisp :tangle yes
+  (req-package company-ghc
+    :require (company ghc)
+    :config
+    (add-to-list 'company-backends '(company-ghc :with company-dabbrev-code)))
+#+end_src
 
 *** Shell-pop
 
@@ -1185,7 +1203,6 @@ Show matching and unmatched delimiters, and auto-close them as well.
   (req-package smartparens-config
     :require smartparens
     :config
-    (setq sp-show-pair-from-inside t)
     ;; highlights matching pairs
     (setq sp-base-key-bindings 'paredit)
     (setq sp-autoskip-closing-pair 'always)
@@ -1211,7 +1228,7 @@ Show matching and unmatched delimiters, and auto-close them as well.
 [[https://github.com/chrisdone/structured-haskell-mode][Structured-haskell-mode]] is a minor mode providing structured editing
 operations based on the syntax of Haskell.
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package shm
     :config
     (add-hook 'haskell-mode-hook 'structured-haskell-mode))
@@ -1400,71 +1417,29 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
             (if this-win-2nd (other-window 1))))))
 #+END_SRC
 
-*** Untabify Buffer
+*** Indent and untabfy Buffer
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (defun prelude-untabify-buffer ()
-    "Remove all tabs from the current buffer."
-    (interactive)
-    (untabify (point-min) (point-max)))
+  (defmacro with-region-or-buffer (func)
+    "When called with no active region, call FUNC on current buffer."
+    `(defadvice ,func (before with-region-or-buffer activate compile)
+       (interactive
+        (if mark-active
+            (list (region-beginning) (region-end))
+          (list (point-min) (point-max))))))
 
-  (defun prelude-untabify-buffer-or-region ()
-    "Untabify a region if selected, otherwise the whole buffer."
-    (interactive)
-    (save-excursion
-      (if (region-active-p)
-          (progn
-            (untabify (region-beginning) (region-end))
-            (message "Untabify selected region."))
-        (progn
-          (prelude-untabify-buffer)
-          (message "Untabify buffer.")))))
-#+END_SRC
-
-*** Indent Buffer
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (defun prelude-indent-buffer ()
-    "Indent the currently visited buffer."
-    (interactive)
-    (indent-region (point-min) (point-max)))
-
-  (defun prelude-indent-buffer-or-region ()
-    "Indent a region if selected, otherwise the whole buffer."
-    (interactive)
-    (save-excursion
-      (if (region-active-p)
-          (progn
-            (indent-region (region-beginning) (region-end))
-            (message "Indented selected region."))
-        (progn
-          (prelude-indent-buffer)
-          (message "Indented buffer.")))))
+  (with-region-or-buffer indent-region)
+  (with-region-or-buffer untabify)
 #+END_SRC
 
 *** Cleanup Buffer
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (defun prelude-cleanup-buffer ()
-    "Perform a bunch of operations on the whitespace content of a buffer."
-    (interactive)
-    (prelude-untabify-buffer)
-    (prelude-indent-buffer)
-    (whitespace-cleanup))
-
   (defun prelude-cleanup-buffer-or-region ()
     "Cleanup a region if selected, otherwise the whole buffer."
     (interactive)
-    (save-excursion
-      (if (region-active-p)
-          (progn
-            (untabify (region-beginning) (region-end))
-            (indent-region (region-beginning) (region-end))
-            (message "Cleanup selected region."))
-        (progn
-          (prelude-untabify-buffer)
-          (prelude-indent-buffer)
-          (message "Cleanup buffer."))))
+    (call-interactively 'untabify)
+    (call-interactively 'indent-region)
     (whitespace-cleanup))
 #+END_SRC
 
