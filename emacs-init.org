@@ -606,7 +606,12 @@ files.
   (req-package helm
     :bind ("C-x C-f" . helm-find-files)
     :init
-    (require 'helm-config))
+    (require 'helm-config)
+    :config
+    (setq helm-quick-update t
+          helm-ff-search-library-in-sexp t
+          helm-ff-file-name-history-use-recentf t
+          helm-buffers-fuzzy-matching t))
 #+END_SRC
 
 *** Helm-swoop
@@ -1130,9 +1135,8 @@ Open file in Finder
   (req-package ensime
     :require scala-mode2
     :init
-    (setq ensime-typecheck-when-idle nil)
     (setq ensime-default-java-home
-          "Library/Java/JavaVirtualMachines/jdk1.8.0_05.jdk/Contents/Home")
+          "/Library/Java/JavaVirtualMachines/jdk1.8.0_05.jdk/Contents/Home")
     (setq ensime-default-server-root
           (expand-file-name "ensime-servers/" savefile-dir))
     :config
@@ -1335,6 +1339,27 @@ View Large Files in Emacs
     :config
     (global-anzu-mode +1))
 #+END_SRC
+
+*** Volatile-highlights
+
+#+begin_src emacs-lisp :tangle no
+  (req-package volatile-highlights
+    :diminish (volatile-highlights-mode . "")
+    :config
+    (volatile-highlights-mode t))
+#+end_src
+
+*** Rebox2
+
+#+begin_src emacs-lisp :tangle no
+  (req-package rebox2
+    :config
+    (add-hook 'prog-mode-hook
+              (lambda ()
+                (set (make-local-variable 'rebox-style-loop) '(25 17 21))
+                (set (make-local-variable 'rebox-min-fill-column) 40)
+                (rebox-mode 1))))
+#+end_src
 
 *** Multi-term
 
