@@ -254,9 +254,19 @@ All packages and modes are configured here.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package-force magit
-    :diminish (magit-auto-revert-mode . "")
-    :bind ("C-x g" . magit-status))
+    :diminish (magit-auto-revert-mode . ""))
 #+END_SRC
+
+*** Monky
+
+[[https://github.com/ananthakumaran/monky][Monky]] provides an interactive interface for Hg.
+
+#+begin_src emacs-lisp :tangle yes
+  (req-package monky
+    :bind ("C-x g" . monky-status)
+    :config
+    (setq monky-process-type 'cmdserver))
+#+end_src
 
 *** Lisp
 
@@ -670,8 +680,10 @@ setup when exiting.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package fullframe
+    :require (magit monky)
     :config
     (fullframe magit-status magit-mode-quit-window)
+    (fullframe monky-status monky-quit-window)
     (fullframe info Info-exit)
     (fullframe ibuffer ibuffer-quit))
 #+END_SRC
@@ -973,6 +985,8 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
     :require clojure-mode
     :config
     (setq nrepl-log-messages t)
+    (setq nrepl-hide-special-buffers t)
+    (setq cider-repl-use-clojure-font-lock t)
     (setq cider-repl-result-prefix ";; => ")
     (setq cider-interactive-eval-result-prefix ";; => ")
     (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
@@ -980,6 +994,13 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
       (subword-mode +1)
       (smartparens-strict-mode +1))
     (add-hook 'cider-repl-mode-hook 'prelude-cider-repl-mode-defaults))
+#+end_src
+
+*** Kibit-mode
+
+#+begin_src emacs-lisp :tangle no
+  (req-package kibit-mode
+    :require clojure-mode)
 #+end_src
 
 *** Company
@@ -1077,6 +1098,16 @@ A great syntax checker.
     (setq flycheck-indication-mode 'left-fringe)
     (setq flycheck-completion-system 'ido))
 #+END_SRC
+
+*** Flycheck-haskell
+
+#+begin_src emacs-lisp :tangle yes
+  (req-package flycheck-haskell
+    :require flycheck
+    :init
+    (eval-after-load 'flycheck
+      '(add-hook 'flycheck-mode-hook #'flycheck-haskell-setup)))
+#+end_src
 
 *** Pop Win
 
