@@ -14,6 +14,7 @@
 (depends-on "bind-key")
 (depends-on "browse-kill-ring")
 (depends-on "cask")
+(depends-on "cider")
 (depends-on "color-identifiers-mode")
 (depends-on "company")
 (depends-on "company-ghc")

@@ -260,6 +260,16 @@ All packages and modes are configured here.
 
 *** Lisp
 
+**** Clojure
+
+#+begin_src emacs-lisp :tangle yes
+  (req-package clojure-mode
+    :config
+    (defun prelude-clojure-mode-defaults ()
+      (subword-mode +1))
+    (add-hook 'clojure-mode-hook 'prelude-clojure-mode-defaults))
+#+end_src
+
 **** Emacs lisp
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -603,15 +613,22 @@ recent files using =recentf=.  It is a great way to manage many open
 files.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (req-package helm
-    :bind ("C-x C-f" . helm-find-files)
+  (req-package helm-config
+    :require helm
+    :bind (("C-x C-f" . helm-find-files)
+           ("M-y" . helm-show-kill-ring))
     :init
-    (require 'helm-config)
     :config
     (setq helm-quick-update t
           helm-ff-search-library-in-sexp t
           helm-ff-file-name-history-use-recentf t
-          helm-buffers-fuzzy-matching t))
+          helm-buffers-fuzzy-matching t
+          helm-boring-file-regexp-list
+          '("\\.git$" "\\.hg$" "\\.svn$" "\\.CVS$" "\\._darcs$" "\\.la$" "\\.o$" "\\.i$")
+          helm-move-to-line-cycle-in-source t)
+    ;;; Save current position to mark ring
+    (add-hook 'helm-goto-line-before-hook 'helm-save-current-pos-to-mark-ring)
+    (helm-mode 1))
 #+END_SRC
 
 *** Helm-swoop
@@ -901,11 +918,12 @@ Lisp code.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package lispy
+    :require helm
     :init
     (dolist (hook '(emacs-lisp-mode-hook
                     lisp-mode-hook
                     scheme-mode-hook
-                    clojure-mode))
+                    clojure-mode-hook))
       (add-hook hook (lambda () (lispy-mode +1))))
     :config
     (bind-keys :map lispy-mode-map
@@ -947,6 +965,22 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
     :config
     (global-undo-tree-mode 1))
 #+END_SRC
+
+*** Cider
+
+#+begin_src emacs-lisp :tangle yes
+  (req-package cider
+    :require clojure-mode
+    :config
+    (setq nrepl-log-messages t)
+    (setq cider-repl-result-prefix ";; => ")
+    (setq cider-interactive-eval-result-prefix ";; => ")
+    (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+    (defun prelude-cider-repl-mode-defaults ()
+      (subword-mode +1)
+      (smartparens-strict-mode +1))
+    (add-hook 'cider-repl-mode-hook 'prelude-cider-repl-mode-defaults))
+#+end_src
 
 *** Company
 
@@ -1021,7 +1055,7 @@ Enable spell-checking in Emacs.
 =C-.= corrects word at point.  =C-,​= to jump to next misspelled word.
 *** Browse-kill-ring
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (req-package browse-kill-ring
     :config
     (browse-kill-ring-default-keybindings))
@@ -1268,6 +1302,7 @@ based on a recursive-descent parser for regexp syntax.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package worf
+    :require helm
     :config
     (add-hook 'org-mode-hook 'worf-mode))
 #+END_SRC
