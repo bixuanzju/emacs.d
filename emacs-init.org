@@ -623,19 +623,18 @@ recent files using =recentf=.  It is a great way to manage many open
 files.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (req-package helm-config
-    :require helm
+  (req-package helm
     :bind (("C-x C-f" . helm-find-files)
            ("M-y" . helm-show-kill-ring))
     :init
+    (require 'helm-config)
     :config
     (setq helm-quick-update t
           helm-ff-search-library-in-sexp t
           helm-ff-file-name-history-use-recentf t
           helm-buffers-fuzzy-matching t
           helm-boring-file-regexp-list
-          '("\\.git$" "\\.hg$" "\\.svn$" "\\.CVS$" "\\._darcs$" "\\.la$" "\\.o$" "\\.i$")
-          helm-move-to-line-cycle-in-source t)
+          '("\\.git$" "\\.hg$" "\\.svn$" "\\.CVS$" "\\._darcs$" "\\.la$" "\\.o$" "\\.i$"))
     ;;; Save current position to mark ring
     (add-hook 'helm-goto-line-before-hook 'helm-save-current-pos-to-mark-ring)
     (helm-mode 1))
@@ -673,14 +672,13 @@ with helm.
     (helm-descbinds-mode 1))
 #+END_SRC
 
-*** Fulframe
+*** Fullframe
 
 [[https://github.com/tomterl/fullframe][Fullframe]] advises commands to execute fullscreen, restoring the window
 setup when exiting.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package fullframe
-    :require (magit monky)
     :config
     (fullframe magit-status magit-mode-quit-window)
     (fullframe monky-status monky-quit-window)
@@ -1247,8 +1245,9 @@ variable binding forms in Emacs Lisp.
 Show matching and unmatched delimiters, and auto-close them as well.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (req-package smartparens-config
-    :require smartparens
+  (req-package smartparens
+    :init
+    (require 'smartparens-config)
     :config
     ;; highlights matching pairs
     (setq sp-base-key-bindings 'paredit)
