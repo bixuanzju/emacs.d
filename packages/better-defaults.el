@@ -98,6 +98,10 @@
 ;; disable annoying blink-matching-paren
 (setq blink-matching-paren nil)
 
+;; abbrev config
+(add-hook 'text-mode-hook 'abbrev-mode)
+(setq abbrev-file-name (expand-file-name "abbrev_defs" savefile-dir))
+
 ;; automatically save buffers associated with files on buffer switch
 ;; and on windows switch
 (defun prelude-auto-save-command ()

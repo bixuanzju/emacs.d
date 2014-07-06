@@ -19,6 +19,14 @@ Only modes that don't derive from `prog-mode' should be listed here.")
 (defvar prelude-yank-indent-threshold 1000
   "Threshold (# chars) over which indentation does not automatically occur.")
 
+(defface org-block-begin-line
+  '((t (:underline "#A7A6AA" :foreground "#008ED1")))
+  "Face used for the line delimiting the begin of source blocks.")
+
+(defface org-block-end-line
+  '((t (:overline "#A7A6AA" :foreground "#008ED1")))
+  "Face used for the line delimiting the end of source blocks.")
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
