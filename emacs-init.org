@@ -247,26 +247,6 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
 
 All packages and modes are configured here.
 ** Major Modes
-*** Magit
-
-[[https://github.com/magit/magit][Magit]] is the ultimate =git= interface for Emacs.
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (req-package-force magit
-    :diminish (magit-auto-revert-mode . ""))
-#+END_SRC
-
-*** Monky
-
-[[https://github.com/ananthakumaran/monky][Monky]] provides an interactive interface for Hg.
-
-#+begin_src emacs-lisp :tangle yes
-  (req-package monky
-    :bind ("C-x g" . monky-status)
-    :config
-    (setq monky-process-type 'cmdserver))
-#+end_src
-
 *** Lisp
 
 **** Clojure
@@ -610,6 +590,26 @@ Type =clear= to clear the buffer like in other terminal emulators.
     :config
     (ido-vertical-mode +1))
 #+END_SRC
+
+*** Magit
+
+[[https://github.com/magit/magit][Magit]] is the ultimate =git= interface for Emacs.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (req-package-force magit
+    :diminish (magit-auto-revert-mode . ""))
+#+END_SRC
+
+*** Monky
+
+[[https://github.com/ananthakumaran/monky][Monky]] provides an interactive interface for Hg.
+
+#+begin_src emacs-lisp :tangle yes
+  (req-package monky
+    :bind ("C-x g" . monky-status)
+    :config
+    (setq monky-process-type 'cmdserver))
+#+end_src
 
 *** Wgrep
 
