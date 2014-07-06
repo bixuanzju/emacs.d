@@ -582,6 +582,12 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
 #+END_SRC
 
+*** Lua Mode
+
+#+begin_src emacs-lisp :tangle yes
+  (req-package lua-mode)
+#+end_src
+
 *** Js2 Mode
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -630,6 +636,7 @@ files.
     (require 'helm-config)
     :config
     (setq helm-quick-update t
+          projectile-completion-system 'helm
           helm-ff-search-library-in-sexp t
           helm-ff-file-name-history-use-recentf t
           helm-buffers-fuzzy-matching t
@@ -758,8 +765,7 @@ interface.
              (setq my-timer-obj
                    (run-at-time "52 minutes" 2600
                                 (lambda () (alert "Stand up, stretch out!" :title "Stop Watering"))))
-             (alert "Start timing!" :title "Emacs")))))
-    (bind-key* "C-c C-z" 'start-my-timer))
+             (alert "Start timing!" :title "Emacs"))))))
 
 #+END_SRC
 
@@ -938,8 +944,10 @@ Lisp code.
     :config
     (bind-keys :map lispy-mode-map
                ("C-e" . nil)
+               ("/" . nil)
                ("M-i" . nil)
                ("M-e" . lispy-iedit)
+               ("S" . special-lispy-splice)
                ("g" . special-lispy-goto-local)
                ("G" . special-lispy-goto)))
 #+END_SRC
@@ -992,6 +1000,24 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
       (subword-mode +1)
       (smartparens-strict-mode +1))
     (add-hook 'cider-repl-mode-hook 'prelude-cider-repl-mode-defaults))
+#+end_src
+
+*** Clj-refactor
+
+#+begin_src emacs-lisp :tangle yes
+  (req-package clj-refactor
+    :config
+    (add-hook 'clojure-mode-hook
+              (lambda ()
+                (clj-refactor-mode 1)
+                ;; insert keybinding setup here
+                (cljr-add-keybindings-with-prefix "C-c C-m"))))
+#+end_src
+
+*** Clojure-cheatsheet
+
+#+begin_src emacs-lisp :tangle yes
+  (req-package clojure-cheatsheet)
 #+end_src
 
 *** Kibit-mode
