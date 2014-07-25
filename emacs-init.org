@@ -185,12 +185,12 @@ Set custom theme path and load theme
   ;; (bind-key "C-c x" 'sunrise-cd)
   ;; (bind-key "C-c X" 'sunrise)
   (bind-key "C-c q" 'auto-fill-mode)
-  (bind-key "M-'" 'next-error)
+  ;; (bind-key "M-'" 'next-error)
   (bind-key "C-c k" 'prelude-kill-other-buffers)
   (bind-key "C-c n" 'prelude-cleanup-buffer-or-region)
   (bind-key "C-c d" 'duplicate-comment-current-line-or-region)
   (bind-key [(control shift return)] 'prelude-smart-open-line-above)
-  (bind-key "C-M-h" 'backward-kill-word)
+  (bind-key* "C-M-h" 'backward-kill-word)
   ;; (bind-key "C-x [" 'shrink-window)
   ;; (bind-key "C-x ]" 'enlarge-window)
 
@@ -254,15 +254,16 @@ All packages and modes are configured here.
 #+begin_src emacs-lisp :tangle yes
   (req-package clojure-mode
     :config
-    (defun prelude-clojure-mode-defaults ()
-      (subword-mode +1))
-    (add-hook 'clojure-mode-hook 'prelude-clojure-mode-defaults))
+    (defun my/clojure-mode-defaults ()
+      (subword-mode +1)
+      (smartparens-mode -1))
+    (add-hook 'clojure-mode-hook 'my/clojure-mode-defaults))
 #+end_src
 
 **** Emacs lisp
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (defun prelude-recompile-elc-on-save ()
+  (defun my/recompile-elc-on-save ()
     "Recompile your elc when saving an elisp file."
     (add-hook 'after-save-hook
               (lambda ()
@@ -271,31 +272,32 @@ All packages and modes are configured here.
               nil
               t))
 
-  (defun prelude-conditional-emacs-lisp-checker ()
+  (defun my/conditional-emacs-lisp-checker ()
     "Don't check doc style in Emacs Lisp test files."
     (let ((file-name (buffer-file-name)))
       (when (and file-name (string-match-p ".*-tests?\\.el\\'" file-name))
         (setq-local flycheck-checkers '(emacs-lisp)))))
 
-  (defun prelude-emacs-lisp-mode-defaults ()
+  (defun my/emacs-lisp-mode-defaults ()
     "Sensible defaults for `emacs-lisp-mode'."
     (eldoc-mode +1)
     (diminish 'eldoc-mode "")
-    (prelude-recompile-elc-on-save)
+    (my/recompile-elc-on-save)
+    (smartparens-mode -1)
     (setq mode-name "EL")
     (prettify-symbols-mode +1)
     (add-hook 'eval-expression-minibuffer-setup-hook 'eldoc-mode)
-    (prelude-conditional-emacs-lisp-checker))
+    (my/conditional-emacs-lisp-checker))
 
-  (add-hook 'emacs-lisp-mode-hook 'prelude-emacs-lisp-mode-defaults)
+  (add-hook 'emacs-lisp-mode-hook 'my/emacs-lisp-mode-defaults)
 
   ;; ielm is an interactive Emacs Lisp shell
-  (defun prelude-ielm-mode-defaults ()
+  (defun my/ielm-mode-defaults ()
     "Sensible defaults for `ielm'."
     (whitespace-mode -1)
     (eldoc-mode +1))
 
-  (add-hook 'ielm-mode-hook 'prelude-ielm-mode-defaults)
+  (add-hook 'ielm-mode-hook 'my/ielm-mode-defaults)
 
   (add-to-list 'auto-mode-alist '("Cask\\'" . emacs-lisp-mode))
 
@@ -311,9 +313,12 @@ All packages and modes are configured here.
     :config
     (setq geiser-active-implementations '(racket)))
 
-  (add-hook 'scheme-mode-hook
-            (lambda ()
-              (push '("lambda" . 955) prettify-symbols-alist)))
+  (defun my/scheme-mode-defaults ()
+    (push '("lambda" . 955) prettify-symbols-alist)
+    (prettify-symbols-mode +1)
+    (smartparens-mode -1))
+
+  (add-hook 'scheme-mode-hook #'my/scheme-mode-defaults)
 #+END_SRC
 
 *** LaTex
@@ -344,14 +349,13 @@ Sane setup for LaTeX writers.
               ("PDF Viewer" "open %o")
               ("HTML Viewer" "open %o"))))
 
-    (defun prelude-latex-mode-defaults ()
+    (defun my/latex-mode-defaults ()
       (turn-on-auto-fill)
       (add-to-list 'TeX-engine-alist-builtin
                    '(xetex "XeTeX" "xetex -shell-escape" "xelatex -shell-escape" "xetex"))
-      (latex/setup-keybinds)
-      (abbrev-mode +1))
+      (latex/setup-keybinds))
 
-    (add-hook 'LaTeX-mode-hook 'prelude-latex-mode-defaults))
+    (add-hook 'LaTeX-mode-hook 'my/latex-mode-defaults))
 
 #+END_SRC
 
@@ -365,13 +369,12 @@ If you are not using it, you need to start.
     (require 'ox-md)
     (require 'ox-latex)
 
-    (defun org-mode-defaults ()
+    (defun my/org-mode-defaults ()
       (turn-on-org-cdlatex)
       (diminish 'org-cdlatex-mode "")
-      (turn-on-auto-fill)
-      (bind-key "C-c b" 'ebib-insert-bibtex-key org-mode-map))
+      (turn-on-auto-fill))
 
-    (add-hook 'org-mode-hook 'org-mode-defaults)
+    (add-hook 'org-mode-hook 'my/org-mode-defaults)
 
     ;; Fontify org-mode code blocks
     (setq org-src-fontify-natively t)
@@ -405,6 +408,8 @@ If you are not using it, you need to start.
           '(("frame" "lines") ("framesep" "6pt")
             ("mathescape" "true") ("fontsize" "\\small")))
 
+    (setq org-confirm-babel-evaluate nil)
+
     ;; execute external programs.
     (org-babel-do-load-languages
      (quote org-babel-load-languages)
@@ -423,9 +428,7 @@ If you are not using it, you need to start.
              (plantuml . t)
              (scala . t)
              (sql . t)
-             (latex . t))))
-
-    (setq org-confirm-babel-evaluate nil))
+             (latex . t)))))
 #+END_SRC
 
 [[https://github.com/jkitchin/jmax/blob/master/org-ref.org][Org-ref]] is an emacs-lisp module to handle bibliographic citations, and
@@ -439,6 +442,17 @@ references to figures, tables and sections in org-mode.
             org-ref-pdf-directory "/Users/jeremybi/research/papers/"
             org-ref-bibliography-notes "/Users/jeremybi/research/notes.org")))
 #+end_src
+
+**** ox-pandoc
+
+[[https://github.com/kawabata/ox-pandoc][ox-org]] is another exporter for Org 8 that translates org-mode file to
+various other formats via Pandoc (version 1.12.4 or later is needed).
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (req-package ox-pandoc
+    :if (executable-find "pandoc"))
+#+END_SRC
+
 
 *** Dired and dired+
 
@@ -475,10 +489,10 @@ favorite feature is that pressing =F= will open all marked files.
     :config
     (setq scala-indent:align-forms t
           scala-indent:align-parameters t)
-    (defun scala-mode-hook-defaults ()
+    (defun my/scala-mode-hook-defaults ()
       (company-mode -1)
       (subword-mode +1))
-    (add-hook 'scala-mode-hook 'scala-mode-hook-defaults))
+    (add-hook 'scala-mode-hook 'my/scala-mode-hook-defaults))
 #+END_SRC
 
 *** Markdown
@@ -510,35 +524,39 @@ Type =clear= to clear the buffer like in other terminal emulators.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package haskell-mode
     :config
-    (defun prelude-haskell-mode-defaults ()
+    (defun my/haskell-mode-defaults ()
       (subword-mode +1)
       (turn-on-haskell-doc-mode))
     (add-hook 'haskell-mode-hook
-              'prelude-haskell-mode-defaults)
+              'my/haskell-mode-defaults)
+
     (setq haskell-tags-on-save t
           haskell-process-suggest-hoogle-imports t
           haskell-process-suggest-remove-import-lines t
           haskell-process-auto-import-loaded-modules t
           haskell-process-type 'cabal-repl
           haskell-process-log t)
+
     ;; Haskell-mode bindings
-    (define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-or-reload)
-    (define-key haskell-mode-map (kbd "C-`") 'haskell-interactive-bring)
-    (define-key haskell-mode-map (kbd "C-c C-t") 'haskell-process-do-type)
-    (define-key haskell-mode-map (kbd "C-c C-i") 'haskell-process-do-info)
-    (define-key haskell-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
-    (define-key haskell-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
-    (define-key haskell-mode-map (kbd "C-c c") 'haskell-process-cabal)
-    (define-key haskell-mode-map (kbd "SPC") 'haskell-mode-contextual-space)
-    (define-key haskell-mode-map (kbd "M-.") 'haskell-mode-jump-to-def-or-tag)
+    (bind-keys :map haskell-mode-map
+                ("C-c C-l" . haskell-process-load-or-reload)
+                ("C-c C-z" . haskell-interactive-bring)
+                ("C-c C-t" . haskell-process-do-type)
+                ("C-c C-i" . haskell-process-do-info)
+                ("C-c C-v" . haskell-process-cabal-build)
+                ("C-c C-k" . haskell-interactive-mode-clear)
+                ("C-c c" . haskell-process-cabal)
+                ("SPC" . haskell-mode-contextual-space)
+                ("M-." . haskell-mode-jump-to-def-or-tag))
 
     ;; Cabal-mode bindings
     (eval-after-load 'haskell-cabal
       '(progn
-         (define-key haskell-cabal-mode-map (kbd "C-`") 'haskell-interactive-bring)
-         (define-key haskell-cabal-mode-map (kbd "C-c C-k") 'haskell-interactive-mode-clear)
-         (define-key haskell-cabal-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
-         (define-key haskell-cabal-mode-map (kbd "C-c c") 'haskell-process-cabal))))
+         (bind-keys :map haskell-cabal-mode-map
+                    ("C-c C-z" . haskell-interactive-bring)
+                    ("C-c C-k" . haskell-interactive-mode-clear)
+                    ("C-c C-c" . haskell-process-cabal-build)
+                    ("C-c c" . haskell-process-cabal)))))
 #+END_SRC
 
 *** SML Mode
@@ -639,11 +657,11 @@ files.
           helm-ff-search-library-in-sexp t
           helm-ff-file-name-history-use-recentf t
           helm-buffers-fuzzy-matching t
+          helm-move-to-line-cycle-in-source t
           helm-boring-file-regexp-list
           '("\\.git$" "\\.hg$" "\\.svn$" "\\.CVS$" "\\._darcs$" "\\.la$" "\\.o$" "\\.i$"))
     ;;; Save current position to mark ring
-    (add-hook 'helm-goto-line-before-hook 'helm-save-current-pos-to-mark-ring)
-    (helm-mode 1))
+    (add-hook 'helm-goto-line-before-hook 'helm-save-current-pos-to-mark-ring))
 #+END_SRC
 
 *** Helm-swoop
@@ -995,10 +1013,10 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
     (setq cider-repl-result-prefix ";; => ")
     (setq cider-interactive-eval-result-prefix ";; => ")
     (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-    (defun prelude-cider-repl-mode-defaults ()
+    (defun my/cider-repl-mode-defaults ()
       (subword-mode +1)
       (smartparens-strict-mode +1))
-    (add-hook 'cider-repl-mode-hook 'prelude-cider-repl-mode-defaults))
+    (add-hook 'cider-repl-mode-hook 'my/cider-repl-mode-defaults))
 #+end_src
 
 *** Clj-refactor
@@ -1223,8 +1241,6 @@ Open file in Finder
   (req-package ensime
     :require scala-mode2
     :init
-    (setq ensime-default-java-home
-          "/Library/Java/JavaVirtualMachines/jdk1.8.0_05.jdk/Contents/Home")
     (setq ensime-default-server-root
           (expand-file-name "ensime-servers/" savefile-dir))
     :config
@@ -1249,8 +1265,10 @@ source code identifier uniquely based on its name.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package ebib
+    :require org
     :config
-    (setq ebib-preload-bib-files (quote ("~/research/refs.bib"))))
+    (setq ebib-preload-bib-files (quote ("~/research/refs.bib")))
+    (bind-key "C-c b" 'ebib-insert-bibtex-key org-mode-map))
 #+END_SRC
 
 *** Lexbind-mode
@@ -1282,7 +1300,8 @@ Show matching and unmatched delimiters, and auto-close them as well.
     (sp-pair "{" nil :post-handlers
              '(((lambda (&rest _ignored)
                   (prelude-smart-open-line-above)) "RET")))
-    (show-smartparens-global-mode t))
+    (show-smartparens-global-mode t)
+    (smartparens-global-mode +1))
 #+END_SRC
 
 *** GHC
@@ -1379,7 +1398,7 @@ based on a recursive-descent parser for regexp syntax.
 
 *** Paradox
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (req-package paradox
     :bind ("C-S-l" . paradox-list-packages))
 #+END_SRC
@@ -1402,7 +1421,7 @@ based on a recursive-descent parser for regexp syntax.
 #+begin_src emacs-lisp :tangle yes
   (req-package electric-spacing
     :config
-    (add-hook 'org-mode-hook 'electric-spacing-mode)
+    (add-hook 'text-mode-hook 'electric-spacing-mode)
     (add-to-list 'electric-spacing-regexp-pairs
                  '("\\cA\\|\\cC\\|\\ck\\|\\cK\\|\\cH" . "[0-9A-Za-z]"))
     (add-to-list 'electric-spacing-regexp-pairs

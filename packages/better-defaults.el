@@ -130,13 +130,8 @@ The body of the advice is in BODY."
 
 (add-hook 'mouse-leave-buffer-hook 'prelude-auto-save-command)
 
-;; Autosave buffers when focus is lost
-(defun prelude-save-all-buffers ()
-  "Save all modified buffers, without prompts."
-  (save-some-buffers 'dont-ask))
-
-(when (version<= "24.4" emacs-version)
-  (add-hook 'focus-out-hook 'prelude-save-all-buffers))
+;; (when (version<= "24.4" emacs-version)
+;;   (add-hook 'focus-out-hook 'prelude-save-all-buffers))
 
 ;; automatically indenting yanked text if in programming-modes
 (defun yank-advised-indent-function (beg end)
@@ -157,6 +152,12 @@ indent yanked text (with prefix arg don't indent)."
 ;; Nic says eval-expression-print-level needs to be set to nil (turned off) so
 ;; that you can always see what's happening.
 (setq eval-expression-print-level nil)
+
+(defadvice set-buffer-major-mode (after set-major-mode activate compile)
+  "Set buffer major mode according to `auto-mode-alist'."
+  (let* ((name (buffer-name buffer))
+         (mode (assoc-default name auto-mode-alist 'string-match)))
+    (with-current-buffer buffer (if mode (funcall mode)))))
 
 ;; use shift + arrow keys to switch between visible buffers
 (require 'windmove)
