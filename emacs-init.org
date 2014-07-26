@@ -60,17 +60,25 @@ Start using =req-package=
 * Meta
 
 We add a function to the =after-save-hook= ensuring to always tangle
-and byte-compile the =org=-document after changes.
+and byte-compile the =org=-document after changes asynchronously.
+
+[[https://github.com/jwiegley/emacs-async][async]] is a module for doing asynchronous processing in Emacs.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (defun my-init-hook ()
-    "If the current buffer is 'init.org' the code-blocks are
-  tangled, and the tangled file is compiled."
-    (let ((my-org-file (expand-file-name (concat user-emacs-directory "emacs-init.org"))))
+  (req-package-force async
+    :config
+    (defun my/init-hook ()
+      "If the current buffer is 'emacs-init.org' the code-blocks
+  are tangled, and the tangled file is compiled."
       (when (equal (buffer-file-name) my-org-file)
-        (org-babel-tangle)
-        (byte-compile-file my-init-file))))
-  (add-hook 'after-save-hook 'my-init-hook)
+        (async-start
+         `(lambda ()
+            (require 'org)
+            (org-babel-tangle-file ,my-org-file)
+            (byte-compile-file ,my-init-file))
+         (lambda (result)
+           (message "Tangled file compiled.")))))
+    (add-hook 'after-save-hook 'my/init-hook))
 #+END_SRC
 
 * Essentials

@@ -9,6 +9,7 @@
 (depends-on "ag")
 (depends-on "alert")
 (depends-on "anzu")
+(depends-on "async")
 (depends-on "auctex")
 (depends-on "auto-complete")
 (depends-on "bind-key")
