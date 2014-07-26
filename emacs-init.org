@@ -48,8 +48,8 @@ Where Pallet keeps track of the packages we have installed,
 =req-package= handles all our internal package dependencies and
 configurations.
 
-Another nice thing about =req-package=, is that you no longer not need
-to specify the =:ensure= keyword, as it is added by default.
+Another nice thing about =req-package=, is that you no longer need to
+specify the =:ensure= keyword, as it is added by default.
 
 Start using =req-package=
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -187,17 +187,12 @@ Set custom theme path and load theme
   (bind-key "C-x C-b" 'ibuffer)
   (bind-key "C-:" 'eval-expression)
   (bind-key "M-SPC" 'cycle-spacing)
-  ;; (bind-key "C-c x" 'sunrise-cd)
-  ;; (bind-key "C-c X" 'sunrise)
   (bind-key "C-c q" 'auto-fill-mode)
-  ;; (bind-key "M-'" 'next-error)
   (bind-key "C-c k" 'prelude-kill-other-buffers)
   (bind-key "C-c n" 'prelude-cleanup-buffer-or-region)
   (bind-key "C-c d" 'duplicate-comment-current-line-or-region)
   (bind-key [(control shift return)] 'prelude-smart-open-line-above)
   (bind-key* "C-M-h" 'backward-kill-word)
-  ;; (bind-key "C-x [" 'shrink-window)
-  ;; (bind-key "C-x ]" 'enlarge-window)
 
   ;; Set Regexp Alignment
   (bind-key "C-x \\" 'align-regexp)
@@ -1582,17 +1577,6 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
           (linum-mode 1)
           (call-interactively 'goto-line))
       (linum-mode -1)))
-#+END_SRC
-*** Backward kill
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (defun backward-kill-word-or-kill-region ()
-    "Kill region if there's one, otherwise kill the a word
-  backward."
-    (interactive)
-    (call-interactively (if (region-active-p)
-                            'kill-region
-                          'backward-kill-word)))
 #+END_SRC
 *** Search
 
