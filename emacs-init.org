@@ -95,9 +95,6 @@ Some quick essential customizations.
   (when (eq system-type 'darwin)
     (require 'cocoa-emacs-default))
 
-  ;; No splash screen please
-  (setq inhibit-startup-screen t)
-
   ;; Store all backup and autosave files in the tmp dir
   (setq backup-directory-alist
         `((".*" . ,temporary-file-directory)))
@@ -388,7 +385,6 @@ If you are not using it, you need to start.
 
     (setq org-enforce-todo-dependencies t)
     (setq org-src-tab-acts-natively t)
-    (setq org-src-window-setup 'current-window)
 
     ;; set up latex
     (setq org-latex-create-formula-image-program 'imagemagick)
@@ -452,7 +448,6 @@ various other formats via Pandoc (version 1.12.4 or later is needed).
   (req-package ox-pandoc
     :if (executable-find "pandoc"))
 #+END_SRC
-
 
 *** Dired and dired+
 
@@ -1278,7 +1273,9 @@ lexical-binding variable which determines the behaviour of
 variable binding forms in Emacs Lisp.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (req-package lexbind-mode
+  (req-package-force lexbind-mode
+    :init
+    (setq initial-buffer-choice 'lexbind-lexscratch)
     :config
     (add-hook 'emacs-lisp-mode-hook 'lexbind-mode))
 #+END_SRC

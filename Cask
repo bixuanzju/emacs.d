@@ -75,7 +75,6 @@
 (depends-on "ov")
 (depends-on "owdriver")
 (depends-on "ox-pandoc")
-(depends-on "ox-reveal")
 (depends-on "package-build")
 (depends-on "pallet")
 (depends-on "paradox")
