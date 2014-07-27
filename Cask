@@ -15,6 +15,7 @@
 (depends-on "bind-key")
 (depends-on "browse-kill-ring")
 (depends-on "cask")
+(depends-on "cdlatex")
 (depends-on "cider")
 (depends-on "clj-refactor")
 (depends-on "clojure-cheatsheet")
