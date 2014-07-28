@@ -130,6 +130,13 @@ The body of the advice is in BODY."
 
 (add-hook 'mouse-leave-buffer-hook 'prelude-auto-save-command)
 
+(defadvice kill-region (before smart-cut activate compile)
+  "When called interactively with no active region, kill a single line instead."
+  (interactive
+   (if mark-active (list (region-beginning) (region-end))
+     (list (line-beginning-position)
+           (line-beginning-position 2)))))
+
 ;; (when (version<= "24.4" emacs-version)
 ;;   (add-hook 'focus-out-hook 'prelude-save-all-buffers))
 

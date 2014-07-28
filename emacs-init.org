@@ -734,10 +734,7 @@ single keybind.
       "C-S-n"
       :default (next-line 4)
       "C-S-p"
-      :default (previous-line 4)
-      "C-w"
-      :default (kill-region (mark) (point))
-      :minibuff (backward-kill-word 1)))
+      :default (previous-line 4)))
 #+END_SRC
 
 *** Ace-jump-mode
@@ -790,6 +787,14 @@ interface.
                                 (lambda () (alert "Stand up, stretch out!" :title "Stop Watering"))))
              (alert "Start timing!" :title "Emacs"))))))
 
+#+END_SRC
+
+*** Magic-latex-buffer
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  (req-package magic-latex-buffer
+    :config
+    (add-hook 'LaTeX-mode-hook 'magic-latex-buffer))
 #+END_SRC
 
 *** Ace-window
@@ -1318,6 +1323,7 @@ Show matching and unmatched delimiters, and auto-close them as well.
   (req-package ghc
     :config
     (autoload 'ghc-init "ghc" nil t)
+    (autoload 'ghc-debug "ghc" nil t)
     (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
 #+END_SRC
 
