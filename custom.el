@@ -51,6 +51,7 @@ Only modes that don't derive from `prog-mode' should be listed here.")
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(company-tooltip-annotation ((t (:inherit company-tooltip :foreground "orange1"))))
  '(cursor ((t (:background "gray78" :foreground "#DCDCCC"))))
  '(flyspell-duplicate ((t nil)))
  '(flyspell-incorrect ((t (:inherit nil :underline (:color "yellow" :style wave)))))

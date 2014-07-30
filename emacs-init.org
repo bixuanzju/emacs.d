@@ -602,6 +602,20 @@ Type =clear= to clear the buffer like in other terminal emulators.
 *** Ido-related
 
 #+BEGIN_SRC emacs-lisp :tangle yes
+  (require 'ido)
+  (setq ido-enable-prefix nil
+        ido-enable-flex-matching t
+        ido-create-new-buffer 'always
+        ido-use-filename-at-point 'guess
+        ido-max-prospects 10
+        ido-save-directory-list-file (expand-file-name "ido.hist" savefile-dir)
+        ido-default-file-method 'selected-window
+        ido-auto-merge-work-directories-length -1)
+  (ido-mode +1)
+
+  ;; disable ido faces to see flx highlights
+  (setq ido-use-faces nil)
+
   (req-package-force ido-ubiquitous
     :config
     (ido-ubiquitous-mode +1))
@@ -657,10 +671,24 @@ files.
            ("M-y" . helm-show-kill-ring))
     :init
     (require 'helm-config)
+    (require 'helm-eshell)
+    (require 'helm-files)
+    (require 'helm-grep)
     :config
-    (setq helm-quick-update t
-          projectile-completion-system 'helm
+    (define-key helm-grep-mode-map (kbd "<return>")
+      'helm-grep-mode-jump-other-window)
+    (define-key helm-grep-mode-map (kbd "n")
+      'helm-grep-mode-jump-other-window-forward)
+    (define-key helm-grep-mode-map (kbd "p")
+      'helm-grep-mode-jump-other-window-backward)
+    (setq helm-google-suggest-use-curl-p t
+          helm-quick-update t
+          helm-idle-delay 0.01
+          helm-split-window-default-side 'other
+          helm-split-window-in-side-p t
+          helm-input-idle-delay 0.01
           helm-ff-search-library-in-sexp t
+          helm-candidate-number-limit 200
           helm-ff-file-name-history-use-recentf t
           helm-buffers-fuzzy-matching t
           helm-move-to-line-cycle-in-source t
@@ -715,6 +743,18 @@ setup when exiting.
     (fullframe info Info-exit)
     (fullframe ibuffer ibuffer-quit))
 #+END_SRC
+
+*** Exec-path-from-shell
+
+A GNU Emacs library to setup environment variables from the user's
+shell.
+
+#+begin_src emacs-lisp :tangle yes
+  (req-package-force exec-path-from-shell
+    :if (memq window-system '(mac ns))
+    :config
+    (exec-path-from-shell-initialize))
+#+end_src
 
 *** Mykie
 
@@ -920,8 +960,9 @@ Whitespace-mode configuration.
     (projectile-global-mode)
     :config
     (setq projectile-cache-file
-          (expand-file-name  "projectile.cache" savefile-dir))
-    (setq projectile-sort-order 'modification-time))
+          (expand-file-name  "projectile.cache" savefile-dir)
+          projectile-completion-system 'helm
+          projectile-sort-order 'modification-time))
 #+END_SRC
 
 *** Discover-my-major
