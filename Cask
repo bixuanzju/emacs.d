@@ -35,7 +35,6 @@
 (depends-on "elisp-slime-nav")
 (depends-on "ensime")
 (depends-on "epl")
-(depends-on "epresent")
 (depends-on "exec-path-from-shell")
 (depends-on "expand-region")
 (depends-on "f")

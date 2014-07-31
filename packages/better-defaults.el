@@ -207,12 +207,6 @@ indent yanked text (with prefix arg don't indent)."
 (require 're-builder)
 (setq reb-re-syntax 'string)
 
-;; (require 'desktop)
-;; (setq desktop-save t)
-;; (setq desktop-path (list savefile-dir))
-;; (setq desktop-dirname savefile-dir)
-;; (desktop-save-mode +1)
-
 (defun prelude-local-comment-auto-fill ()
   (set (make-local-variable 'comment-auto-fill-only-comments) t))
 
@@ -224,6 +218,9 @@ This functions should be added to the hooks of major modes for programming."
    nil '(("\\<\\(\\(FIX\\(ME\\)?\\|TODO\\|OPTIMIZE\\|HACK\\|REFACTOR\\):\\)"
           1 font-lock-warning-face t))))
 
+;; Newline at end of file
+(setq require-final-newline t)
+
 (defun prelude-prog-mode-defaults ()
   "Default coding hook, useful with any programming language."
   (eval-after-load "subword"
@@ -232,9 +229,6 @@ This functions should be added to the hooks of major modes for programming."
   (prelude-font-lock-comment-annotations))
 
 (add-hook 'prog-mode-hook 'prelude-prog-mode-defaults)
-
-;; Newline at end of file
-(setq require-final-newline t)
 
 (provide 'better-defaults)
 
