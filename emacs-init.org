@@ -232,6 +232,16 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
     (key-chord-define-global "xn" 'helm-mini)
     (key-chord-define-global "jk" 'magit-status)
     (key-chord-define-global "xm" 'helm-M-x)
+    (key-chord-define-global "1q" "!")
+    (key-chord-define-global "2w" "@")
+    (key-chord-define-global "3e" "#")
+    (key-chord-define-global "4r" "$")
+    (key-chord-define-global "5t" "%")
+    (key-chord-define-global "6y" "^")
+    (key-chord-define-global "7y" "&")
+    (key-chord-define-global "8u" "*")
+    (key-chord-define-global "9i" "(")
+    (key-chord-define-global "-p" "_")
     (key-chord-mode +1))
 #+END_SRC
 
