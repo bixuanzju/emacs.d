@@ -48,6 +48,7 @@
 (depends-on "ghc")
 (depends-on "git-commit-mode")
 (depends-on "git-rebase-mode")
+(depends-on "git-timemachine")
 (depends-on "gntp")
 (depends-on "guide-key")
 (depends-on "haskell-mode")

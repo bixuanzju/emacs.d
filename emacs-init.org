@@ -1558,6 +1558,12 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
                 (company-mode -1))))
 #+END_SRC
 
+*** Git-timemachine
+
+#+begin_src emacs-lisp :tangle yes
+  (req-package git-timemachine)
+#+end_src
+
 ** Buffer
 *** Toggle Windows
 
