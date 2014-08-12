@@ -54,7 +54,16 @@ specify the =:ensure= keyword, as it is added by default.
 Start using =req-package=
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; Add the personal packages directory to the load-path
-  (add-to-list 'load-path (concat user-emacs-directory "packages/"))
+  (defun prelude-add-subfolders-to-load-path (parent-dir)
+    "Add all level PARENT-DIR subdirs to the `load-path'."
+    (dolist (f (directory-files parent-dir))
+      (let ((name (expand-file-name f parent-dir)))
+        (when (and (file-directory-p name)
+                   (not (string-prefix-p "." f)))
+          (add-to-list 'load-path name)
+          (prelude-add-subfolders-to-load-path name)))))
+  (add-to-list 'load-path my-vendor-dir)
+  (prelude-add-subfolders-to-load-path my-vendor-dir)
   (require 'req-package)
 #+END_SRC
 * Meta
@@ -546,7 +555,8 @@ Type =clear= to clear the buffer like in other terminal emulators.
     :config
     (defun my/haskell-mode-defaults ()
       (subword-mode +1)
-      (turn-on-haskell-doc-mode))
+      (turn-on-haskell-doc-mode)
+      (smartparens-mode -1))
     (add-hook 'haskell-mode-hook
               'my/haskell-mode-defaults)
 
@@ -651,7 +661,8 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package magit
-    :diminish (magit-auto-revert-mode . ""))
+    :commands magit-status
+    :diminish (magit-auto-revert-mode ""))
 #+END_SRC
 
 *** Monky

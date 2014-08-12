@@ -8,6 +8,9 @@
 (defvar org-load-path (list (concat user-emacs-directory "packages/"))
   "List of directories to search for org files to load.")
 
+(defvar my-vendor-dir (expand-file-name "packages/" user-emacs-directory)
+  "This directory houses packages that are not yet available in ELPA (or MELPA).")
+
 (defvar savefile-dir (expand-file-name "savefile/" user-emacs-directory)
   "This folder stores all the automatically generated save/history-files.")
 
