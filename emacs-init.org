@@ -84,7 +84,8 @@ and byte-compile the =org=-document after changes asynchronously.
          `(lambda ()
             (require 'org)
             (org-babel-tangle-file ,my-org-file)
-            (byte-compile-file ,my-init-file))
+            ;; (byte-compile-file ,my-init-file)
+            )
          (lambda (result)
            (message "Tangled file compiled.")))))
     (add-hook 'after-save-hook 'my/init-hook))
@@ -556,7 +557,9 @@ Type =clear= to clear the buffer like in other terminal emulators.
     (defun my/haskell-mode-defaults ()
       (subword-mode +1)
       (turn-on-haskell-doc-mode)
-      (smartparens-mode -1))
+      (turn-on-haskell-simple-indent)
+      (smartparens-mode -1)
+      (flycheck-mode -1))
     (add-hook 'haskell-mode-hook
               'my/haskell-mode-defaults)
 
@@ -567,6 +570,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
           haskell-process-suggest-remove-import-lines t
           haskell-process-auto-import-loaded-modules t
           haskell-process-type 'cabal-repl
+          haskell-interactive-types-for-show-ambiguous nil
           haskell-process-log t)
 
     ;; Haskell-mode bindings
@@ -1217,7 +1221,7 @@ A great syntax checker.
 
 *** Flycheck-haskell
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (req-package flycheck-haskell
     :require flycheck
     :init
