@@ -771,6 +771,17 @@ setup when exiting.
     (fullframe ibuffer ibuffer-quit))
 #+END_SRC
 
+*** Ws-butler
+
+[[https://github.com/lewang/ws-butler][ws-butler]] is an unobtrusive way to trim spaces from end of line.
+
+#+begin_src emacs-lisp :tangle yes
+  (req-package ws-butler
+    :diminish (ws-butler-mode . "")
+    :config
+    (ws-butler-global-mode))
+#+end_src
+
 *** Exec-path-from-shell
 
 A GNU Emacs library to setup environment variables from the user's
@@ -947,7 +958,6 @@ keep pressing the key until it selects what you want.
 Whitespace-mode configuration.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-
   (req-package-force whitespace
     :diminish (whitespace-mode . "")
     :config
@@ -956,7 +966,7 @@ Whitespace-mode configuration.
 
     (defun prelude-enable-whitespace ()
       "Enable `whitespace-mode' if `prelude-whitespace' is not nil."
-      (add-hook 'before-save-hook 'whitespace-cleanup nil t)
+      ;; (add-hook 'before-save-hook 'whitespace-cleanup nil t)
       (whitespace-mode +1))
 
     (add-hook 'text-mode-hook 'prelude-enable-whitespace)
@@ -1392,6 +1402,7 @@ Show matching and unmatched delimiters, and auto-close them as well.
     :config
     (autoload 'ghc-init "ghc" nil t)
     (autoload 'ghc-debug "ghc" nil t)
+    (setq ghc-ghc-options '("-fno-warn-unused-do-bind"))
     (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
 #+END_SRC
 

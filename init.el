@@ -6,7 +6,7 @@
 ;; Keep emacs custom-settings in separate file
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load-file custom-file)
-
+;; (setq use-package-verbose t)
 (if (file-exists-p my-init-file)
     (load-file my-init-file)
   (progn
