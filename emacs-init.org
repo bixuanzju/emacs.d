@@ -777,7 +777,8 @@ setup when exiting.
 
 #+begin_src emacs-lisp :tangle yes
   (req-package ws-butler
-    :diminish (ws-butler-mode . "")
+    :diminish ((ws-butler-mode . "")
+               (highlight-changes-mode . ""))
     :config
     (ws-butler-global-mode))
 #+end_src
