@@ -700,17 +700,19 @@ files.
   (req-package helm
     :bind (("C-x C-f" . helm-find-files)
            ("M-y" . helm-show-kill-ring))
-    :init
+    :config
+    (setq helm-command-prefix-key "C-c h")
     (require 'helm-config)
     (require 'helm-grep)
-    :config
     (define-key helm-grep-mode-map (kbd "<return>")
       'helm-grep-mode-jump-other-window)
     (define-key helm-grep-mode-map (kbd "n")
       'helm-grep-mode-jump-other-window-forward)
     (define-key helm-grep-mode-map (kbd "p")
       'helm-grep-mode-jump-other-window-backward)
-    (setq helm-quick-update t
+    (setq helm-google-suggest-use-curl-p t
+          helm-scroll-amount 4
+          helm-quick-update t
           helm-idle-delay 0.01
           helm-split-window-default-side 'other
           helm-split-window-in-side-p t
@@ -718,12 +720,16 @@ files.
           helm-ff-search-library-in-sexp t
           helm-candidate-number-limit 200
           helm-ff-file-name-history-use-recentf t
+          ido-use-virtual-buffers t
           helm-buffers-fuzzy-matching t
-          helm-move-to-line-cycle-in-source t
-          helm-boring-file-regexp-list
-          '("\\.git$" "\\.hg$" "\\.svn$" "\\.CVS$" "\\._darcs$" "\\.la$" "\\.o$" "\\.i$"))
+          helm-move-to-line-cycle-in-source t)
     ;;; Save current position to mark ring
-    (add-hook 'helm-goto-line-before-hook 'helm-save-current-pos-to-mark-ring))
+    (add-hook 'helm-goto-line-before-hook 'helm-save-current-pos-to-mark-ring)
+
+    ;; show minibuffer history with Helm
+    (define-key minibuffer-local-map (kbd "M-p") 'helm-minibuffer-history)
+    (define-key minibuffer-local-map (kbd "M-n") 'helm-minibuffer-history)
+    (helm-mode +1))
 #+END_SRC
 
 *** Helm-swoop
@@ -994,8 +1000,6 @@ Whitespace-mode configuration.
            ("s-d" . projectile-find-dir)
            ("s-f" . projectile-find-file)
            ("s-g" . projectile-ag))
-    :init
-    (projectile-global-mode)
     :config
     (setq projectile-cache-file
           (expand-file-name  "projectile.cache" savefile-dir)
@@ -1019,6 +1023,7 @@ Whitespace-mode configuration.
     (setq persp-show-modestring 'header)
     (add-hook 'after-init-hook #'(lambda () (persp-mode 1)))
     (defun custom-persp-last ()
+      "Switch to the last perspective."
       (interactive)
       (persp-switch (persp-name persp-last)))
     ;; Easily switch to your last perspective
@@ -1029,8 +1034,7 @@ Whitespace-mode configuration.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package persp-projectile
-    :require (projectile perspective)
-    :bind ("s-s" . projectile-persp-switch-project))
+    :require (projectile perspective))
 
 #+END_SRC
 
@@ -1285,7 +1289,7 @@ dynamically.
     :config
     (guide-key-mode 1)
     (setq guide-key/guide-key-sequence
-          '("C-x r" "C-x c" "C-x 4" "C-x 5"
+          '("C-x r" "C-c h" "C-x 4" "C-x 5"
             (org-mode "C-c C-x")))
     (setq guide-key/popup-window-position 'bottom)
     (setq guide-key/highlight-command-regexp
@@ -1454,7 +1458,7 @@ more escaped group parentheses, and other goodies!).
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package visual-regexp-steroids
-    :bind (("C-c r" . vr/replace)))
+    :bind ("C-c r" . vr/replace))
 #+END_SRC
 
 *** Pcre2el
@@ -1538,6 +1542,8 @@ View Large Files in Emacs
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package anzu
+    :bind (("M-%" . anzu-query-replace)
+           ("C-M-%" . anzu-query-replace-regexp))
     :diminish (anzu-mode . "")
     :config
     (global-anzu-mode +1))
