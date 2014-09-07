@@ -457,10 +457,11 @@ If you are not using it, you need to start.
              (sql . t)
              (latex . t))))
 
-    (org-require 'org-ref)
-    (setq org-ref-default-bibliography '("/Users/jeremybi/research/refs.bib")
-          org-ref-pdf-directory "/Users/jeremybi/research/papers/"
-          org-ref-bibliography-notes "/Users/jeremybi/research/notes.org"))
+    ;; (org-require 'org-ref)
+    ;; (setq org-ref-default-bibliography '("/Users/jeremybi/research/refs.bib")
+    ;;       org-ref-pdf-directory "/Users/jeremybi/research/papers/"
+    ;;       org-ref-bibliography-notes "/Users/jeremybi/research/notes.org")
+    )
 #+END_SRC
 
 [[https://github.com/jkitchin/jmax/blob/master/org-ref.org][Org-ref]] is an emacs-lisp module to handle bibliographic citations, and
@@ -699,37 +700,38 @@ files.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package helm
     :bind (("C-x C-f" . helm-find-files)
-           ("M-y" . helm-show-kill-ring))
+           ("M-y" . helm-show-kill-ring)
+           ("C-h r" . helm-info-emacs))
     :config
-    (setq helm-command-prefix-key "C-c h")
-    (require 'helm-config)
     (require 'helm-grep)
+    (require 'helm-files)
+    (setq helm-command-prefix-key "C-c h")
+
+    (require 'helm-config)
+
+    (when (executable-find "curl")
+      (setq helm-google-suggest-use-curl-p t))
+
     (define-key helm-grep-mode-map (kbd "<return>")
       'helm-grep-mode-jump-other-window)
     (define-key helm-grep-mode-map (kbd "n")
       'helm-grep-mode-jump-other-window-forward)
     (define-key helm-grep-mode-map (kbd "p")
       'helm-grep-mode-jump-other-window-backward)
-    (setq helm-google-suggest-use-curl-p t
-          helm-scroll-amount 4
-          helm-quick-update t
-          helm-idle-delay 0.01
-          helm-split-window-default-side 'other
-          helm-split-window-in-side-p t
-          helm-input-idle-delay 0.01
-          helm-ff-search-library-in-sexp t
-          helm-candidate-number-limit 200
-          helm-ff-file-name-history-use-recentf t
-          ido-use-virtual-buffers t
-          helm-buffers-fuzzy-matching t
-          helm-move-to-line-cycle-in-source t)
-    ;;; Save current position to mark ring
-    (add-hook 'helm-goto-line-before-hook 'helm-save-current-pos-to-mark-ring)
+
+    (setq helm-quick-update                     t
+          helm-split-window-in-side-p           t
+          helm-buffers-fuzzy-matching           t
+          helm-move-to-line-cycle-in-source     t
+          helm-ff-search-library-in-sexp        t
+          helm-ff-file-name-history-use-recentf t)
 
     ;; show minibuffer history with Helm
-    (define-key minibuffer-local-map (kbd "M-p") 'helm-minibuffer-history)
-    (define-key minibuffer-local-map (kbd "M-n") 'helm-minibuffer-history)
-    (helm-mode +1))
+    (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history)
+
+    ;; shell history.
+    (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
+    (helm-mode 1))
 #+END_SRC
 
 *** Helm-swoop
