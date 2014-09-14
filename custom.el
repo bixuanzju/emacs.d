@@ -54,10 +54,17 @@ Only modes that don't derive from `prog-mode' should be listed here.")
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(agda2-highlight-datatype-face ((t (:foreground "azure4"))))
+ '(agda2-highlight-function-face ((t (:foreground "aquamarine3"))))
+ '(agda2-highlight-module-face ((t (:foreground "DarkOliveGreen2"))))
+ '(agda2-highlight-primitive-type-face ((t (:foreground "SkyBlue3"))))
  '(company-tooltip-annotation ((t (:inherit company-tooltip :foreground "orange1"))))
  '(cursor ((t (:background "gray78" :foreground "#DCDCCC"))))
  '(flyspell-duplicate ((t nil)))
  '(flyspell-incorrect ((t (:inherit nil :underline (:color "yellow" :style wave)))))
+ '(idris-loaded-region-face ((t (:background "#2B2B2B"))))
+ '(idris-semantic-data-face ((t (:foreground "light pink"))))
+ '(idris-semantic-type-face ((t (:foreground "LightGoldenrod3"))))
  '(persp-selected-face ((t (:inherit nil :foreground "yellow"))))
  '(shm-current-face ((t (:background "#2B2B2B"))))
  '(sr-active-path-face ((t (:weight bold :height 180)))))
