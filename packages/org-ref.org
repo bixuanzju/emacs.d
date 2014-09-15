@@ -7,7 +7,7 @@
 This document is an experiment at creating a literate program to provide similar features as reftex for org-mode referencing. These features include:
 
 1. using completion to create links
-2. storing links to places,
+2. storing links to places, 
 3. Clickable links that do useful things
 4. Exportable links to LaTeX
 5. Utility functions for dealing with bibtex files and org-files
@@ -197,7 +197,7 @@ We setup reftex here. We use a custom insert cite link function defined here: [[
 			  )))))
 #+END_SRC
 
-You may want to add new formats to the reftex-cite-format-builtin variable. Here is an example of adding two new formats. Note that this does not create the links.
+You may want to add new formats to the reftex-cite-format-builtin variable. Here is an example of adding two new formats. Note that this does not create the links. 
 
 #+BEGIN_SRC emacs-lisp :tangle no
 ;; add new format
@@ -246,7 +246,7 @@ Reftex is no longer being developed. I want a url and doi option for formatting,
     (when (and (not (string= result "")) (string= "{" (substring result 0 1)))
       (setq result (substring result 1 -1)))
     (when (and (not (string= result "")) (string= "\"" (substring result 0 1)))
-      (setq result (substring result 1 -1)))
+      (setq result (substring result 1 -1)))    
       result))
 
 (defun org-ref-reftex-format-citation (entry format)
@@ -363,7 +363,7 @@ environment, only %l is available."
 
     (setq file (catch 'result
 		 (loop for file in org-ref-bibliography-files do
-		       (if (org-ref-key-in-file-p key (file-truename file))
+		       (if (org-ref-key-in-file-p key (file-truename file)) 
 			   (throw 'result file)
 			 (message "%s not found in %s" key (file-truename file))))))
 
@@ -377,7 +377,7 @@ environment, only %l is available."
 	  (setq entry  (org-ref-reftex-format-citation bibtex-entry format))
 	(save-restriction
 	  (bibtex-narrow-to-entry)
-	  (setq entry (buffer-string)))))
+	  (setq entry (buffer-string)))))      
     entry))
 #+END_SRC
 
@@ -402,11 +402,11 @@ This code provides some functions to generate a simple sorted bibliography in ht
   "return a list of unique keys in the buffer."
   (let ((keys '()))
     (org-element-map (org-element-parse-buffer) 'link
-      (lambda (link)
-	(let ((plist (nth 1 link)))
+      (lambda (link)       
+	(let ((plist (nth 1 link)))			     
 	  (when (-contains? org-ref-cite-types (plist-get plist ':type))
-	    (dolist
-		(key
+	    (dolist 
+		(key 
 		 (org-ref-split-and-strip-string (plist-get plist ':path)))
 	      (when (not (-contains? keys key))
 		(setq keys (append keys (list key)))))))))
@@ -426,7 +426,7 @@ This function gets the html for one entry.
 
 Now, we map over the whole list of keys, and the whole bibliography, formatted as an unordered list.
 
-#+BEGIN_SRC emacs-lisp :tangle org-ref.el
+#+BEGIN_SRC emacs-lisp :tangle org-ref.el 
 (defun org-ref-get-html-bibliography ()
   "Create an html bibliography when there are keys"
   (let ((keys (org-ref-get-bibtex-keys)))
@@ -439,6 +439,79 @@ Now, we map over the whole list of keys, and the whole bibliography, formatted a
 
 I do not have plans to make a numbered bibliography with numbered citations anytime soon. This will require changing the way the citation links are exported, and keeping track of the numbers.
 
+*** An org bibliography
+You can export an org-file to an org-file or org-buffer (org-org-epxort-as-org). In this case, it would be useful convert the cite links to links to custom_ids, and the bibliography link to a first-level heading Bibliography with org-bibtex like headings for each entry. This code should enable this. Right now, it does not appear to work for org export though.
+
+First, we get the string for a single entry.
+#+BEGIN_SRC emacs-lisp :tangle org-ref.el
+(defun org-ref-get-bibtex-entry-org (key)
+  "returns an org string for the bibliography entry corresponding to key"
+  (let ((org-ref-bibliography-files (org-ref-find-bibliography))
+	(file) (entry) (bibtex-entry) (entry-type) (format))
+
+    (setq file (catch 'result
+		 (loop for file in org-ref-bibliography-files do
+		       (if (org-ref-key-in-file-p key (file-truename file)) 
+			   (throw 'result file)
+			 (message "%s not found in %s" key (file-truename file))))))
+
+    (with-temp-buffer
+      (insert-file-contents file)
+      (bibtex-search-entry key nil 0)
+      (setq entry (bibtex-parse-entry))
+      (format "** %s - %s
+  :PROPERTIES:
+  %s
+  :END:
+" (org-ref-reftex-get-bib-field "author" entry)
+(org-ref-reftex-get-bib-field "title" entry)
+(concat "   :CUSTOM_ID: " (org-ref-reftex-get-bib-field "=key=" entry) "\n"
+	(mapconcat (lambda (element) (format "   :%s: %s"
+					     (upcase (car element))
+					     (cdr element)))
+		   entry
+		   "\n"))))))
+#+END_SRC
+
+Now, we loop over the keys, and combine all the entries into a bibliography.
+#+BEGIN_SRC emacs-lisp :tangle org-ref.el 
+(defun org-ref-get-org-bibliography ()
+  "Create an org bibliography when there are keys"
+  (let ((keys (org-ref-get-bibtex-keys)))
+    (when keys
+      (concat "* Bibliography
+"
+	      (mapconcat (lambda (x) (org-ref-get-bibtex-entry-org x)) keys "\n")
+	      "\n"))))
+#+END_SRC
+
+*** An ascii bibliography
+
+This function gets the html for one entry.
+
+#+BEGIN_SRC emacs-lisp :tangle org-ref.el
+(defun org-ref-get-bibtex-entry-ascii (key)
+  "returns an ascii string for the bibliography entry corresponding to key"
+
+  (format "[%s] %s" key (org-ref-get-bibtex-entry-citation key)))
+#+END_SRC
+
+Now, we map over the whole list of keys, and the whole bibliography, formatted as an unordered list.
+
+#+BEGIN_SRC emacs-lisp :tangle org-ref.el 
+(defun org-ref-get-ascii-bibliography ()
+  "Create an html bibliography when there are keys"
+  (let ((keys (org-ref-get-bibtex-keys)))
+    (when keys
+      (concat 
+"Bibliography
+=============
+"
+	      (mapconcat (lambda (x) (org-ref-get-bibtex-entry-ascii x)) keys "\n")
+	      "\n"))))
+#+END_SRC
+
+
 *** the links
 We use a link for the bibliography so that we can click on it to open the bibliography file. The link may have more than one bibliography file in it, separated by commas. Clicking opens the file under the cursor. The bibliographies should be full filenames with the bib extension. Clicking on this link makes reftex-default-bibliography local and sets it to the list of files in the link. We need this to use reftex's searching capability.
 
@@ -447,15 +520,15 @@ We use a link for the bibliography so that we can click on it to open the biblio
 		   ;; this code is run on clicking. The bibliography
 		   ;; may contain multiple files. this code finds the
 		   ;; one you clicked on and opens it.
-		   (lambda (link-string)
+		   (lambda (link-string)	
 		       ;; get link-string boundaries
 		       ;; we have to go to the beginning of the line, and then search forward
-
+		       
 		     (let* ((bibfile)
 			    ;; object is the link you clicked on
 			    (object (org-element-context))
-
-			    (link-string-beginning)
+ 
+			    (link-string-beginning) 
 			    (link-string-end))
 
 		     (save-excursion
@@ -468,7 +541,7 @@ We use a link for the bibliography so that we can click on it to open the biblio
 		       ;; here. it should be a local variable only in
 		       ;; the current buffer. We need this for using
 		       ;; reftex to do citations.
-		       (set (make-local-variable 'reftex-default-bibliography)
+		       (set (make-local-variable 'reftex-default-bibliography) 
 			    (split-string (org-element-property :path object) ","))
 
 		       ;; now if we have comma separated bibliographies
@@ -490,6 +563,8 @@ We use a link for the bibliography so that we can click on it to open the biblio
 		     ;; formatting code
 		   (lambda (keyword desc format)
 		     (cond
+		      ((eq format 'org) (org-ref-get-org-bibliography))
+                      ((eq format 'ascii) (org-ref-get-ascii-bibliography))
 		      ((eq format 'html) (org-ref-get-html-bibliography))
 		      ((eq format 'latex)
 			 ;; write out the latex bibliography command
@@ -501,10 +576,12 @@ We use a link for the bibliography so that we can click on it to open the biblio
 		   (lambda (arg) (message "Nothing implemented for clicking here."))
 		   (lambda (keyword desc format)
 		     (cond
+                      ((eq format 'org) (org-ref-get-org-bibliography))
                       ((eq format 'html) (org-ref-get-html-bibliography))
 		      ((eq format 'latex)
 		       ;; write out the latex bibliography command
-		       (format "\\printbibliography" keyword)))))
+		       (format "\\printbibliography" keyword))
+)))
 #+END_SRC
 
 We also create a bibliographystyle link. There is nothing to do on clicking here, and we create it for consistency. This sets the style for latex export, so use something appropriate there, e.g. unsrt, plain, plainnat, ...
@@ -520,7 +597,7 @@ We also create a bibliographystyle link. There is nothing to do on clicking here
 #+END_SRC
 
 *** Completion for bibliography link
-It would be nice
+It would be nice 
 
 #+BEGIN_SRC emacs-lisp :tangle org-ref.el
 (defun org-bibliography-complete-link (&optional arg)
@@ -539,15 +616,15 @@ This is apparently used for biblatex.
 		   ;; this code is run on clicking. The addbibresource
 		   ;; may contain multiple files. this code finds the
 		   ;; one you clicked on and opens it.
-		   (lambda (link-string)
+		   (lambda (link-string)	
 		       ;; get link-string boundaries
 		       ;; we have to go to the beginning of the line, and then search forward
-
+		       
 		     (let* ((bibfile)
 			    ;; object is the link you clicked on
 			    (object (org-element-context))
-
-			    (link-string-beginning)
+ 
+			    (link-string-beginning) 
 			    (link-string-end))
 
 		     (save-excursion
@@ -560,7 +637,7 @@ This is apparently used for biblatex.
 		       ;; here. it should be a local variable only in
 		       ;; the current buffer. We need this for using
 		       ;; reftex to do citations.
-		       (set (make-local-variable 'reftex-default-addbibresource)
+		       (set (make-local-variable 'reftex-default-addbibresource) 
 			    (split-string (org-element-property :path object) ","))
 
 		       ;; now if we have comma separated bibliographies
@@ -599,27 +676,27 @@ In long documents, a list of figures is not uncommon. Here we create a clickable
   (save-excursion (widen)
   (let* ((c-b (buffer-name))
 	 (counter 0)
-	 (list-of-figures
+	 (list-of-figures 
 	  (org-element-map (org-element-parse-buffer) 'link
-	    (lambda (link)
+	    (lambda (link) 
 	      "create a link for to the figure"
-	      (when
+	      (when 
 		  (and (string= (org-element-property :type link) "file")
-		       (string-match-p
+		       (string-match-p  
 			"[^.]*\\.\\(png\\|jpg\\|eps\\|pdf\\)$"
-			(org-element-property :path link)))
+			(org-element-property :path link)))                   
 		(incf counter)
-
+		
 		(let* ((start (org-element-property :begin link))
 		       (parent (car (cdr (org-element-property :parent link))))
 		       (caption (caaar (plist-get parent :caption)))
 		       (name (plist-get parent :name)))
-		  (if caption
-		      (format
-		       "[[elisp:(progn (switch-to-buffer \"%s\")(widen)(goto-char %s))][figure %s: %s]] %s\n"
+		  (if caption 
+		      (format 
+		       "[[elisp:(progn (switch-to-buffer \"%s\")(widen)(goto-char %s))][figure %s: %s]] %s\n" 
 		       c-b start counter (or name "") caption)
-		    (format
-		     "[[elisp:(progn (switch-to-buffer \"%s\")(widen)(goto-char %s))][figure %s: %s]]\n"
+		    (format 
+		     "[[elisp:(progn (switch-to-buffer \"%s\")(widen)(goto-char %s))][figure %s: %s]]\n" 
 		     c-b start counter (or name "")))))))))
     (switch-to-buffer "*List of Figures*")
     (setq buffer-read-only nil)
@@ -630,7 +707,7 @@ In long documents, a list of figures is not uncommon. Here we create a clickable
     (use-local-map (copy-keymap org-mode-map))
     (local-set-key "q" #'(lambda () (interactive) (kill-buffer))))))
 
-(org-add-link-type
+(org-add-link-type 
  "list-of-figures"
  'org-ref-list-of-figures ; on click
  (lambda (keyword desc format)
@@ -649,20 +726,20 @@ In long documents, a list of figures is not uncommon. Here we create a clickable
   (widen)
   (let* ((c-b (buffer-name))
 	 (counter 0)
-	 (list-of-tables
+	 (list-of-tables 
 	  (org-element-map (org-element-parse-buffer 'element) 'table
-	    (lambda (table)
+	    (lambda (table) 
 	      "create a link for to the table"
 	      (incf counter)
 	      (let ((start (org-element-property :begin table))
 		    (name  (org-element-property :name table))
 		    (caption (caaar (org-element-property :caption table))))
-		(if caption
-		    (format
-		     "[[elisp:(progn (switch-to-buffer \"%s\")(widen)(goto-char %s))][table %s: %s]] %s\n"
+		(if caption 
+		    (format 
+		     "[[elisp:(progn (switch-to-buffer \"%s\")(widen)(goto-char %s))][table %s: %s]] %s\n" 
 		     c-b start counter (or name "") caption)
-		  (format
-		   "[[elisp:(progn (switch-to-buffer \"%s\")(widen)(goto-char %s))][table %s: %s]]\n"
+		  (format 
+		   "[[elisp:(progn (switch-to-buffer \"%s\")(widen)(goto-char %s))][table %s: %s]]\n" 
 		   c-b start counter (or name ""))))))))
     (switch-to-buffer "*List of Tables*")
     (setq buffer-read-only nil)
@@ -673,7 +750,7 @@ In long documents, a list of figures is not uncommon. Here we create a clickable
     (use-local-map (copy-keymap org-mode-map))
     (local-set-key "q" #'(lambda () (interactive) (kill-buffer))))))
 
-(org-add-link-type
+(org-add-link-type 
  "list-of-tables"
  'org-ref-list-of-tables
  (lambda (keyword desc format)
@@ -712,9 +789,9 @@ We want to store links on labels, so you can put the cursor on the label, press 
 #+BEGIN_SRC emacs-lisp  :tangle org-ref.el
 (defun org-label-store-link ()
   "store a link to a label. The output will be a ref to that label"
-  ;; First we have to make sure we are on a label link.
+  ;; First we have to make sure we are on a label link. 
   (let* ((object (org-element-context)))
-    (when (and (equal (org-element-type object) 'link)
+    (when (and (equal (org-element-type object) 'link) 
                (equal (org-element-property :type object) "label"))
       (org-store-link-props
        :type "ref"
@@ -746,7 +823,7 @@ We want to store links on labels, so you can put the cursor on the label, press 
 #+END_SRC
 ** ref
 
-The ref link allows you make links to labels. Clicking on the link takes you to the label, and provides a mark to go back to.
+The ref link allows you make links to labels. Clicking on the link takes you to the label, and provides a mark to go back to. 
 
 At the moment, ref links are not usable for section links. You need [[#CUSTOM_ID]] type links.
 
@@ -764,7 +841,7 @@ At the moment, ref links are not usable for section links. You need [[#CUSTOM_ID
    (unless
        (or
 	;; our label links
-	(progn
+	(progn 
 	  (goto-char (point-min))
 	  (re-search-forward (format "label:%s\\b" label) nil t))
 
@@ -777,7 +854,7 @@ At the moment, ref links are not usable for section links. You need [[#CUSTOM_ID
 	(progn
 	  (goto-char (point-min))
 	  (re-search-forward (format "^#\\+label:\\s-*\\(%s\\)\\b" label) nil t))
-
+	
 	;; org tblname
 	(progn
 	  (goto-char (point-min))
@@ -808,8 +885,8 @@ It would be nice to use completion to enter a ref link, where a list of labels i
 (defun org-ref-get-custom-ids ()
  "return a list of custom_id properties in the buffer"
  (let ((results '()) custom_id)
-   (org-map-entries
-    (lambda ()
+   (org-map-entries 
+    (lambda () 
       (let ((custom_id (org-entry-get (point) "CUSTOM_ID")))
 	(when (not (null custom_id))
 	  (setq results (append results (list custom_id)))))))
@@ -832,7 +909,7 @@ Finally, we get the table names.
 #+BEGIN_SRC emacs-lisp :tangle org-ref.el
 (defun org-ref-get-tblnames ()
   (org-element-map (org-element-parse-buffer 'element) 'table
-    (lambda (table)
+    (lambda (table) 
       (org-element-property :name table))))
 #+END_SRC
 
@@ -884,7 +961,7 @@ This refers to the page of a label in LaTeX.
    (unless
        (or
 	;; our label links
-	(progn
+	(progn 
 	  (goto-char (point-min))
 	  (re-search-forward (format "label:%s\\b" label) nil t))
 
@@ -897,7 +974,7 @@ This refers to the page of a label in LaTeX.
 	(progn
 	  (goto-char (point-min))
 	  (re-search-forward (format "^#\\+label:\\s-*\\(%s\\)\\b" label) nil t))
-
+	
 	;; org tblname
 	(progn
 	  (goto-char (point-min))
@@ -971,7 +1048,7 @@ The nameref link allows you make links to the text of a section with a label. Cl
 
 ** eqref
 This is just the LaTeX ref for equations. On export, the reference is enclosed in parentheses.
-
+ 
 #+BEGIN_SRC emacs-lisp  :tangle org-ref.el
 (org-add-link-type
  "eqref"
@@ -1017,12 +1094,12 @@ point to get a comma, or the end of the link, and then backwards
 to get a comma, or the beginning of the link. that delimits the
 keyword we clicked on. We also strip the text properties."
   (interactive)
-  (let* ((object (org-element-context))
+  (let* ((object (org-element-context))	 
 	 (link-string (org-element-property :path object)))
 
     (if (not (org-element-property :contents-begin object))
 	;; this means no description in the link
-	(progn
+	(progn	  
 	  ;; we need the link path start and end
 	  (save-excursion
 	    (goto-char (org-element-property :begin object))
@@ -1071,14 +1148,14 @@ falling back to what the user has set in org-ref-default-bibliography
 	      (mapcar 'org-ref-strip-string (split-string (match-string 1) ",")))
 	(throw 'result org-ref-bibliography-files))
 
-
+      
       ;; we did not find a bibliography link. now look for \bibliography
       (goto-char (point-min))
       (when (re-search-forward "\\\\bibliography{\\([^}]+\\)}" nil t)
 	;; split, and add .bib to each file
 	(setq org-ref-bibliography-files
 	      (mapcar (lambda (x) (concat x ".bib"))
-		      (mapcar 'org-ref-strip-string
+		      (mapcar 'org-ref-strip-string 
 			      (split-string (match-string 1) ","))))
 	(throw 'result org-ref-bibliography-files))
 
@@ -1089,7 +1166,7 @@ falling back to what the user has set in org-ref-default-bibliography
 	(setq org-ref-bibliography-files
 	      (mapcar 'org-ref-strip-string (split-string (match-string 1) ",")))
 	(throw 'result org-ref-bibliography-files))
-
+	  
       ;; we did not find anything. use defaults
       (setq org-ref-bibliography-files org-ref-default-bibliography)))
 
@@ -1099,17 +1176,15 @@ falling back to what the user has set in org-ref-default-bibliography
 #+END_SRC
 
 **** Finding the bibliography file a key is in
-Now, we can see if an entry is in a file.
+Now, we can see if an entry is in a file. 
 
 #+BEGIN_SRC emacs-lisp :tangle org-ref.el
 (defun org-ref-key-in-file-p (key filename)
   "determine if the key is in the file"
   (interactive "skey: \nsFile: ")
-
-  (with-temp-buffer
-    (insert-file-contents filename)
-    (prog1
-        (bibtex-search-entry key nil 0))))
+  (save-current-buffer
+    (let ((bibtex-files (list filename)))
+      (bibtex-search-entry key t))))
 #+END_SRC
 
 Finally, we want to know which file the key is in.
@@ -1124,7 +1199,7 @@ Finally, we want to know which file the key is in.
      (setq key (org-ref-get-bibtex-key-under-cursor)))
    (setq file     (catch 'result
 		    (loop for file in org-ref-bibliography-files do
-			  (if (org-ref-key-in-file-p key (file-truename file))
+			  (if (org-ref-key-in-file-p key (file-truename file)) 
 			      (throw 'result file)))))
    (cons key file)))
 #+END_SRC
@@ -1146,7 +1221,7 @@ we check to see if there is pdf, and if the key actually exists in the bibliogra
          (pdf-file (format (concat org-ref-pdf-directory "%s.pdf") key))
          (bibfile (cdr results))
 	 m1 m2 m3 m4 m5 menu-string)
-    (setq m1 (if bibfile
+    (setq m1 (if bibfile		 
 		 "(o)pen"
 	       "(No key found)"))
 
@@ -1246,7 +1321,7 @@ We need some convenience functions to open act on the citation at point. These w
   (let* ((cb (current-buffer))
 	(results (org-ref-get-bibtex-key-and-file))
 	(key (car results))
-	(bibfile (cdr results)))
+	(bibfile (cdr results)))	
     (message "%s" (progn
 		    (with-temp-buffer
                       (insert-file-contents bibfile)
@@ -1289,10 +1364,10 @@ you select your option with a single key press."
      ;; cite
      ((= choice ?c)
       (org-ref-citation-at-point))
-
+      
 
      ;; quit
-     ((or
+     ((or 
       (= choice ?q) ; q
       (= choice ?\ )) ; space
       ;; this clears the minibuffer
@@ -1312,7 +1387,7 @@ you select your option with a single key press."
 
      ;; anything else we just quit.
      (t (message "")))))
-
+    
 #+END_SRC
 
 *** A function to format a cite link
@@ -1340,29 +1415,42 @@ Finally, we define the cite link. This is deprecated; the links are autogenerate
 #+END_SRC
 
 *** Automatic definition of the cite links
-There are many different kinds of citations in LaTeX, but they are all variants of a basic syntax of \citetype[optional text]{label1,label2}. Here we use lisp to generate the link definitions. We define a function that creates the code to create the link, and then we evaluate it. We also create the completion function for the new link, and add it to the list of known links.
+There are many different kinds of citations in LaTeX, but they are all variants of a basic syntax of \citetype[optional text]{label1,label2}. Here we use lisp to generate the link definitions. We define a function that creates the code to create the link, and then we evaluate it. We also create the completion function for the new link, and add it to the list of known links. 
 
-#+BEGIN_SRC emacs-lisp :tangle org-ref.el
+#+BEGIN_SRC emacs-lisp :tangle org-ref.el 
 (defmacro org-ref-make-completion-function (type)
   `(defun ,(intern (format "org-%s-complete-link" type)) (&optional arg)
      (interactive)
-     (format "%s:%s"
+     (format "%s:%s" 
 	     ,type
-	     (completing-read
-	      "bibtex key: "
+	     (completing-read 
+	      "bibtex key: " 
 	      (let ((bibtex-files (org-ref-find-bibliography)))
 		(bibtex-global-key-alist))))))
 #+END_SRC
 
 We will want to generate formatting functions for each citation type. The reason for doing this is so we can on the fly change the formatting later.
 
-#+BEGIN_SRC emacs-lisp :tangle org-ref.el
+#+BEGIN_SRC emacs-lisp :tangle org-ref.el 
 (defmacro org-ref-make-format-function (type)
   `(defun ,(intern (format "org-ref-format-%s" type)) (keyword desc format)
      (cond
-      ((eq format 'html)
+      ((eq format 'org)
        (mapconcat
 	(lambda (key)
+	  (format "[[#%s][%s]]" key key))
+	(org-ref-split-and-strip-string keyword) ","))
+
+      ((eq format 'ascii)
+       (concat "["
+	       (mapconcat
+		(lambda (key)
+		  (format "%s" key))
+		(org-ref-split-and-strip-string keyword) ",") "]"))
+	
+      ((eq format 'html) 
+       (mapconcat 
+	(lambda (key) 
 	  (format "<a href=\"#%s\">%s</a>" key key))
 	(org-ref-split-and-strip-string keyword) ","))
 
@@ -1379,7 +1467,7 @@ We will want to generate formatting functions for each citation type. The reason
 
 
 
-We create the links by mapping the function onto the list of defined link types.
+We create the links by mapping the function onto the list of defined link types. 
 
 #+BEGIN_SRC emacs-lisp :tangle org-ref.el
 (defun org-ref-format-citation-description (desc)
@@ -1392,22 +1480,22 @@ We create the links by mapping the function onto the list of defined link types.
 
 (defun org-ref-define-citation-link (type &optional key)
   "add a citation link for org-ref. With optional key, set the reftex binding. For example:
-(org-ref-define-citation-link \"citez\" ?z) will create a new citez link, with reftex key of z,
+(org-ref-define-citation-link \"citez\" ?z) will create a new citez link, with reftex key of z, 
 and the completion function."
   (interactive "sCitation Type: \ncKey: ")
 
   ;; create the formatting function
   (eval `(org-ref-make-format-function ,type))
 
-  (eval-expression
-   `(org-add-link-type
+  (eval-expression 
+   `(org-add-link-type 
      ,type
      'org-ref-cite-onclick-minibuffer-menu
      (quote ,(intern (format "org-ref-format-%s" type)))))
 
   ;; create the completion function
   (eval `(org-ref-make-completion-function ,type))
-
+  
   ;; store new type so it works with adding citations, which checks
   ;; for existence in this list
   (add-to-list 'org-ref-cite-types type)
@@ -1415,7 +1503,7 @@ and the completion function."
   ;; and finally if a key is specified, we modify the reftex menu
   (when key
     (setf (nth 2 (assoc 'org reftex-cite-format-builtin))
-	  (append (nth 2 (assoc 'org reftex-cite-format-builtin))
+	  (append (nth 2 (assoc 'org reftex-cite-format-builtin)) 
 		  `((,key  . ,(concat type ":%l")))))))
 
 ;; create all the link types and their completion functions
@@ -1435,33 +1523,33 @@ inserted. Use a prefix arg to get a menu of citation types."
   (let* ((object (org-element-context))
 	 (link-string-beginning (org-element-property :begin object))
 	 (link-string-end (org-element-property :end object))
-	 (path (org-element-property :path object)))
+	 (path (org-element-property :path object)))  
 
     (if (not alternative-cite)
-
+	
 	(cond
 	 ;; case where we are in a link
-	 ((and (equal (org-element-type object) 'link)
+	 ((and (equal (org-element-type object) 'link) 
 	       (-contains? org-ref-cite-types (org-element-property :type object)))
 	  (goto-char link-string-end)
 	  ;; sometimes there are spaces at the end of the link
 	  ;; this code moves point pack until no spaces are there
-	  (while (looking-back " ") (backward-char))
+	  (while (looking-back " ") (backward-char))  
 	  (insert (concat "," (mapconcat 'identity (reftex-citation t ?a) ","))))
 
 	 ;; We are next to a link, and we want to append
-	 ((save-excursion
+	 ((save-excursion 
 	    (backward-char)
-	    (and (equal (org-element-type (org-element-context)) 'link)
+	    (and (equal (org-element-type (org-element-context)) 'link) 
 		 (-contains? org-ref-cite-types (org-element-property :type (org-element-context)))))
-	  (while (looking-back " ") (backward-char))
+	  (while (looking-back " ") (backward-char))  
 	  (insert (concat "," (mapconcat 'identity (reftex-citation t ?a) ","))))
 
 	 ;; insert fresh link
-	 (t
-	  (insert
-	   (concat org-ref-default-citation-link
-		   ":"
+	 (t 
+	  (insert 
+	   (concat org-ref-default-citation-link 
+		   ":" 
 		   (mapconcat 'identity (reftex-citation t) ",")))))
 
       ;; you pressed a C-u so we run this code
@@ -1478,10 +1566,10 @@ If you know the specific bibtex key, you may like to use completion directly. Yo
 #+BEGIN_SRC emacs-lisp  :tangle no
 (defun org-cite-complete-link (&optional arg)
   "Completion function for cite links"
-  (format "%s:%s"
+  (format "%s:%s" 
           org-ref-default-citation-link
-	  (completing-read
-	   "bibtex key: "
+	  (completing-read 
+	   "bibtex key: " 
 	   (let ((bibtex-files (org-ref-find-bibliography)))
 	     (bibtex-global-key-alist)))))
 #+END_SRC
@@ -1502,8 +1590,8 @@ org-mode already defines a store link function for bibtex entries. It does not s
 (defun org-ref-store-bibtex-entry-link ()
   "Save a citation link to the current bibtex entry. Saves in the default link type."
   (interactive)
-  (let ((link (concat org-ref-default-citation-link
-		 ":"
+  (let ((link (concat org-ref-default-citation-link 
+		 ":"   
 		 (save-excursion
 		   (bibtex-beginning-of-entry)
 		   (reftex-get-bib-field "=key=" (bibtex-parse-entry))))))
@@ -1625,12 +1713,12 @@ construct the heading by hand."
     (with-temp-buffer
       (insert key)
       (kill-ring-save (point-min) (point-max)))
-
+    
     ;; now look for entry in the notes file
     (if  org-ref-bibliography-notes
 	(find-file org-ref-bibliography-notes)
       (error "org-ref-bib-bibliography-notes is not set to anything"))
-
+    
     (goto-char (point-min))
     ;; put new entry in notes if we don't find it.
     (unless (re-search-forward (format ":Custom_ID: %s$" key) nil 'end)
@@ -1701,7 +1789,7 @@ Relies on the python script /upload_bibtex_citeulike.py being in the user direct
 #+END_SRC
 
 *** The upload script
-Here is the python script for uploading.
+Here is the python script for uploading. 
 
 *************** TODO document how to get the cookies
 *************** END
@@ -1764,7 +1852,7 @@ print r
     (shell-command (concat "pdflatex " bib-base))
     (kill-buffer texfile)
     (org-open-file pdffile)
-    ))
+    )) 
 #+END_SRC
 
 ** Extract bibtex entries cited in an org-file
@@ -1781,20 +1869,20 @@ If no bibliography is in the buffer the `reftex-default-bibliography' is used."
          (contents (buffer-string))
          (cb (current-buffer))
 	 basename texfile bibfile results)
-
+    
     ;; open tempfile and insert org-buffer contents
     (find-file tempname)
     (insert contents)
-    (setq basename (file-name-sans-extension
+    (setq basename (file-name-sans-extension 
 		    (file-name-nondirectory buffer-file-name))
 	  texfile (concat tempname ".tex")
 	  bibfile (concat tempname ".bib"))
-
+    
     ;; see if we have a bibliography, and insert the default one if not.
     (save-excursion
       (goto-char (point-min))
       (unless (re-search-forward "^bibliography:" (point-max) 'end)
-	(insert (format "\nbibliography:%s"
+	(insert (format "\nbibliography:%s" 
 			(mapconcat 'identity reftex-default-bibliography ",")))))
     (save-buffer)
 
@@ -1842,7 +1930,7 @@ Depending on how you enter citations, you may have citations with no correspondi
 	(found nil))
     (dolist (arg list i)
       (if (string-match (concat "^" substring "$") arg)
-	  (progn
+	  (progn 
 	    (setq found t)
 	    (return i)))
       (setq i (+ i 1)))
@@ -1862,8 +1950,8 @@ Makes a new buffer with clickable links."
 	 (bad-citations '()))
 
     (org-element-map (org-element-parse-buffer) 'link
-      (lambda (link)
-	(let ((plist (nth 1 link)))
+      (lambda (link)       
+	(let ((plist (nth 1 link)))			     
 	  (when (equal (plist-get plist ':type) "cite")
 	    (dolist (key (org-ref-split-and-strip-string (plist-get plist ':path)) )
 	      (when (not (index key bibtex-keys))
@@ -1889,7 +1977,7 @@ Makes a new buffer with clickable links."
 #+END_SRC
 
 ** Finding non-ascii characters
-I like my bibtex files to be 100% ascii. This function finds the non-ascii characters so you can replace them.
+I like my bibtex files to be 100% ascii. This function finds the non-ascii characters so you can replace them. 
 
 #+BEGIN_SRC emacs-lisp :tangle org-ref.el
 (defun org-ref-find-non-ascii-characters ()
@@ -1924,16 +2012,16 @@ I like neat and orderly bibtex entries.That means the fields are in a standard o
 
     (cond
      ;; right now we only resort articles
-     ((string= (downcase type) "article")
+     ((string= (downcase type) "article") 
       (bibtex-kill-entry)
       (insert
-       (concat "@article{" key ",\n"
-	       (mapconcat
-		(lambda (field)
+       (concat "@article{" key ",\n" 
+	       (mapconcat  
+		(lambda (field) 
 		  (when (member field entry-fields)
 		    (format "%s = %s," (downcase field) (cdr (assoc field entry))))) master "\n")
-	       (mapconcat
-		(lambda (field)
+	       (mapconcat 
+		(lambda (field) 
 		  (format "%s = %s," (downcase field) (cdr (assoc field entry)))) other-fields "\n")
 	       "\n}\n\n"))
       (bibtex-find-entry key)
@@ -1949,7 +2037,7 @@ see [[file:emacs-24.3/lisp/textmodes/bibtex.el::bibtex-autokey-before-presentati
 (defun org-ref-clean-bibtex-entry(&optional keep-key)
   "clean and replace the key in a bibtex function. When keep-key is t, do not replace it. You can use a prefix to specify the key should be kept"
   (interactive "P")
-  (bibtex-beginning-of-entry)
+  (bibtex-beginning-of-entry) 
 (end-of-line)
   ;; some entries do not have a key or comma in first line. We check and add it, if needed.
   (unless (string-match ",$" (thing-at-point 'line))
@@ -1976,7 +2064,7 @@ see [[file:emacs-24.3/lisp/textmodes/bibtex.el::bibtex-autokey-before-presentati
 
     ;; asap articles often set year to 0, which messes up key
     ;; generation. fix that.
-    (when (string= "0" year)
+    (when (string= "0" year)  
       (bibtex-beginning-of-entry)
       (goto-char (car (cdr (bibtex-search-forward-field "year" t))))
       (bibtex-kill-field)
@@ -1986,7 +2074,7 @@ see [[file:emacs-24.3/lisp/textmodes/bibtex.el::bibtex-autokey-before-presentati
 
     ;; fix pages if they are empty if there is an eid to put there.
     (when (string= "-" pages)
-      (when eid
+      (when eid	  
 	(bibtex-beginning-of-entry)
 	;; this seems like a clunky way to set the pages field.But I
 	;; cannot find a better way.
@@ -2025,7 +2113,7 @@ see [[file:emacs-24.3/lisp/textmodes/bibtex.el::bibtex-autokey-before-presentati
 	  (setq key (bibtex-read-key "Duplicate Key found, edit: " key)))
 
 	(insert key)
-	(kill-new key))) ;; save key for pasting
+	(kill-new key))) ;; save key for pasting	    
 
     ;; run hooks. each of these operates on the entry with no arguments.
     ;; this did not work like  i thought, it gives a symbolp error.
@@ -2035,7 +2123,7 @@ see [[file:emacs-24.3/lisp/textmodes/bibtex.el::bibtex-autokey-before-presentati
 		(save-excursion
 		  (funcall x))))
 	    org-ref-clean-bibtex-entry-hook)
-
+    
     ;; sort fields within entry
     (org-ref-sort-bibtex-entry)
     ;; check for non-ascii characters
@@ -2064,14 +2152,14 @@ I prefer citations in chronological order within a grouping. These functions sor
 (defun org-ref-sort-citation-link ()
  "replace link at point with sorted link by year"
  (interactive)
- (let* ((object (org-element-context))
+ (let* ((object (org-element-context))	 
         (type (org-element-property :type object))
 	(begin (org-element-property :begin object))
 	(end (org-element-property :end object))
 	(link-string (org-element-property :path object))
 	keys years data)
   (setq keys (org-ref-split-and-strip-string link-string))
-  (setq years (mapcar 'org-ref-get-citation-year keys))
+  (setq years (mapcar 'org-ref-get-citation-year keys)) 
   (setq data (mapcar* (lambda (a b) `(,a . ,b)) years keys))
   (setq data (cl-sort data (lambda (x y) (< (string-to-int (car x)) (string-to-int (car y))))))
   ;; now get the keys separated by commas
@@ -2093,7 +2181,7 @@ Sometimes it may be helpful to manually change the order of citations. These fun
 (defun org-ref-swap-citation-link (direction)
  "move citation at point in direction +1 is to the right, -1 to the left"
  (interactive)
- (let* ((object (org-element-context))
+ (let* ((object (org-element-context))	 
         (type (org-element-property :type object))
 	(begin (org-element-property :begin object))
 	(end (org-element-property :end object))
@@ -2106,12 +2194,12 @@ Sometimes it may be helpful to manually change the order of citations. These fun
         (setq i (index key keys))  ;; defined in org-ref
 	(if (> direction 0) ;; shift right
 	    (org-ref-swap-keys i (+ i 1) keys)
-	  (org-ref-swap-keys i (- i 1) keys))
+	  (org-ref-swap-keys i (- i 1) keys))	
 	(setq keys (mapconcat 'identity keys ","))
 	;; and replace the link with the sorted keys
 	(cl--set-buffer-substring begin end (concat type ":" keys))
 	;; now go forward to key so we can move with the key
-	(re-search-forward key)
+	(re-search-forward key) 
 	(goto-char (match-beginning 0)))))
 
 ;; add hooks to make it work
@@ -2146,5 +2234,6 @@ I like convenience. Here are some aliases for faster typing.
 [[elisp:(progn (org-babel-tangle) (load-file "org-ref.el"))]]
 
 [[elisp:(org-babel-load-file "org-ref.org")]]
+
 
 
