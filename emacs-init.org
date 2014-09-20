@@ -642,10 +642,12 @@ Type =clear= to clear the buffer like in other terminal emulators.
   (setq ido-use-faces nil)
 
   (req-package-force ido-ubiquitous
+    :disabled t
     :config
     (ido-ubiquitous-mode +1))
 
   (req-package-force flx-ido
+    :disabled t
     :config
     (flx-ido-mode +1))
 
