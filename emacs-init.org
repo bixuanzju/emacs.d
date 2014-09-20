@@ -76,8 +76,8 @@ and byte-compile the =org=-document after changes asynchronously.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package async
     :config
-    (when (require 'dired-aux)
-      (require 'dired-async))
+    (require 'dired-async)
+    (require 'async-bytecomp)
     (defun my/init-hook ()
       "If the current buffer is 'emacs-init.org' the code-blocks
   are tangled, and the tangled file is compiled."
@@ -85,8 +85,7 @@ and byte-compile the =org=-document after changes asynchronously.
         (async-start
          `(lambda ()
             (require 'org)
-            (org-babel-tangle-file ,my-org-file)
-            (byte-compile-file ,my-init-file))
+            (org-babel-tangle-file ,my-org-file))
          (lambda (result)
            (message "Tangled file compiled.")))))
     (add-hook 'after-save-hook 'my/init-hook))
@@ -699,9 +698,9 @@ files.
            ("M-y" . helm-show-kill-ring)
            ("C-h r" . helm-info-emacs))
     :config
+    (require 'helm-config)
     (require 'helm-grep)
     (require 'helm-files)
-    (require 'helm-config)
 
     (when (executable-find "curl")
       (setq helm-google-suggest-use-curl-p t))
