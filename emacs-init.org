@@ -1009,7 +1009,8 @@ Whitespace-mode configuration.
     (setq projectile-cache-file
           (expand-file-name  "projectile.cache" savefile-dir)
           projectile-completion-system 'helm
-          projectile-sort-order 'modification-time))
+          projectile-sort-order 'modification-time)
+    (projectile-global-mode t))
 #+END_SRC
 
 *** Discover-my-major
