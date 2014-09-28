@@ -56,13 +56,14 @@
 
   ;; Agda mode setup
 
-  (add-to-list 'load-path
-               "/Users/jeremybi/Library/Haskell/share/ghc-7.8.3-x86_64/Agda-2.4.2/emacs-mode")
+  ;; (add-to-list 'load-path
+  ;;              "/Users/jeremybi/Library/Haskell/share/ghc-7.8.3-x86_64/Agda-2.4.2/emacs-mode")
 
-  (autoload 'agda2-mode "agda2-mode"
-    "Major mode for editing Agda files (version ≥ 2)." t)
-  (add-to-list 'auto-mode-alist '("\\.l?agda\\'" . agda2-mode))
-  (modify-coding-system-alist 'file "\\.l?agda\\'" 'utf-8))
+  ;; (autoload 'agda2-mode "agda2-mode"
+  ;;   "Major mode for editing Agda files (version ≥ 2)." t)
+  ;; (add-to-list 'auto-mode-alist '("\\.l?agda\\'" . agda2-mode))
+  ;; (modify-coding-system-alist 'file "\\.l?agda\\'" 'utf-8)
+  )
 
 (provide 'cocoa-emacs-default)
 

@@ -1,5 +1,5 @@
 ;; Initialize cask to get the correct version of org-mode
-(require 'cask "~/.cask/cask.el")
+(require 'cask "/usr/local/share/emacs/site-lisp/cask.el")
 (cask-initialize)
 
 ;; Load customization
