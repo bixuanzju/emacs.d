@@ -1548,7 +1548,7 @@ View Large Files in Emacs
     :bind (("M-%" . anzu-query-replace)
            ("C-M-%" . anzu-query-replace-regexp))
     :diminish (anzu-mode . "")
-    :config
+    :init
     (global-anzu-mode +1))
 #+END_SRC
 
