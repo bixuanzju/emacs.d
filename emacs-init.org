@@ -167,6 +167,9 @@ Some quick essential customizations.
   (put 'erase-buffer 'disabled nil)
 
   (show-paren-mode 1)
+
+  ;; toggle global eldoc-mode
+  (global-eldoc-mode +1)
 #+END_SRC
 
 * Appearance
@@ -304,13 +307,10 @@ All packages and modes are configured here.
 
   (defun my/emacs-lisp-mode-defaults ()
     "Sensible defaults for `emacs-lisp-mode'."
-    (eldoc-mode +1)
-    (diminish 'eldoc-mode "")
     (my/recompile-elc-on-save)
     (smartparens-mode -1)
     (setq mode-name "EL")
     (prettify-symbols-mode +1)
-    (add-hook 'eval-expression-minibuffer-setup-hook 'eldoc-mode)
     (my/conditional-emacs-lisp-checker))
 
   (add-hook 'emacs-lisp-mode-hook 'my/emacs-lisp-mode-defaults)
@@ -318,8 +318,7 @@ All packages and modes are configured here.
   ;; ielm is an interactive Emacs Lisp shell
   (defun my/ielm-mode-defaults ()
     "Sensible defaults for `ielm'."
-    (whitespace-mode -1)
-    (eldoc-mode +1))
+    (whitespace-mode -1))
 
   (add-hook 'ielm-mode-hook 'my/ielm-mode-defaults)
 
@@ -1513,7 +1512,6 @@ based on a recursive-descent parser for regexp syntax.
               (lambda ()
                 (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
                   (ggtags-mode 1)
-                  (eldoc-mode +1)
                   (setq-local eldoc-documentation-function #'ggtags-eldoc-function)))))
 #+END_SRC
 
