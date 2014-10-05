@@ -21,3 +21,4 @@ session*
 tramp
 /packages/org-ref.el
 /packages/upload_bibtex_citeulike.py
+/packages/hindent.el
