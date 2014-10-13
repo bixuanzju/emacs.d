@@ -7,7 +7,7 @@ Title: $1
 
 Speaker: $2
 
-Data $ Time: `(format-time-string "%A,%e %B, %Y 2:00 pm" (current-time))`
+Data & Time: `(format-time-string "%A,%e %B, %Y 2:00 pm" (current-time))`
 
 Venue: CB $3
 

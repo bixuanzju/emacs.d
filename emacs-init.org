@@ -77,7 +77,6 @@ and byte-compile the =org=-document after changes asynchronously.
   (req-package async
     :config
     (require 'dired-async)
-    (require 'async-bytecomp)
     (defun my/init-hook ()
       "If the current buffer is 'emacs-init.org' the code-blocks
   are tangled, and the tangled file is compiled."
@@ -397,7 +396,7 @@ If you are not using it, you need to start.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package org
-    :idle
+    :init
     (require 'ox-md)
     (require 'ox-latex)
 
@@ -461,10 +460,11 @@ If you are not using it, you need to start.
              (sql . t)
              (latex . t))))
 
-    (org-require 'org-ref)
-    (setq org-ref-default-bibliography '("/Users/jeremybi/research/refs.bib")
-          org-ref-pdf-directory "/Users/jeremybi/research/papers/"
-          org-ref-bibliography-notes "/Users/jeremybi/research/notes.org"))
+    ;; (org-require 'org-ref)
+    ;; (setq org-ref-default-bibliography '("/Users/jeremybi/research/refs.bib")
+    ;;       org-ref-pdf-directory "/Users/jeremybi/research/papers/"
+    ;;       org-ref-bibliography-notes "/Users/jeremybi/research/notes.org")
+    )
 #+END_SRC
 
 [[https://github.com/jkitchin/jmax/blob/master/org-ref.org][Org-ref]] is an emacs-lisp module to handle bibliographic citations, and
@@ -543,13 +543,12 @@ Type =clear= to clear the buffer like in other terminal emulators.
     (defun my/haskell-mode-defaults ()
       (subword-mode +1)
       (turn-on-haskell-doc-mode)
-      (electric-indent-local-mode -1)
       (smartparens-mode -1)
       (flycheck-mode -1))
     (add-hook 'haskell-mode-hook
               'my/haskell-mode-defaults)
 
-    (add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template)
+    ;; (add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template)
 
     (setq haskell-tags-on-save t
           haskell-process-suggest-hoogle-imports t
@@ -568,7 +567,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
                 ("C-c C-v" . haskell-process-cabal-build)
                 ("C-c C-k" . haskell-interactive-mode-clear)
                 ("C-c c" . haskell-process-cabal)
-                ("SPC" . haskell-mode-contextual-space)
+                ;; ("SPC" . haskell-mode-contextual-space)
                 ("M-." . haskell-mode-jump-to-def-or-tag))
 
     ;; Cabal-mode bindings
@@ -603,8 +602,9 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
 *** Idris Mode
 
-#+begin_src emacs-lisp :tangle no
-  (req-package idris-mode)
+#+begin_src emacs-lisp :tangle yes
+  (req-package idris-mode
+    :require flycheck)
 #+end_src
 
 *** Lua Mode
@@ -961,8 +961,8 @@ Whitespace-mode configuration.
   (req-package-force whitespace
     :diminish (whitespace-mode . "")
     :config
-    (setq whitespace-line-column 80) ;; limit line length
-    (setq whitespace-style '(face tabs trailing lines-tail))
+    ;; (setq whitespace-line-column 80)
+    (setq whitespace-style '(face tabs trailing))
 
     (defun prelude-enable-whitespace ()
       "Enable `whitespace-mode' if `prelude-whitespace' is not nil."
@@ -1073,19 +1073,14 @@ Snippets are keys.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package yasnippet
-    :idle
-    (yas-global-mode 1)
-    :idle-priority 3
     :diminish (yas-minor-mode . "")
     :config
-    (setq yas-snippet-dirs '("~/.emacs.d/snippets/"))
     (add-to-list 'auto-mode-alist '("\\.yasnippet$" . snippet-mode))
     (setq yas-verbosity 1)
-    ;; No need to be so verbose
     (setq yas-wrap-around-region t)
-    ;; Wrap around region
     (setq-default yas/prompt-functions '(yas/ido-prompt))
-    (bind-key "<return>" 'yas-exit-all-snippets yas-keymap))
+    (bind-key "<return>" 'yas-exit-all-snippets yas-keymap)
+    (yas-global-mode 1))
 #+END_SRC
 
 *** Undo-Tree
@@ -1227,9 +1222,7 @@ A great syntax checker.
   (req-package flycheck
     :bind ("C-c L" . flycheck-list-errors)
     :init
-    (if (fboundp 'global-flycheck-mode)
-        (global-flycheck-mode +1)
-      (add-hook 'prog-mode-hook 'flycheck-mode))
+    (add-hook 'after-init-hook #'global-flycheck-mode)
     :config
     (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
     (setq flycheck-indication-mode 'left-fringe)
