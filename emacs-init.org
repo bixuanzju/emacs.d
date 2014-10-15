@@ -259,6 +259,12 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
     (key-chord-define-global "8u" "*")
     (key-chord-define-global "9i" "(")
     (key-chord-define-global "-p" "_")
+    ;; don't work in the minibuffer
+    (defun disable-key-chord-mode ()
+      (set (make-local-variable 'input-method-function) nil))
+
+    (add-hook 'minibuffer-setup-hook #'disable-key-chord-mode)
+
     (key-chord-mode +1))
 #+END_SRC
 
@@ -548,27 +554,26 @@ Type =clear= to clear the buffer like in other terminal emulators.
     (add-hook 'haskell-mode-hook
               'my/haskell-mode-defaults)
 
-    ;; (add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template)
+    (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
 
     (setq haskell-tags-on-save t
           haskell-process-suggest-hoogle-imports t
           haskell-process-suggest-remove-import-lines t
           haskell-process-auto-import-loaded-modules t
-          haskell-process-type 'cabal-repl
           haskell-interactive-types-for-show-ambiguous nil
           haskell-process-log t)
 
     ;; Haskell-mode bindings
-    (bind-keys :map haskell-mode-map
-                ("C-c C-l" . haskell-process-load-or-reload)
-                ("C-c C-z" . haskell-interactive-bring)
-                ("C-c C-t" . haskell-process-do-type)
-                ("C-c C-i" . haskell-process-do-info)
-                ("C-c C-v" . haskell-process-cabal-build)
-                ("C-c C-k" . haskell-interactive-mode-clear)
-                ("C-c c" . haskell-process-cabal)
-                ;; ("SPC" . haskell-mode-contextual-space)
-                ("M-." . haskell-mode-jump-to-def-or-tag))
+    ;; (bind-keys :map haskell-mode-map
+    ;;             ("C-c C-l" . haskell-process-load-or-reload)
+    ;;             ("C-c C-z" . haskell-interactive-bring)
+    ;;             ("C-c C-t" . haskell-process-do-type)
+    ;;             ("C-c C-i" . haskell-process-do-info)
+    ;;             ("C-c C-v" . haskell-process-cabal-build)
+    ;;             ("C-c C-k" . haskell-interactive-mode-clear)
+    ;;             ("C-c c" . haskell-process-cabal)
+    ;;             ;; ("SPC" . haskell-mode-contextual-space)
+    ;;             ("M-." . haskell-mode-jump-to-def-or-tag))
 
     ;; Cabal-mode bindings
     (eval-after-load 'haskell-cabal
@@ -681,7 +686,10 @@ file buffer.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package wgrep-ag
-    :require wgrep)
+    :require wgrep
+    :init
+    (autoload 'wgrep-ag-setup "wgrep-ag")
+    (add-hook 'ag-mode-hook 'wgrep-ag-setup))
 #+END_SRC
 
 *** Helm
@@ -697,18 +705,10 @@ files.
            ("C-h r" . helm-info-emacs))
     :config
     (require 'helm-config)
-    (require 'helm-grep)
     (require 'helm-files)
 
     (when (executable-find "curl")
       (setq helm-google-suggest-use-curl-p t))
-
-    (define-key helm-grep-mode-map (kbd "<return>")
-      'helm-grep-mode-jump-other-window)
-    (define-key helm-grep-mode-map (kbd "n")
-      'helm-grep-mode-jump-other-window-forward)
-    (define-key helm-grep-mode-map (kbd "p")
-      'helm-grep-mode-jump-other-window-backward)
 
     (setq helm-quick-update                     t
           helm-split-window-in-side-p           t
@@ -1078,7 +1078,7 @@ Snippets are keys.
     (add-to-list 'auto-mode-alist '("\\.yasnippet$" . snippet-mode))
     (setq yas-verbosity 1)
     (setq yas-wrap-around-region t)
-    (setq-default yas/prompt-functions '(yas/ido-prompt))
+    (setq-default yas-prompt-functions '(yas-ido-prompt))
     (bind-key "<return>" 'yas-exit-all-snippets yas-keymap)
     (yas-global-mode 1))
 #+END_SRC
