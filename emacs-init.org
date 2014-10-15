@@ -548,7 +548,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
     :config
     (defun my/haskell-mode-defaults ()
       (subword-mode +1)
-      (turn-on-haskell-doc-mode)
+      ;; (turn-on-haskell-doc-mode)
       (smartparens-mode -1)
       (flycheck-mode -1))
     (add-hook 'haskell-mode-hook
@@ -557,32 +557,11 @@ Type =clear= to clear the buffer like in other terminal emulators.
     (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
 
     (setq haskell-tags-on-save t
-          haskell-process-suggest-hoogle-imports t
-          haskell-process-suggest-remove-import-lines t
           haskell-process-auto-import-loaded-modules t
           haskell-interactive-types-for-show-ambiguous nil
           haskell-process-log t)
 
-    ;; Haskell-mode bindings
-    ;; (bind-keys :map haskell-mode-map
-    ;;             ("C-c C-l" . haskell-process-load-or-reload)
-    ;;             ("C-c C-z" . haskell-interactive-bring)
-    ;;             ("C-c C-t" . haskell-process-do-type)
-    ;;             ("C-c C-i" . haskell-process-do-info)
-    ;;             ("C-c C-v" . haskell-process-cabal-build)
-    ;;             ("C-c C-k" . haskell-interactive-mode-clear)
-    ;;             ("C-c c" . haskell-process-cabal)
-    ;;             ;; ("SPC" . haskell-mode-contextual-space)
-    ;;             ("M-." . haskell-mode-jump-to-def-or-tag))
-
-    ;; Cabal-mode bindings
-    (eval-after-load 'haskell-cabal
-      '(progn
-         (bind-keys :map haskell-cabal-mode-map
-                    ("C-c C-z" . haskell-interactive-bring)
-                    ("C-c C-k" . haskell-interactive-mode-clear)
-                    ("C-c C-c" . haskell-process-cabal-build)
-                    ("C-c c" . haskell-process-cabal)))))
+    (bind-key "M-," 'pop-tag-mark haskell-mode-map))
 #+END_SRC
 
 *** SML Mode
