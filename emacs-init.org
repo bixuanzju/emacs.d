@@ -554,14 +554,20 @@ Type =clear= to clear the buffer like in other terminal emulators.
     (add-hook 'haskell-mode-hook
               'my/haskell-mode-defaults)
 
-    (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+    (bind-keys :map haskell-mode-map
+               ("C-c C-l" . haskell-process-load-or-reload)
+               ("M-." . haskell-mode-jump-to-def-or-tag)
+               ("M-," . pop-tag-mark)
+               ("C-c C-k" . haskell-interactive-mode-clear)
+               ("C-c C-c" . haskell-process-cabal-build)
+               ("C-c C-x" . haskell-process-cabal)
+               ("C-c C-b" . haskell-interactive-switch)
+               ("C-c C-z" . haskell-interactive-switch))
 
     (setq haskell-tags-on-save t
           haskell-process-auto-import-loaded-modules t
           haskell-interactive-types-for-show-ambiguous nil
-          haskell-process-log t)
-
-    (bind-key "M-," 'pop-tag-mark haskell-mode-map))
+          haskell-process-log t))
 #+END_SRC
 
 *** SML Mode
@@ -1377,6 +1383,7 @@ Show matching and unmatched delimiters, and auto-close them as well.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package ghc
+    :require haskell-mode
     :config
     (autoload 'ghc-init "ghc" nil t)
     (autoload 'ghc-debug "ghc" nil t)
