@@ -978,17 +978,28 @@ Whitespace-mode configuration.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package projectile
     :diminish ""
-    :bind (("s-p" . projectile-switch-project)
-           ("s-d" . projectile-find-dir)
-           ("s-f" . projectile-find-file)
-           ("s-g" . projectile-ag))
+    :bind (("s-g" . projectile-ag))
     :config
     (setq projectile-cache-file
           (expand-file-name  "projectile.cache" savefile-dir)
           projectile-completion-system 'helm
           projectile-sort-order 'modification-time)
+    (setq helm-projectile-sources-list
+          '(helm-source-projectile-projects
+            helm-source-projectile-files-list))
     (projectile-global-mode t))
 #+END_SRC
+
+*** Helm-projectile
+
+#+begin_src emacs-lisp :tangle yes
+  (req-package helm-projectile
+    :bind (("s-p" . helm-projectile-switch-project)
+           ("s-f" . helm-projectile-find-file-dwim))
+    :config
+    (setq projectile-switch-project-action 'helm-projectile)
+    (helm-projectile-on))
+#+end_src
 
 *** Discover-my-major
 
