@@ -259,12 +259,6 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
     (key-chord-define-global "8u" "*")
     (key-chord-define-global "9i" "(")
     (key-chord-define-global "-p" "_")
-    ;; don't work in the minibuffer
-    (defun disable-key-chord-mode ()
-      (set (make-local-variable 'input-method-function) nil))
-
-    (add-hook 'minibuffer-setup-hook #'disable-key-chord-mode)
-
     (key-chord-mode +1))
 #+END_SRC
 
@@ -549,7 +543,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
     (defun my/haskell-mode-defaults ()
       (subword-mode +1)
       ;; (turn-on-haskell-doc-mode)
-      (smartparens-mode -1)
+      (turn-on-haskell-indentation)
       (flycheck-mode -1))
     (add-hook 'haskell-mode-hook
               'my/haskell-mode-defaults)
@@ -1396,7 +1390,7 @@ Show matching and unmatched delimiters, and auto-close them as well.
 [[https://github.com/chrisdone/structured-haskell-mode][Structured-haskell-mode]] is a minor mode providing structured editing
 operations based on the syntax of Haskell.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (req-package shm
     :config
     (add-hook 'haskell-mode-hook 'structured-haskell-mode)
