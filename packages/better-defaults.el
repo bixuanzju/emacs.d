@@ -225,6 +225,8 @@ This functions should be added to the hooks of major modes for programming."
   "Default coding hook, useful with any programming language."
   (eval-after-load "subword"
     '(diminish 'subword-mode))
+  (eval-after-load "eldoc"
+    '(diminish 'eldoc-mode))
   (prelude-local-comment-auto-fill)
   (prelude-font-lock-comment-annotations))
 

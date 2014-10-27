@@ -841,19 +841,22 @@ interface.
     (defvar my-timer-obj nil
       "For canceling if I cannot bear")
 
-    (defun start-my-timer (arg)
+    (defun start-my-timer ()
       "Timer for long time coding."
-      (interactive "p")
-      (cl-case arg
-        (4 (progn
-             (cancel-timer my-timer-obj)
-             (alert "Stop timing!" :title "Emacs")))
-        (t (progn
-             (if my-timer-obj (cancel-timer my-timer-obj))
-             (setq my-timer-obj
-                   (run-at-time "52 minutes" 2600
-                                (lambda () (alert "Stand up, stretch out!" :title "Stop Watering"))))
-             (alert "Start timing!" :title "Emacs"))))))
+      (if my-timer-obj (cancel-timer my-timer-obj))
+      (setq my-timer-obj
+            (run-at-time "42 minutes" 2600
+                         (lambda () (alert "Stand up, stretch out!" :title "Stop Watering"))))
+      ;; (alert "Start timing!" :title "Emacs")
+      )
+
+    (defun stop-my-timer ()
+      (if my-timer-obj (cancel-timer my-timer-obj))
+      ;; (alert "Stop timing!" :title "Emacs")
+      )
+
+    (add-hook 'focus-in-hook #'start-my-timer)
+    (add-hook 'focus-out-hook #'stop-my-timer))
 
 #+END_SRC
 
