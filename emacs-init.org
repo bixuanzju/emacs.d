@@ -27,7 +27,7 @@ centralized =Cask= file when you install or remove packages.
 ** Cask
 
 Cask is initialized in =init.el= with the following:
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (require 'cask "~/.cask/cask.el")
   (cask-initialize)
 #+END_SRC
@@ -565,11 +565,14 @@ Type =clear= to clear the buffer like in other terminal emulators.
                ("C-c C-x" . haskell-process-cabal)
                ("C-c C-b" . haskell-interactive-switch)
                ("C-c C-z" . haskell-interactive-switch))
-
     (setq haskell-tags-on-save t
           haskell-process-auto-import-loaded-modules t
           haskell-interactive-types-for-show-ambiguous nil
-          haskell-process-log t))
+          haskell-process-log t)
+
+    (require 'hindent)
+    (setq hindent-style "chris-done")
+    (define-key haskell-mode-map (kbd "C-c i") 'hindent/reformat-decl))
 #+END_SRC
 
 *** SML Mode
@@ -895,7 +898,7 @@ highlights parentheses, brackets, and braces according to their depth
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package rainbow-delimiters
     :config
-    (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+    (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 #+END_SRC
 
 *** Elisp-slime-nav
