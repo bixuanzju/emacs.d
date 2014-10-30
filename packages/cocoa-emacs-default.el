@@ -43,6 +43,10 @@
       mac-right-option-modifier 'none
       mac-right-command-modifier 'super)
 
+(global-set-key (kbd "M-`") 'ns-next-frame)
+(global-set-key (kbd "M-h") 'ns-do-hide-emacs)
+(global-set-key (kbd "M-'") 'ns-do-hide-others)
+
 (when (string= user-login-name "jeremybi")
   (setq display-time-world-list '(("Asia/Shanghai" "Shanghai")
                                   ("America/Vancouver" "Vancouver")))

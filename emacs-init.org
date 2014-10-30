@@ -38,6 +38,7 @@ You can download all packages in your =Cask= file by using =M-x
 pallet-install=. However, this should not be necessary.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (require 'pallet)
+  (pallet-mode t)
 #+END_SRC
 
 * Packages, Modes, and Extensions
@@ -760,18 +761,6 @@ setup when exiting.
     (fullframe ibuffer ibuffer-quit))
 #+END_SRC
 
-*** Ws-butler
-
-[[https://github.com/lewang/ws-butler][ws-butler]] is an unobtrusive way to trim spaces from end of line.
-
-#+begin_src emacs-lisp :tangle no
-  (req-package ws-butler
-    :diminish ((ws-butler-mode . "")
-               (highlight-changes-mode . ""))
-    :config
-    (ws-butler-global-mode))
-#+end_src
-
 *** Exec-path-from-shell
 
 A GNU Emacs library to setup environment variables from the user's
@@ -1011,7 +1000,7 @@ Whitespace-mode configuration.
     :bind (("s-p" . helm-projectile-switch-project)
            ("s-f" . helm-projectile-find-file-dwim))
     :config
-    (setq projectile-switch-project-action 'helm-projectile)
+    (setq projectile-switch-project-action 'helm-projectile-find-file)
     (helm-projectile-on))
 #+end_src
 
@@ -1116,18 +1105,6 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
     (add-hook 'cider-repl-mode-hook 'my/cider-repl-mode-defaults))
 #+end_src
 
-*** Clj-refactor
-
-#+begin_src emacs-lisp :tangle yes
-  (req-package clj-refactor
-    :config
-    (add-hook 'clojure-mode-hook
-              (lambda ()
-                (clj-refactor-mode 1)
-                ;; insert keybinding setup here
-                (cljr-add-keybindings-with-prefix "C-c C-m"))))
-#+end_src
-
 *** Clojure-cheatsheet
 
 #+begin_src emacs-lisp :tangle yes
@@ -1204,7 +1181,9 @@ Enable spell-checking in Emacs.
     (define-key flyspell-mouse-map [down-mouse-3] 'flyspell-correct-word)
     (define-key flyspell-mouse-map [mouse-3] 'undefined)
     (define-key flyspell-mode-map (kbd "C-M-i") nil)
-    (define-key flyspell-mode-map (kbd "C-;") nil))
+    (define-key flyspell-mode-map (kbd "C-;") nil)
+    ;; Work with auto-complete
+    (ac-flyspell-workaround))
 
 #+END_SRC
 
@@ -1312,12 +1291,11 @@ Open file in Finder
 [[https://github.com/hvesalai/sbt-mode][Sbt-mode]] is an emacs mode for interacting with sbt, scala console
 (aka REPL) and sbt projects.
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package sbt-mode
     :config
     (add-hook 'scala-mode-hook
               '(lambda ()
-                 (local-set-key (kbd "M-.") 'sbt-find-definitions)
                  (local-set-key (kbd "C-x '") 'sbt-run-previous-command)))
     (add-hook 'sbt-mode-hook
               '(lambda ()
@@ -1330,12 +1308,9 @@ Open file in Finder
 
 [[https://github.com/ensime/ensime-src][ENSIME]] is the ENhanced Scala Interaction Mode for Emacs.
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (req-package ensime
     :require scala-mode2
-    :init
-    (setq ensime-default-server-root
-          (expand-file-name "ensime-servers/" savefile-dir))
     :config
     (add-hook 'scala-mode-hook 'ensime-scala-mode-hook))
 #+END_SRC
@@ -1492,7 +1467,7 @@ based on a recursive-descent parser for regexp syntax.
       :title "Scala Project"
       :after-creation
       (lambda (dir)
-        (skeletor-async-shell-command dir "sbt \"ensime generate\" && sbt eclipse"))
+        (skeletor-async-shell-command dir "sbt \"gen-ensime\" && sbt eclipse"))
       :requires-executables
       '(("sbt" . "https://github.com/sbt/sbt"))))
 
