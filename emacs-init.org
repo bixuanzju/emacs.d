@@ -716,6 +716,16 @@ files.
     (helm-mode 1))
 #+END_SRC
 
+*** Elpy
+
+#+begin_src emacs-lisp :tangle yes
+  (req-package elpy
+    :config
+    (remove-hook 'elpy-modules 'elpy-module-flymake)
+    (remove-hook 'elpy-modules 'elpy-module-yasnippet)
+    (elpy-enable))
+#+end_src
+
 *** Helm-swoop
 
 [[https://github.com/ShingoFukuyama/helm-swoop][Helm-swoop]], efficiently hopping squeezed lines powered by Emacs
@@ -998,7 +1008,7 @@ Whitespace-mode configuration.
 #+begin_src emacs-lisp :tangle yes
   (req-package helm-projectile
     :bind (("s-p" . helm-projectile-switch-project)
-           ("s-f" . helm-projectile-find-file-dwim))
+           ("s-f" . helm-projectile-find-file))
     :config
     (setq projectile-switch-project-action 'helm-projectile-find-file)
     (helm-projectile-on))

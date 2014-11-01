@@ -31,6 +31,7 @@
 (depends-on "ebib")
 (depends-on "electric-spacing")
 (depends-on "elisp-slime-nav")
+(depends-on "elpy")
 (depends-on "ensime")
 (depends-on "epl")
 (depends-on "exec-path-from-shell")
