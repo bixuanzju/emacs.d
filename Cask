@@ -73,7 +73,6 @@
 (depends-on "magit")
 (depends-on "makey")
 (depends-on "markdown-mode")
-(depends-on "monky")
 (depends-on "move-text")
 (depends-on "multi-term")
 (depends-on "multiple-cursors")

@@ -598,7 +598,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
 *** Idris Mode
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
   (req-package idris-mode
     :require flycheck)
 #+end_src
@@ -658,17 +658,6 @@ Type =clear= to clear the buffer like in other terminal emulators.
     :commands magit-status
     :diminish (magit-auto-revert-mode ""))
 #+END_SRC
-
-*** Monky
-
-[[https://github.com/ananthakumaran/monky][Monky]] provides an interactive interface for Hg.
-
-#+begin_src emacs-lisp :tangle yes
-  (req-package monky
-    :bind ("C-x g" . monky-status)
-    :config
-    (setq monky-process-type 'cmdserver))
-#+end_src
 
 *** Wgrep
 
