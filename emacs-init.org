@@ -704,6 +704,15 @@ files.
     (helm-mode 1))
 #+END_SRC
 
+*** Pandoc-mode
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package pandoc-mode
+    :config
+    (add-hook 'markdown-mode-hook 'turn-on-pandoc)
+    (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
+#+end_src
+
 *** Elpy
 
 #+begin_src emacs-lisp :tangle yes
@@ -957,7 +966,7 @@ Whitespace-mode configuration.
 [[https://github.com/Wilfred/ag.el][Ag.el]] is a simple ag frontend, loosely based on ack-and-half.el.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (req-package ag
+  (use-package ag
     :config
     (setq ag-highlight-search t))
 #+END_SRC
@@ -996,28 +1005,6 @@ Whitespace-mode configuration.
   (use-package discover-my-major
     :config
     (bind-key "C-m" 'discover-my-major 'help-command))
-#+END_SRC
-
-*** Perspective
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package perspective
-    :config
-    (setq persp-show-modestring 'header)
-    (add-hook 'after-init-hook #'(lambda () (persp-mode 1)))
-    (defun custom-persp-last ()
-      "Switch to the last perspective."
-      (interactive)
-      (persp-switch (persp-name persp-last)))
-    ;; Easily switch to your last perspective
-    (define-key persp-mode-map (kbd "C-x x '") 'custom-persp-last))
-#+END_SRC
-
-*** Persp-projectile
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package persp-projectile)
-
 #+END_SRC
 
 *** Lispy
