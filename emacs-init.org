@@ -307,7 +307,6 @@ All packages and modes are configured here.
     "Sensible defaults for `emacs-lisp-mode'."
     (my/recompile-elc-on-save)
     (smartparens-mode -1)
-    (eldoc-mode +1)
     (prettify-symbols-mode +1)
     (my/conditional-emacs-lisp-checker))
 
@@ -316,7 +315,6 @@ All packages and modes are configured here.
   ;; ielm is an interactive Emacs Lisp shell
   (defun my/ielm-mode-defaults ()
     "Sensible defaults for `ielm'."
-    (eldoc-mode +1)
     (whitespace-mode -1))
 
   (add-hook 'ielm-mode-hook 'my/ielm-mode-defaults)
