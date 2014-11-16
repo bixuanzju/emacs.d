@@ -329,9 +329,16 @@ All packages and modes are configured here.
 *** Geiser/Scheme
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package geiser
+  ;; (use-package geiser
+  ;;   :config
+  ;;   (setq geiser-active-implementations '(racket)))
+
+  (use-package racket-mode
     :config
-    (setq geiser-active-implementations '(racket)))
+    (add-hook 'racket-mode-hook
+              '(lambda ()
+                 (define-key racket-mode-map (kbd "C-c C-l") 'racket-run)
+                 (define-key racket-mode-map (kbd "C-c C-k") 'racket-test))))
 
   (defun my/scheme-mode-defaults ()
     (push '("lambda" . 955) prettify-symbols-alist)
@@ -978,9 +985,6 @@ Whitespace-mode configuration.
           (expand-file-name  "projectile.cache" savefile-dir)
           projectile-completion-system 'helm
           projectile-sort-order 'modification-time)
-    (setq helm-projectile-sources-list
-          '(helm-source-projectile-projects
-            helm-source-projectile-files-list))
     (projectile-global-mode t))
 #+END_SRC
 
