@@ -83,6 +83,7 @@
 (depends-on "ox-pandoc")
 (depends-on "package-build")
 (depends-on "pallet")
+(depends-on "pandoc-mode")
 (depends-on "paredit")
 (depends-on "pcre2el")
 (depends-on "pkg-info")
