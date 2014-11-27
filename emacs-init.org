@@ -30,6 +30,10 @@ Cask is initialized in =init.el= with the following:
 #+BEGIN_SRC emacs-lisp :tangle yes
   (require 'cask "~/.cask/cask.el")
   (cask-initialize)
+
+  (ignore-errors
+    (setq package-pinned-packages '((ghc . "melpa-stable")
+                                    (magit . "melpa"))))
 #+END_SRC
 
 ** Pallet
