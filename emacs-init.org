@@ -898,20 +898,6 @@ highlights parentheses, brackets, and braces according to their depth
     (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 #+END_SRC
 
-*** Elisp-slime-nav
-
-[[https://github.com/purcell/elisp-slime-nav][Elisp-slime-nav]] allows very convenient navigation to the symbol at
-point (using =M-.=), and the ability to pop back to previous marks
-(using =M-,=).
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package elisp-slime-nav
-    :diminish (elisp-slime-nav-mode . "")
-    :config
-    (dolist (hook '(emacs-lisp-mode-hook ielm-mode-hook))
-      (add-hook hook 'elisp-slime-nav-mode)))
-#+END_SRC
-
 *** Operate-on-numbes
 
 #+BEGIN_SRC emacs-lisp :tangle yes
