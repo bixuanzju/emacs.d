@@ -579,11 +579,11 @@ Type =clear= to clear the buffer like in other terminal emulators.
     (setq haskell-tags-on-save t
           haskell-process-auto-import-loaded-modules t
           haskell-interactive-types-for-show-ambiguous nil
-          haskell-process-log t))
+          haskell-process-log t)
 
-    ;; (require 'hindent)
-    ;; (setq hindent-style "chris-done")
-    ;; (define-key haskell-mode-map (kbd "C-c i") 'hindent/reformat-decl))
+    (require 'hindent)
+    (setq hindent-style "chris-done")
+    (define-key haskell-mode-map (kbd "C-c i") 'hindent/reformat-decl))
 #+END_SRC
 
 *** SML Mode
