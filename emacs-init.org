@@ -311,7 +311,6 @@ All packages and modes are configured here.
     "Sensible defaults for `emacs-lisp-mode'."
     (my/recompile-elc-on-save)
     (smartparens-mode -1)
-    (prettify-symbols-mode +1)
     (my/conditional-emacs-lisp-checker))
 
   (add-hook 'emacs-lisp-mode-hook 'my/emacs-lisp-mode-defaults)
@@ -345,8 +344,6 @@ All packages and modes are configured here.
                  (define-key racket-mode-map (kbd "C-c C-k") 'racket-test))))
 
   (defun my/scheme-mode-defaults ()
-    (push '("lambda" . 955) prettify-symbols-alist)
-    (prettify-symbols-mode +1)
     (smartparens-mode -1))
 
   (add-hook 'scheme-mode-hook #'my/scheme-mode-defaults)
@@ -564,22 +561,31 @@ Type =clear= to clear the buffer like in other terminal emulators.
       ;; (turn-on-haskell-doc-mode)
       (turn-on-haskell-indentation)
       (flycheck-mode -1))
+
     (add-hook 'haskell-mode-hook
               'my/haskell-mode-defaults)
 
+    (advice-add 'haskell-mode-goto-loc :before #'my/record-mark)
+
     (bind-keys :map haskell-mode-map
                ("C-c C-l" . haskell-process-load-or-reload)
-               ("M-." . haskell-mode-jump-to-def-or-tag)
+               ("M-." . haskell-mode-goto-loc)
                ("M-," . pop-tag-mark)
                ("C-c C-k" . haskell-interactive-mode-clear)
                ("C-c C-c" . haskell-process-cabal-build)
                ("C-c C-x" . haskell-process-cabal)
                ("C-c C-b" . haskell-interactive-switch)
-               ("C-c C-z" . haskell-interactive-switch))
-    (setq haskell-tags-on-save t
-          haskell-process-auto-import-loaded-modules t
+               ("C-c C-z" . haskell-interactive-switch)
+               ("C-?" . haskell-mode-find-uses))
+
+    (setq haskell-process-auto-import-loaded-modules t
           haskell-interactive-types-for-show-ambiguous nil
           haskell-process-log t)
+
+    (setq haskell-process-args-cabal-repl
+          '("--ghc-option=-ferror-spans" "--with-ghc=ghci-ng"))
+
+    (setq haskell-process-path-ghci "ghci-ng")
 
     (require 'hindent)
     (setq hindent-style "chris-done")
@@ -712,6 +718,14 @@ files.
     (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
     (helm-mode 1))
 #+END_SRC
+
+*** Pretty-mode
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package pretty-mode
+    :config
+    (global-pretty-mode t))
+#+end_src
 
 *** Pandoc-mode
 
@@ -1405,14 +1419,7 @@ based on a recursive-descent parser for regexp syntax.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package skeletor
     :config
-    (skeletor-define-template "scala-project"
-      :title "Scala Project"
-      :after-creation
-      (lambda (dir)
-        (skeletor-async-shell-command dir "sbt \"gen-ensime\" && sbt eclipse"))
-      :requires-executables
-      '(("sbt" . "https://github.com/sbt/sbt"))))
-
+    (setq skeletor-scala-use-ensime t))
 #+END_SRC
 
 *** Paradox

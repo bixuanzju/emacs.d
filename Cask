@@ -93,6 +93,7 @@
 (depends-on "pkg-info")
 (depends-on "popup")
 (depends-on "popwin")
+(depends-on "pretty-mode")
 (depends-on "projectile")
 (depends-on "pyvenv")
 (depends-on "queue")
