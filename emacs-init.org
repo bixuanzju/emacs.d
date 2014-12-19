@@ -30,10 +30,6 @@ Cask is initialized in =init.el= with the following:
 #+BEGIN_SRC emacs-lisp :tangle yes
   (require 'cask "~/.cask/cask.el")
   (cask-initialize)
-
-  (ignore-errors
-    (setq package-pinned-packages '((ghc . "melpa-stable")
-                                    (magit . "melpa"))))
 #+END_SRC
 
 ** Pallet
@@ -513,7 +509,6 @@ favorite feature is that pressing =F= will open all marked files.
     (setq scala-indent:align-forms t
           scala-indent:align-parameters t)
     (defun my/scala-mode-hook-defaults ()
-      (company-mode -1)
       (subword-mode +1))
     (add-hook 'scala-mode-hook 'my/scala-mode-hook-defaults))
 #+END_SRC
@@ -562,8 +557,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
       (turn-on-haskell-indentation)
       (flycheck-mode -1))
 
-    (add-hook 'haskell-mode-hook
-              'my/haskell-mode-defaults)
+    (add-hook 'haskell-mode-hook 'my/haskell-mode-defaults)
 
     (advice-add 'haskell-mode-goto-loc :before #'my/record-mark)
 
@@ -574,9 +568,8 @@ Type =clear= to clear the buffer like in other terminal emulators.
                ("C-c C-k" . haskell-interactive-mode-clear)
                ("C-c C-c" . haskell-process-cabal-build)
                ("C-c C-x" . haskell-process-cabal)
-               ("C-c C-b" . haskell-interactive-switch)
                ("C-c C-z" . haskell-interactive-switch)
-               ("C-?" . haskell-mode-find-uses))
+               ("C-c C-u" . haskell-mode-find-uses))
 
     (setq haskell-process-auto-import-loaded-modules t
           haskell-interactive-types-for-show-ambiguous nil
@@ -670,6 +663,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package magit
+    :pin melpa
     :commands magit-status
     :diminish (magit-auto-revert-mode ""))
 #+END_SRC
@@ -1335,6 +1329,8 @@ Show matching and unmatched delimiters, and auto-close them as well.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ghc
+    :ensure t
+    :pin melpa-stable
     :config
     (autoload 'ghc-init "ghc" nil t)
     (autoload 'ghc-debug "ghc" nil t)
