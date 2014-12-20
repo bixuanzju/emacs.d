@@ -121,9 +121,9 @@ With a prefix ARG open line above the current line."
               (throw 'result path))))
     (org-babel-load-file path)))
 
-(defun my/record-mark ()
-  (deactivate-mark)
-  (ring-insert find-tag-marker-ring (point-marker)))
+;; (defun my/record-mark ()
+;;   (deactivate-mark)
+;;   (ring-insert find-tag-marker-ring (point-marker)))
 
 (provide 'elisp)
 

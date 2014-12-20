@@ -559,7 +559,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
     (add-hook 'haskell-mode-hook 'my/haskell-mode-defaults)
 
-    (advice-add 'haskell-mode-goto-loc :before #'my/record-mark)
+    ;; (advice-add 'haskell-mode-goto-loc :before #'my/record-mark)
 
     (bind-keys :map haskell-mode-map
                ("C-c C-l" . haskell-process-load-or-reload)
@@ -1284,7 +1284,7 @@ source code identifier uniquely based on its name.
 
 [[https://github.com/joostkremers/ebib][Ebib]] is a BibTeX database manager that runs in GNU Emacs.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package ebib
     :config
     (setq ebib-preload-bib-files (quote ("~/research/refs.bib")))
