@@ -16,6 +16,7 @@
 (depends-on "browse-kill-ring")
 (depends-on "cask")
 (depends-on "cdlatex")
+(depends-on "chinese-fonts-setup")
 (depends-on "cider")
 (depends-on "clojure-cheatsheet")
 (depends-on "clojure-mode")

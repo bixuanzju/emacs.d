@@ -53,8 +53,7 @@
   ;; Use GNU ls - install with:
   (setq insert-directory-program "/usr/local/opt/coreutils/libexec/gnubin/ls")
   ;; ProofGeneral
-  (load-file "/usr/local/share/emacs/site-lisp/ProofGeneral/generic/proof-site.el")
-
+  (load-file "/Users/jeremybi/scratch/ProofGeneral/ProofGeneral/generic/proof-site.el")
 
   ;; Agda mode setup
 
