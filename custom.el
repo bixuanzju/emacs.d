@@ -39,7 +39,7 @@ Only modes that don't derive from `prog-mode' should be listed here.")
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(cfs--current-profile-name "profile1" t)
- '(cfs--profiles-fontsizes (quote (16 12.5 12.5)) t)
+ '(cfs--profiles-fontsizes (quote (18 12.5 12.5)) t)
  '(column-number-mode t)
  '(history-length 1000)
  '(indicate-empty-lines t)

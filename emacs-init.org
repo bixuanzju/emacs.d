@@ -566,7 +566,6 @@ Type =clear= to clear the buffer like in other terminal emulators.
                ("M-." . haskell-mode-goto-loc)
                ("M-," . pop-tag-mark)
                ("C-c C-k" . haskell-interactive-mode-clear)
-               ("C-c C-c" . haskell-process-cabal-build)
                ("C-c C-x" . haskell-process-cabal)
                ("C-c C-z" . haskell-interactive-switch)
                ("C-c C-u" . haskell-mode-find-uses))
@@ -831,7 +830,7 @@ single keybind.
 [[https://github.com/jwiegley/alert][Alert]] is a Growl-workalike for Emacs which uses a common notification
 interface.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package alert
     :config
     (setq terminal-notifier-command (executable-find "terminal-notifier"))
@@ -931,7 +930,7 @@ keep pressing the key until it selects what you want.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package expand-region
-    :bind ("C-=" . er/expand-region))
+    :bind ("M-2" . er/expand-region))
 #+END_SRC
 
 *** Whitespace
