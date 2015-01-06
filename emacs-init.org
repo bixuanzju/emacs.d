@@ -210,8 +210,8 @@ Set custom theme path and load theme
   (bind-key "C-x \\" 'align-regexp)
 
   ;; Font size
-  (bind-key "C-+" 'text-scale-increase)
-  (bind-key "C--" 'text-scale-decrease)
+  ;; (bind-key "C-+" 'text-scale-increase)
+  ;; (bind-key "C--" 'text-scale-decrease)
 
   ;; Indentation help
   (bind-key "C-^" 'prelude-top-join-line)

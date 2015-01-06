@@ -33,19 +33,15 @@
 
 (setq delete-by-moving-to-trash t
       trash-directory "~/.Trash")
-(bind-key "M-ƒ" 'toggle-frame-fullscreen)
+;; (bind-key "M-ƒ" 'toggle-frame-fullscreen)
 
-(setq-default locate-command "mdfind")
-(setq ns-pop-up-frames nil ; Don't pop up new frames from the workspace
-      mac-option-modifier 'meta
-      mac-command-modifier 'meta
-      mac-function-modifier 'hyper
-      mac-right-option-modifier 'none
-      mac-right-command-modifier 'super)
+;; (setq-default locate-command "mdfind")
+(setq mac-right-command-modifier 'super)
 
-(global-set-key (kbd "M-`") 'ns-next-frame)
-(global-set-key (kbd "M-h") 'ns-do-hide-emacs)
-(global-set-key (kbd "M-'") 'ns-do-hide-others)
+
+;; (global-set-key (kbd "M-`") 'ns-next-frame)
+;; (global-set-key (kbd "M-h") 'ns-do-hide-emacs)
+;; (global-set-key (kbd "M-'") 'ns-do-hide-others)
 
 (when (string= user-login-name "jeremybi")
   (setq display-time-world-list '(("Asia/Shanghai" "Shanghai")
