@@ -125,6 +125,87 @@ With a prefix ARG open line above the current line."
 ;;   (deactivate-mark)
 ;;   (ring-insert find-tag-marker-ring (point-marker)))
 
+(defun goto-line-with-feedback ()
+  "Show line numbers temporarily, while prompting for the line
+  number input."
+  (interactive)
+  (unwind-protect
+      (progn
+        (linum-mode 1)
+        (call-interactively 'goto-line))
+    (linum-mode -1)))
+
+(defun narrow-or-widen-dwim (p)
+  "If the buffer is narrowed, it widens. Otherwise, it narrows intelligently.
+Intelligently means: region, org-src-block, org-subtree, or defun,
+whichever applies first.
+Narrowing to org-src-block actually calls `org-edit-src-code'.
+
+With prefix P, don't widen, just narrow even if buffer is already
+narrowed."
+  (interactive "P")
+  (declare (interactive-only))
+  (cond ((and (buffer-narrowed-p) (not p)) (widen))
+        ((region-active-p)
+         (narrow-to-region (region-beginning) (region-end)))
+        ((derived-mode-p 'org-mode)
+         ;; `org-edit-src-code' is not a real narrowing command.
+         ;; Remove this first conditional if you don't want it.
+         (cond ((ignore-errors (org-edit-src-code))
+                (delete-other-windows))
+               ((org-at-block-p)
+                (org-narrow-to-block))
+               (t (org-narrow-to-subtree))))
+        (t (narrow-to-defun))))
+
+(define-key endless/toggle-map "n" #'narrow-or-widen-dwim)
+
+(defun prelude-get-positions-of-line-or-region ()
+  "Return positions (beg . end) of the current line or region."
+  (let (beg end)
+    (if (and mark-active (> (point) (mark)))
+        (exchange-point-and-mark))
+    (setq beg (line-beginning-position))
+    (if mark-active
+        (exchange-point-and-mark))
+    (setq end (line-end-position))
+    (cons beg end)))
+
+(defun duplicate-comment-current-line-or-region (arg)
+  "Duplicates and/or comments the current line. If there's no
+region, the current line will be duplicated.  However, if there's
+a region, all lines that region covers will be duplicated."
+  (interactive "P")
+  (pcase-let* ((origin (- (point) (line-beginning-position)))
+               (`(,beg . ,end) (prelude-get-positions-of-line-or-region))
+               (region (buffer-substring-no-properties beg end)))
+    (if arg
+        (comment-or-uncomment-region beg end))
+    (setq end (line-end-position))
+    (goto-char end)
+    (newline)
+    (insert region)
+    (goto-char (+ (line-beginning-position) origin))))
+
+(defun prelude-cleanup-buffer-or-region ()
+  "Cleanup a region if selected, otherwise the whole buffer."
+  (interactive)
+  (call-interactively 'untabify)
+  (unless (member major-mode prelude-indent-sensitive-modes)
+    (call-interactively 'indent-region))
+  (whitespace-cleanup))
+
+(defun prelude-kill-other-buffers ()
+  "Kill all buffers but the current one.
+  Doesn't mess with special buffers."
+  (interactive)
+  (-each
+      (->> (buffer-list)
+        (-filter #'buffer-file-name)
+        (--remove (eql (current-buffer) it)))
+    #'kill-buffer)
+  (message "Done"))
+
 (provide 'elisp)
 
 
