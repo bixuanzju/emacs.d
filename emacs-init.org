@@ -52,6 +52,7 @@ configurations.
 Start using =use-package=
 #+BEGIN_SRC emacs-lisp :tangle yes
   (require 'use-package)
+  (setq use-package-verbose t)
 #+END_SRC
 * Meta
 
@@ -117,6 +118,7 @@ Set custom theme path and load theme
            ("C-c k" . prelude-kill-other-buffers)
            ("C-c n" . prelude-cleanup-buffer-or-region)
            ("C-c d" . duplicate-comment-current-line-or-region)
+           ("C-x b" . prelude-switch-to-previous-buffer)
            ("C-M-h" . backward-kill-word)
            ("C-^" . prelude-top-join-line)
            ("C-x \\" . align-regexp)
@@ -143,7 +145,6 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
     :ensure t
     :config
     (setq key-chord-two-keys-delay 0.05)
-    (key-chord-define-global "jl" 'prelude-switch-to-previous-buffer)
     (key-chord-define-global "x1" 'delete-other-windows)
     (key-chord-define-global "xk" 'ace-window)
     (key-chord-define-global "0o" 'delete-window)
@@ -378,7 +379,8 @@ If you are not using it, you need to start.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package org
-    :init
+    :defer t
+    :config
     (require 'ox-md)
     (require 'ox-latex)
 
@@ -527,6 +529,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package cc-mode
+    :defer t
     :init
     (add-hook 'java-mode-hook (lambda ()
                                 (setq c-basic-offset 2))))
@@ -701,7 +704,7 @@ files.
 
     ;; shell history.
     (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
-    (helm-mode 1))
+    :idle (helm-mode 1))
 #+END_SRC
 
 *** Pretty-mode
@@ -709,8 +712,7 @@ files.
 #+begin_src emacs-lisp :tangle yes
   (use-package pretty-mode
     :ensure t
-    :config
-    (global-pretty-mode t))
+    :idle (global-pretty-mode t))
 #+end_src
 
 *** Pandoc-mode
@@ -767,9 +769,9 @@ with helm.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package helm-descbinds
+    :defer t
     :ensure t
-    :config
-    (helm-descbinds-mode 1))
+    :idle (helm-descbinds-mode 1))
 #+END_SRC
 
 *** Fullframe
@@ -1016,6 +1018,7 @@ Whitespace-mode configuration.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package helm-ag
+    :defer t
     :ensure t)
 #+end_src
 
@@ -1034,6 +1037,7 @@ Lisp code.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package lispy
+    :defer t
     :ensure t
     :init
     (dolist (hook '(emacs-lisp-mode-hook
@@ -1066,7 +1070,7 @@ Snippets are keys.
     (setq yas-wrap-around-region t)
     (setq-default yas-prompt-functions '(yas-ido-prompt))
     (bind-key "<return>" 'yas-exit-all-snippets yas-keymap)
-    (yas-global-mode 1))
+    :idle (yas-global-mode 1))
 #+END_SRC
 
 *** Undo-Tree
@@ -1085,6 +1089,7 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package cider
+    :defer t
     :ensure t
     :config
     (setq nrepl-log-messages t)
@@ -1092,7 +1097,7 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
     (setq cider-repl-use-clojure-font-lock t)
     (setq cider-repl-result-prefix ";; => ")
     (setq cider-interactive-eval-result-prefix ";; => ")
-    (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+    (add-hook 'cider-mode-hook 'eldoc-mode)
     (defun my/cider-repl-mode-defaults ()
       (subword-mode +1)
       (smartparens-strict-mode +1))
@@ -1107,8 +1112,8 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package company
     :ensure t
-    :idle
-    (global-company-mode)
+    :defer t
+    :idle (global-company-mode)
     :bind ("C-c y" . company-yasnippet)
     :diminish (company-mode . "")
     :config
