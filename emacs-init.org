@@ -52,7 +52,6 @@ configurations.
 Start using =use-package=
 #+BEGIN_SRC emacs-lisp :tangle yes
   (require 'use-package)
-  (setq use-package-verbose t)
 #+END_SRC
 * Meta
 
