@@ -3,6 +3,7 @@
 (source melpa-stable)
 (source org)
 
+(depends-on "ace-isearch")
 (depends-on "ace-jump-mode")
 (depends-on "ace-link")
 (depends-on "ace-window")

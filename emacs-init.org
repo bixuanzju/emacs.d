@@ -118,20 +118,17 @@ Set custom theme path and load theme
            ("C-c n" . prelude-cleanup-buffer-or-region)
            ("C-c d" . duplicate-comment-current-line-or-region)
            ("C-x b" . prelude-switch-to-previous-buffer)
-           ("C-M-h" . backward-kill-word)
            ("C-^" . prelude-top-join-line)
            ("C-x \\" . align-regexp)
            ([remap move-beginning-of-line] . prelude-move-beginning-of-line)
            ([remap kill-whole-line] . prelude-kill-whole-line)
-           ([(control shift return)] . prelude-smart-open-line-above)))
+           ([(control shift return)] . prelude-smart-open-line-above))
+    :bind* (("C-M-h" . backward-kill-word)))
 
-  ;; A complementary binding to the apropos-command (C-h a)
-  (define-key 'help-command "A" 'apropos)
-
-  (bind-key "C-f" 'find-function 'help-command)
-  (bind-key "C-k" 'find-function-on-key 'help-command)
-  (bind-key "C-v" 'find-variable 'help-command)
-  (bind-key "C-l" 'find-library 'help-command)
+  ;; (bind-key "C-f" 'find-function 'help-command)
+  ;; (bind-key "C-k" 'find-function-on-key 'help-command)
+  ;; (bind-key "C-v" 'find-variable 'help-command)
+  ;; (bind-key "C-l" 'find-library 'help-command)
 
 #+END_SRC
 
@@ -683,7 +680,8 @@ files.
     :ensure t
     :bind (("C-x C-f" . helm-find-files)
            ("M-y" . helm-show-kill-ring)
-           ("C-h r" . helm-info-emacs))
+           ("C-h r" . helm-info-emacs)
+           ("C-h a" . helm-apropos))
     :config
     (require 'helm-config)
     (require 'helm-files)
@@ -832,7 +830,6 @@ single keybind.
     (setq ace-jump-mode-move-keys
         '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?q ?w ?e ?r ?t ?y ?u ?i ?o ?p ?z ?x ?c ?v ?b ?n ?m)))
 #+END_SRC
-
 *** Alert
 
 [[https://github.com/jwiegley/alert][Alert]] is a Growl-workalike for Emacs which uses a common notification
@@ -877,6 +874,16 @@ interface.
     (add-hook 'focus-out-hook #'stop-my-timer))
 
 #+END_SRC
+
+*** Ace-isearch
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package ace-isearch
+    :ensure t
+    :config
+    (setq ace-isearch-use-ace-jump 'printing-char)
+    (global-ace-isearch-mode +1))
+#+end_src
 
 *** Ace-window
 
