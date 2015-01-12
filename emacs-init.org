@@ -120,7 +120,8 @@ Set custom theme path and load theme
            ("C-x b" . prelude-switch-to-previous-buffer)
            ("C-^" . prelude-top-join-line)
            ("C-x \\" . align-regexp)
-           ([remap move-beginning-of-line] . prelude-move-beginning-of-line)
+           ("C-S-n" . my/forward-line-by-many)
+           ("C-S-p" . my/backward-line-by-many)
            ([remap kill-whole-line] . prelude-kill-whole-line)
            ([(control shift return)] . prelude-smart-open-line-above))
     :bind* (("C-M-h" . backward-kill-word)))
@@ -560,12 +561,18 @@ Type =clear= to clear the buffer like in other terminal emulators.
     (setq haskell-process-args-cabal-repl
           '("--ghc-option=-ferror-spans" "--with-ghc=ghci-ng"))
 
-    (setq haskell-process-path-ghci "ghci-ng")
-
-    (require 'hindent)
-    (setq hindent-style "chris-done")
-    (define-key haskell-mode-map (kbd "C-c i") 'hindent/reformat-decl))
+    (setq haskell-process-path-ghci "ghci-ng"))
 #+END_SRC
+
+*** hindent
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package hindent
+    :ensure t
+    :config
+    (setq hindent-style "chris-done")
+    (bind-key "C-c i" 'hindent/reformat-decl haskell-mode-map))
+#+end_src
 
 *** SML Mode
 
@@ -723,7 +730,7 @@ files.
 #+end_src
 *** Elpy
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package elpy
     :ensure t
     :config
@@ -731,12 +738,21 @@ files.
     (remove-hook 'elpy-modules 'elpy-module-yasnippet)
     (elpy-enable))
 #+end_src
-
 *** Chinese-font-setup
 
 #+begin_src emacs-lisp :tangle yes
   (use-package chinese-fonts-setup
     :ensure t)
+#+end_src
+
+*** mwim
+
+Move to the beginning/end of line or code
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package mwim
+    :bind (("C-a" . mwim-beginning-of-code-or-line)
+           ("C-e" . mwim-end-of-code-or-line)))
 #+end_src
 
 *** Helm-swoop
@@ -803,7 +819,7 @@ shell.
 [[https://github.com/yuutayamada/mykie-el][Mykie]] is a command multiplexer, which can add other functions to a
 single keybind.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package mykie
     :ensure t
     :config
