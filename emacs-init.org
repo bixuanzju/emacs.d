@@ -496,7 +496,6 @@ favorite feature is that pressing =F= will open all marked files.
       (subword-mode +1))
     (add-hook 'scala-mode-hook 'my/scala-mode-hook-defaults))
 #+END_SRC
-
 *** Markdown
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -504,6 +503,13 @@ favorite feature is that pressing =F= will open all marked files.
     :ensure t
     :mode "\\.md\\'")
 #+END_SRC
+
+*** F2j-mode
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package f2j-mode
+    :load-path "packages/")
+#+end_src
 
 *** Eshell
 
@@ -563,16 +569,6 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
     (setq haskell-process-path-ghci "ghci-ng"))
 #+END_SRC
-
-*** hindent
-
-#+begin_src emacs-lisp :tangle yes
-  (use-package hindent
-    :ensure t
-    :config
-    (setq hindent-style "chris-done")
-    (bind-key "C-c i" 'hindent/reformat-decl haskell-mode-map))
-#+end_src
 
 *** SML Mode
 
@@ -663,6 +659,16 @@ Type =clear= to clear the buffer like in other terminal emulators.
     :diminish (magit-auto-revert-mode ""))
 #+END_SRC
 
+*** hindent
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package hindent
+    :ensure t
+    :config
+    (setq hindent-style "gibiansky")
+    (add-hook 'haskell-mode-hook #'hindent-mode))
+#+end_src
+
 *** Wgrep
 
 [[https://github.com/mhayashi1120/Emacs-wgrep][Wgrep]] allows you to edit a grep buffer and apply those changes to the
@@ -675,7 +681,6 @@ file buffer.
     (autoload 'wgrep-ag-setup "wgrep-ag")
     (add-hook 'ag-mode-hook 'wgrep-ag-setup))
 #+END_SRC
-
 *** Helm
 
 =helm-mini= is a part of [[https://github.com/emacs-helm/helm][Helm]] that shows current buffers and a list of
@@ -707,9 +712,18 @@ files.
     (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history)
 
     ;; shell history.
-    (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
-    :idle (helm-mode 1))
+    (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring))
 #+END_SRC
+
+*** Paradox
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package paradox
+    :ensure t
+    :config
+    (setq paradox-github-token t)
+    (setq paradox-execute-asynchronously t))
+#+end_src
 
 *** Pretty-mode
 
@@ -1383,7 +1397,7 @@ Show matching and unmatched delimiters, and auto-close them as well.
 
 *** GHC
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ghc
     :ensure t
     :pin melpa-stable
