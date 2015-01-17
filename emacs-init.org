@@ -709,10 +709,12 @@ files.
           helm-ff-file-name-history-use-recentf t)
 
     ;; show minibuffer history with Helm
-    (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history)
+    (bind-key "C-c C-l" 'helm-minibuffer-history minibuffer-local-map)
 
     ;; shell history.
-    (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring))
+    (bind-key "C-c C-l" 'helm-comint-input-ring shell-mode-map)
+
+    (helm-mode +1))
 #+END_SRC
 
 *** Paradox
@@ -1150,7 +1152,6 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
     :ensure t
     :defer t
     :idle (global-company-mode)
-    :bind ("C-c y" . company-yasnippet)
     :diminish (company-mode . "")
     :config
     (setq company-tooltip-align-annotations t)
