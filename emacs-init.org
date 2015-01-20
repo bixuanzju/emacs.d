@@ -658,7 +658,6 @@ Type =clear= to clear the buffer like in other terminal emulators.
     :commands magit-status
     :diminish (magit-auto-revert-mode ""))
 #+END_SRC
-
 *** hindent
 
 #+begin_src emacs-lisp :tangle yes
@@ -667,6 +666,12 @@ Type =clear= to clear the buffer like in other terminal emulators.
     :config
     (setq hindent-style "gibiansky")
     (add-hook 'haskell-mode-hook #'hindent-mode))
+#+end_src
+
+*** quickrun
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package quickrun :ensure t)
 #+end_src
 
 *** Wgrep
@@ -719,7 +724,7 @@ files.
 
 *** Paradox
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package paradox
     :ensure t
     :config
