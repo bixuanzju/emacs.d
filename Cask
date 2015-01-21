@@ -65,6 +65,7 @@
 (depends-on "hindent")
 (depends-on "ht")
 (depends-on "htmlize")
+(depends-on "hydra")
 (depends-on "ido-ubiquitous")
 (depends-on "ido-vertical-mode")
 (depends-on "idomenu")

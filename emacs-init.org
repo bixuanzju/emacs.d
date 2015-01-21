@@ -721,6 +721,16 @@ files.
 
     (helm-mode +1))
 #+END_SRC
+*** Hydra
+
+[[https://github.com/abo-abo/hydra][Hydra]] make Emacs bindings that stick around.
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package hydra-examples
+    :ensure hydra
+    :config
+    (hydra-create "C-S-o" hydra-example-move-window-splitter))
+#+end_src
 
 *** Paradox
 
