@@ -729,7 +729,9 @@ files.
   (use-package hydra-examples
     :ensure hydra
     :config
-    (hydra-create "C-S-o" hydra-example-move-window-splitter))
+    (hydra-create "C-S-o" hydra-example-move-window-splitter)
+    (hydra-create "C-M-o" hydra-example-text-scale)
+    (hydra-create "M-g" hydra-example-goto-error))
 #+end_src
 
 *** Paradox
