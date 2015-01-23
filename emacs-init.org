@@ -552,13 +552,11 @@ Type =clear= to clear the buffer like in other terminal emulators.
     (add-hook 'haskell-mode-hook 'my/haskell-mode-defaults)
     (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
 
-    ;; (advice-add 'haskell-mode-goto-loc :before #'my/record-mark)
     (require 'haskell)
     (bind-keys :map interactive-haskell-mode-map
                ("M-." . haskell-mode-goto-loc)
                ("M-," . pop-tag-mark)
-               ("C-c C-t" . haskell-mode-show-type-at)
-               ("C-c C-u" . haskell-mode-find-uses))
+               ("C-c C-t" . ghc-show-type))
 
     (setq haskell-process-auto-import-loaded-modules t
           haskell-interactive-types-for-show-ambiguous nil
@@ -729,9 +727,18 @@ files.
   (use-package hydra-examples
     :ensure hydra
     :config
-    (hydra-create "C-S-o" hydra-example-move-window-splitter)
-    (hydra-create "C-M-o" hydra-example-text-scale)
-    (hydra-create "M-g" hydra-example-goto-error))
+    (hydra-create "C-S-o"
+      '(("h" hydra-move-splitter-left)
+        ("j" hydra-move-splitter-down)
+        ("k" hydra-move-splitter-up)
+        ("l" hydra-move-splitter-right)))
+    (hydra-create "C-M-o"
+      '(("g" text-scale-increase "zoom in")
+        ("l" text-scale-decrease "zoom out")))
+    (hydra-create "M-g"
+      '(("h" first-error "first")
+        ("j" next-error "next")
+        ("k" previous-error "prev"))))
 #+end_src
 
 *** Paradox
@@ -759,6 +766,7 @@ files.
     :ensure t
     :config
     (add-hook 'markdown-mode-hook 'pandoc-mode)
+    (add-hook 'org-mode-hook 'pandoc-mode)
     (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
 #+end_src
 *** Elpy
@@ -1137,6 +1145,10 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
     :ensure t
     :diminish (undo-tree-mode . "")
     :config
+    ;; autosave the undo-tree history
+    (setq undo-tree-history-directory-alist
+          `((".*" . ,temporary-file-directory)))
+    (setq undo-tree-auto-save-history t)
     (global-undo-tree-mode 1))
 #+END_SRC
 
