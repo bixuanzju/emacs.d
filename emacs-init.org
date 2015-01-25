@@ -973,7 +973,7 @@ represent as their background.
 [[https://github.com/jlr/rainbow-delimiters][Rainbow Delimiters]] is a “rainbow parentheses”-like mode which
 highlights parentheses, brackets, and braces according to their depth
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package rainbow-delimiters
     :ensure t
     :config
