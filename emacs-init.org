@@ -727,18 +727,25 @@ files.
   (use-package hydra-examples
     :ensure hydra
     :config
-    (hydra-create "C-S-o"
-      '(("h" hydra-move-splitter-left)
-        ("j" hydra-move-splitter-down)
-        ("k" hydra-move-splitter-up)
-        ("l" hydra-move-splitter-right)))
-    (hydra-create "C-M-o"
-      '(("g" text-scale-increase "zoom in")
-        ("l" text-scale-decrease "zoom out")))
-    (hydra-create "M-g"
-      '(("h" first-error "first")
-        ("j" next-error "next")
-        ("k" previous-error "prev"))))
+    (defhydra hydra-move (global-map "C-S-o")
+      "move"
+      ("h" hydra-move-splitter-left)
+      ("j" hydra-move-splitter-down)
+      ("k" hydra-move-splitter-up)
+      ("l" hydra-move-splitter-right))
+    (key-chord-define-global
+     "tt"
+     (defhydra hydra-zoom ()
+       "zoom"
+       ("j" text-scale-increase "in")
+       ("k" text-scale-decrease "out")))
+    (key-chord-define-global
+     "hh"
+     (defhydra hydra-error ()
+       "goto-error"
+       ("h" first-error "first")
+       ("j" next-error "next")
+       ("k" previous-error "prev"))))
 #+end_src
 
 *** Paradox
@@ -939,6 +946,7 @@ interface.
     :ensure t
     :config
     (setq ace-isearch-use-ace-jump 'printing-char)
+    (setq ace-isearch-input-idle-delay 0.8)
     (global-ace-isearch-mode +1))
 #+end_src
 
@@ -1170,7 +1178,6 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
       (smartparens-strict-mode +1))
     (add-hook 'cider-repl-mode-hook 'my/cider-repl-mode-defaults))
 #+end_src
-
 *** Company
 
 [[https://github.com/company-mode/company-mode][Company]] is a code completion framework for Emacs. The name stands for
