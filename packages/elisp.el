@@ -135,7 +135,7 @@ narrowed."
                (t (org-narrow-to-subtree))))
         (t (narrow-to-defun))))
 
-(define-key endless/toggle-map "n" #'narrow-or-widen-dwim)
+;; (define-key endless/toggle-map "n" #'narrow-or-widen-dwim)
 
 (defun prelude-get-positions-of-line-or-region ()
   "Return positions (beg . end) of the current line or region."

@@ -727,20 +727,35 @@ files.
   (use-package hydra-examples
     :ensure hydra
     :config
-    (defhydra hydra-move (global-map "C-S-o")
-      "move"
-      ("h" hydra-move-splitter-left)
-      ("j" hydra-move-splitter-down)
-      ("k" hydra-move-splitter-up)
-      ("l" hydra-move-splitter-right))
+    (global-set-key
+     (kbd "C-S-o")
+     (defhydra hydra-move ()
+       "move"
+       ("h" hydra-move-splitter-left)
+       ("j" hydra-move-splitter-down)
+       ("k" hydra-move-splitter-up)
+       ("l" hydra-move-splitter-right)))
+
+    (global-set-key
+     (kbd "C-x t")
+     (defhydra toggle (:color blue)
+       "toggle"
+       ("a" abbrev-mode "abbrev")
+       ("d" toggle-debug-on-error "debug")
+       ("f" auto-fill-mode "fill")
+       ("t" toggle-truncate-lines "truncate")
+       ("w" whitespace-mode "whitespace")
+       ("q" nil "cancel")))
+
     (key-chord-define-global
      "tt"
      (defhydra hydra-zoom ()
        "zoom"
        ("j" text-scale-increase "in")
        ("k" text-scale-decrease "out")))
+
     (key-chord-define-global
-     "hh"
+     "ee"
      (defhydra hydra-error ()
        "goto-error"
        ("h" first-error "first")
@@ -2713,7 +2728,7 @@ Idea borrowed from [[http://endlessparentheses.com/ispell-and-abbrev-the-perfect
 
 *** The Toggle-map
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (define-prefix-command 'endless/toggle-map)
   ;; The manual recommends C-c for user keys, but C-x t is
   ;; always free, whereas C-c t is used by some modes.
