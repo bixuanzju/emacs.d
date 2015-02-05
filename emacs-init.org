@@ -108,8 +108,7 @@ Set custom theme path and load theme
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package elisp
     :load-path "packages/"
-    :bind (([remap goto-line] . goto-line-with-feedback)
-           ("M-/" . hippie-expand)
+    :bind (("M-/" . hippie-expand)
            ("C-x C-b" . ibuffer)
            ("C-:" . eval-expression)
            ("M-SPC" . cycle-spacing)
@@ -148,16 +147,16 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
     (key-chord-define-global "xn" 'helm-mini)
     (key-chord-define-global "jk" 'magit-status)
     (key-chord-define-global "xm" 'helm-M-x)
-    (key-chord-define-global "1q" "!")
-    (key-chord-define-global "2w" "@")
-    (key-chord-define-global "3e" "#")
-    (key-chord-define-global "4r" "$")
-    (key-chord-define-global "5t" "%")
-    (key-chord-define-global "6y" "^")
-    (key-chord-define-global "7y" "&")
-    (key-chord-define-global "8u" "*")
-    (key-chord-define-global "9i" "(")
-    (key-chord-define-global "-p" "_")
+    ;; (key-chord-define-global "1q" "!")
+    ;; (key-chord-define-global "2w" "@")
+    ;; (key-chord-define-global "3e" "#")
+    ;; (key-chord-define-global "4r" "$")
+    ;; (key-chord-define-global "5t" "%")
+    ;; (key-chord-define-global "6y" "^")
+    ;; (key-chord-define-global "7y" "&")
+    ;; (key-chord-define-global "8u" "*")
+    ;; (key-chord-define-global "9i" "(")
+    ;; (key-chord-define-global "-p" "_")
     (key-chord-mode +1))
 #+END_SRC
 
@@ -547,6 +546,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
     (defun my/haskell-mode-defaults ()
       (subword-mode +1)
       (turn-on-haskell-doc-mode)
+      (flycheck-mode -1)
       (turn-on-haskell-indentation))
 
     (add-hook 'haskell-mode-hook 'my/haskell-mode-defaults)
@@ -556,7 +556,8 @@ Type =clear= to clear the buffer like in other terminal emulators.
     (bind-keys :map interactive-haskell-mode-map
                ("M-." . haskell-mode-goto-loc)
                ("M-," . pop-tag-mark)
-               ("C-c C-t" . ghc-show-type))
+               ("C-c C-t" . ghc-show-type)
+               ("C-M-?" . ghc-display-errors))
 
     (setq haskell-process-auto-import-loaded-modules t
           haskell-interactive-types-for-show-ambiguous nil
@@ -747,60 +748,72 @@ files.
        ("w" whitespace-mode "whitespace")
        ("q" nil "cancel")))
 
+    (global-set-key
+     (kbd "M-g")
+     (defhydra hydra-goto-line (:pre (linum-mode 1) :post (linum-mode -1))
+       ("g" goto-line "goto-line")
+       ("m" set-mark-command "mark")
+       ("q" nil "quit")))
+
     (key-chord-define-global
-     "tt"
+     "ss"
      (defhydra hydra-zoom ()
        "zoom"
        ("j" text-scale-increase "in")
        ("k" text-scale-decrease "out")))
 
-    (key-chord-define-global
-     "ee"
+    (global-set-key
+     (kbd "C-c l")
      (defhydra hydra-error ()
        "goto-error"
        ("h" first-error "first")
        ("j" next-error "next")
        ("k" previous-error "prev")))
 
+
     (global-set-key
-   (kbd "C-M-o")
-   (defhydra hydra-window ()
-     "window"
-     ("h" windmove-left)
-     ("j" windmove-down)
-     ("k" windmove-up)
-     ("l" windmove-right)
-     ("a" (lambda ()
-            (interactive)
-            (ace-window 1)
-            (add-hook 'ace-window-end-once-hook
-                      'hydra-window/body))
-          "ace")
-     ("v" (lambda ()
-            (interactive)
-            (split-window-right)
-            (windmove-right))
-          "vert")
-     ("x" (lambda ()
-            (interactive)
-            (split-window-below)
-            (windmove-down))
-          "horz")
-     ("s" (lambda ()
-            (interactive)
-            (ace-window 4)
-            (add-hook 'ace-window-end-once-hook
-                      'hydra-window/body))
-          "swap")
-     ("d" (lambda ()
-            (interactive)
-            (ace-window 16)
-            (add-hook 'ace-window-end-once-hook
-                      'hydra-window/body))
-          "del")
-     ("o" delete-other-windows "1" :color blue)
-     ("i" ace-maximize-window "a1" :color blue)
-     ("q" nil "cancel"))))
+     (kbd "C-M-o")
+     (defhydra hydra-window ()
+       "window"
+       ("h" windmove-left)
+       ("j" windmove-down)
+       ("k" windmove-up)
+       ("l" windmove-right)
+       ("a" (lambda ()
+              (interactive)
+              (ace-window 1)
+              (add-hook 'ace-window-end-once-hook
+                        'hydra-window/body)
+              (throw 'hydra-disable t))
+        "ace")
+       ("v" (lambda ()
+              (interactive)
+              (split-window-right)
+              (windmove-right))
+        "vert")
+       ("x" (lambda ()
+              (interactive)
+              (split-window-below)
+              (windmove-down))
+        "horz")
+       ("s" (lambda ()
+              (interactive)
+              (ace-window 4)
+              (add-hook 'ace-window-end-once-hook
+                        'hydra-window/body)
+              (throw 'hydra-disable t))
+        "swap")
+       ("t" transpose-frame "'")
+       ("d" (lambda ()
+              (interactive)
+              (ace-window 16)
+              (add-hook 'ace-window-end-once-hook
+                        'hydra-window/body)
+              (throw 'hydra-disable t))
+        "del")
+       ("o" delete-other-windows "one" :color blue)
+       ("i" ace-maximize-window "ace-one" :color blue)
+       ("q" nil "cancel"))))
 #+end_src
 
 *** Paradox
@@ -1241,9 +1254,7 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package company
     :ensure t
-    :defer t
-    :idle (global-company-mode)
-    :diminish (company-mode . "")
+    :diminish (company-mode . "CPY")
     :config
     (setq company-tooltip-align-annotations t)
     (setq company-dabbrev-ignore-case nil)
@@ -1254,7 +1265,8 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
     ;; invert the navigation direction if the the completion popup-isearch-match
     ;; is displayed on top (happens near the bottom of windows)
     (setq company-tooltip-flip-when-above t)
-    (setq company-dabbrev-code-other-buffers 'code))
+    (setq company-dabbrev-code-other-buffers 'code)
+    (global-company-mode))
 #+END_SRC
 
 *** Company-ghc
@@ -1311,7 +1323,6 @@ A great syntax checker.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package flycheck
     :ensure t
-    :bind ("C-c L" . flycheck-list-errors)
     :init
     (add-hook 'after-init-hook #'global-flycheck-mode)
     :config
