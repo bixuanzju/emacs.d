@@ -663,7 +663,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
   (use-package hindent
     :ensure t
     :config
-    (setq hindent-style "gibiansky")
+    (setq hindent-style "chris-done")
     (add-hook 'haskell-mode-hook #'hindent-mode))
 #+end_src
 
@@ -739,24 +739,25 @@ files.
 
     (global-set-key
      (kbd "C-x t")
-     (defhydra toggle (:color blue)
+     (defhydra toggle (:color amaranth)
        "toggle"
-       ("a" abbrev-mode "abbrev")
-       ("d" toggle-debug-on-error "debug")
-       ("f" auto-fill-mode "fill")
-       ("t" toggle-truncate-lines "truncate")
-       ("w" whitespace-mode "whitespace")
+       ("a" abbrev-mode "abbrev" :color blue)
+       ("d" toggle-debug-on-error "debug" :color blue)
+       ("f" auto-fill-mode "fill" :color blue)
+       ("t" toggle-truncate-lines "truncate" :color blue)
+       ("w" whitespace-mode "whitespace" :color blue)
        ("q" nil "cancel")))
 
     (global-set-key
      (kbd "M-g")
-     (defhydra hydra-goto-line (:pre (linum-mode 1) :post (linum-mode -1))
+     (defhydra hydra-goto-line
+         (:pre (linum-mode 1) :post (linum-mode -1) :color amaranth)
        ("g" goto-line "goto-line")
        ("m" set-mark-command "mark")
        ("q" nil "quit")))
 
     (key-chord-define-global
-     "ss"
+     "ds"
      (defhydra hydra-zoom ()
        "zoom"
        ("j" text-scale-increase "in")
@@ -769,7 +770,6 @@ files.
        ("h" first-error "first")
        ("j" next-error "next")
        ("k" previous-error "prev")))
-
 
     (global-set-key
      (kbd "C-M-o")
