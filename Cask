@@ -39,6 +39,7 @@
 (depends-on "exec-path-from-shell")
 (depends-on "expand-region")
 (depends-on "f")
+(depends-on "faceup")
 (depends-on "find-file-in-project")
 (depends-on "flx")
 (depends-on "flx-ido")
