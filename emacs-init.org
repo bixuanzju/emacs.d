@@ -728,14 +728,12 @@ files.
   (use-package hydra-examples
     :ensure hydra
     :config
-    (global-set-key
-     (kbd "C-S-o")
-     (defhydra hydra-move ()
-       "move"
-       ("h" hydra-move-splitter-left)
-       ("j" hydra-move-splitter-down)
-       ("k" hydra-move-splitter-up)
-       ("l" hydra-move-splitter-right)))
+    (defhydra hydra-move (global-map "C-S-o")
+      "move"
+      ("h" hydra-move-splitter-left)
+      ("j" hydra-move-splitter-down)
+      ("k" hydra-move-splitter-up)
+      ("l" hydra-move-splitter-right))
 
     (global-set-key
      (kbd "C-x t")
@@ -748,44 +746,32 @@ files.
        ("w" whitespace-mode "whitespace" :color blue)
        ("q" nil "cancel")))
 
-    (global-set-key
-     (kbd "M-g")
-     (defhydra hydra-goto-line
-         (:pre (linum-mode 1) :post (linum-mode -1) :color amaranth)
-       ("g" goto-line "goto-line")
-       ("m" set-mark-command "mark")
-       ("q" nil "quit")))
-
     (key-chord-define-global
      "ds"
      (defhydra hydra-zoom ()
        "zoom"
        ("j" text-scale-increase "in")
-       ("k" text-scale-decrease "out")))
+       ("k" text-scale-decrease "out")
+       ("0" (text-scale-set 0) "reset")
+       ("1" (text-scale-set 0) :bind nil)
+       ("2" (text-scale-set 0) :bind nil :color blue)))
 
-    (global-set-key
-     (kbd "C-c l")
-     (defhydra hydra-error ()
-       "goto-error"
-       ("h" first-error "first")
-       ("j" next-error "next")
-       ("k" previous-error "prev")))
+    (defhydra hydra-error (global-map "M-g")
+      "goto-error"
+      ("h" first-error "first")
+      ("j" next-error "next")
+      ("k" previous-error "prev")
+      ("v" recenter-top-bottom "recenter")
+      ("q" nil "quit"))
 
     (global-set-key
      (kbd "C-M-o")
-     (defhydra hydra-window ()
+     (defhydra hydra-window (:color amaranth)
        "window"
-       ("h" windmove-left)
-       ("j" windmove-down)
-       ("k" windmove-up)
-       ("l" windmove-right)
-       ("a" (lambda ()
-              (interactive)
-              (ace-window 1)
-              (add-hook 'ace-window-end-once-hook
-                        'hydra-window/body)
-              (throw 'hydra-disable t))
-        "ace")
+       ("h" windmove-left nil)
+       ("j" windmove-down nil)
+       ("k" windmove-up nil)
+       ("l" windmove-right nil)
        ("v" (lambda ()
               (interactive)
               (split-window-right)
@@ -796,23 +782,13 @@ files.
               (split-window-below)
               (windmove-down))
         "horz")
-       ("s" (lambda ()
-              (interactive)
-              (ace-window 4)
-              (add-hook 'ace-window-end-once-hook
-                        'hydra-window/body)
-              (throw 'hydra-disable t))
-        "swap")
        ("t" transpose-frame "'")
-       ("d" (lambda ()
-              (interactive)
-              (ace-window 16)
-              (add-hook 'ace-window-end-once-hook
-                        'hydra-window/body)
-              (throw 'hydra-disable t))
-        "del")
        ("o" delete-other-windows "one" :color blue)
+       ("a" ace-window "ace")
+       ("s" ace-swap-window "swap")
+       ("d" ace-delete-window "del")
        ("i" ace-maximize-window "ace-one" :color blue)
+       ("b" ido-switch-buffer "buf")
        ("q" nil "cancel"))))
 #+end_src
 
