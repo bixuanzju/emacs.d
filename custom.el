@@ -25,14 +25,6 @@ Only modes that don't derive from `prog-mode' should be listed here.")
 (defvar prelude-yank-indent-threshold 1000
   "Threshold (# chars) over which indentation does not automatically occur.")
 
-(defface org-block-begin-line
-  '((t (:underline "#A7A6AA" :foreground "#008ED1")))
-  "Face used for the line delimiting the begin of source blocks.")
-
-(defface org-block-end-line
-  '((t (:overline "#A7A6AA" :foreground "#008ED1")))
-  "Face used for the line delimiting the end of source blocks.")
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -69,6 +61,8 @@ Only modes that don't derive from `prog-mode' should be listed here.")
  '(idris-loaded-region-face ((t (:background "#073642"))))
  '(idris-semantic-data-face ((t (:foreground "light pink"))))
  '(idris-semantic-type-face ((t (:foreground "LightGoldenrod3"))))
+ '(org-block-begin-line ((t (:inherit org-meta-line :underline t))) t)
+ '(org-block-end-line ((t (:inherit org-meta-line :underline t))) t)
  '(persp-selected-face ((t (:inherit nil :foreground "yellow"))))
  '(shm-current-face ((t (:background "#2B2B2B"))))
  '(sr-active-path-face ((t (:weight bold :height 180)))))
