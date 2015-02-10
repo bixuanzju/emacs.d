@@ -720,6 +720,14 @@ files.
 
     (helm-mode +1))
 #+END_SRC
+*** zop-to-char
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package zop-to-char
+    :ensure t
+    :bind ("M-z" . zop-to-char))
+#+end_src
+
 *** Hydra
 
 [[https://github.com/abo-abo/hydra][Hydra]] make Emacs bindings that stick around.
