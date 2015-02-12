@@ -110,6 +110,7 @@ Set custom theme path and load theme
     :load-path "packages/"
     :bind (("M-/" . hippie-expand)
            ("C-x C-b" . ibuffer)
+           ([remap goto-line] . goto-line-with-feedback)
            ("C-:" . eval-expression)
            ("M-SPC" . cycle-spacing)
            ("s-k" . kill-this-buffer)
@@ -546,8 +547,9 @@ Type =clear= to clear the buffer like in other terminal emulators.
     (defun my/haskell-mode-defaults ()
       (subword-mode +1)
       (turn-on-haskell-doc-mode)
-      (flycheck-mode -1)
-      (turn-on-haskell-indentation))
+      (turn-on-haskell-indentation)
+      (smartparens-mode -1)
+      (flycheck-mode -1))
 
     (add-hook 'haskell-mode-hook 'my/haskell-mode-defaults)
     (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
