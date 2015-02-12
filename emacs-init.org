@@ -499,8 +499,8 @@ favorite feature is that pressing =F= will open all marked files.
 *** Markdown
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package markdown-mode
-    :ensure t
+  (use-package gfm-mode
+    :ensure markdown-mode
     :mode "\\.md\\'")
 #+END_SRC
 
