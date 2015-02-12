@@ -738,10 +738,10 @@ files.
     :config
     (defhydra hydra-move (global-map "C-S-o")
       "move"
-      ("h" hydra-move-splitter-left)
-      ("j" hydra-move-splitter-down)
-      ("k" hydra-move-splitter-up)
-      ("l" hydra-move-splitter-right))
+      ("h" hydra-move-splitter-left "→")
+      ("j" hydra-move-splitter-down "←")
+      ("k" hydra-move-splitter-up "↑")
+      ("l" hydra-move-splitter-right "↓"))
 
     (global-set-key
      (kbd "C-x t")
@@ -830,7 +830,7 @@ files.
 #+end_src
 *** Elpy
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
   (use-package elpy
     :ensure t
     :config
@@ -912,6 +912,14 @@ shell.
     :if (memq window-system '(mac ns))
     :config
     (exec-path-from-shell-initialize))
+#+end_src
+
+*** Agda
+
+#+begin_src emacs-lisp :tangle yes
+  (if (executable-find "agda-mode")
+      (load-file (let ((coding-system-for-read 'utf-8))
+                   (shell-command-to-string "agda-mode locate"))))
 #+end_src
 
 *** Mykie
