@@ -502,7 +502,6 @@ favorite feature is that pressing =F= will open all marked files.
   (use-package tuareg
     :ensure t
     :config
-    (add-hook 'tuareg-mode-hook 'tuareg-imenu-set-imenu)
     (setq auto-mode-alist
           (append '(("\\.ml[ily]?$" . tuareg-mode)
                     ("\\.topml$" . tuareg-mode))
@@ -1282,8 +1281,9 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
   (use-package utop
     :ensure t
     :config
-    (autoload 'utop-setup-ocaml-buffer "utop" "Toplevel for OCaml" t)
-    (add-hook 'tuareg-mode-hook 'utop-setup-ocaml-buffer))
+    ;; Automatically load utop.el
+    (autoload 'utop-minor-mode "utop" "Minor mode for utop" t)
+    (add-hook 'tuareg-mode-hook 'utop-minor-mode))
 
   (use-package merlin
     :ensure t
