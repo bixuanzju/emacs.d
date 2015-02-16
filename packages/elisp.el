@@ -174,14 +174,14 @@ a region, all lines that region covers will be duplicated."
 
 (defun prelude-kill-other-buffers ()
   "Kill all buffers but the current one.
-  Doesn't mess with special buffers."
+Doesn't mess with special buffers."
   (interactive)
-  (-each
-      (->> (buffer-list)
-        (-filter #'buffer-file-name)
-        (--remove (eql (current-buffer) it)))
-    #'kill-buffer)
-  (message "Done"))
+  (when (y-or-n-p "Are you sure you want to kill all buffers but the current one? ")
+    (-each
+        (->> (buffer-list)
+             (-filter #'buffer-file-name)
+             (--remove (eql (current-buffer) it)))
+      #'kill-buffer)))
 
 (defun my/forward-line-by-many ()
   "Move line forward by multiple times."

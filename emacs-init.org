@@ -483,7 +483,6 @@ favorite feature is that pressing =F= will open all marked files.
   (use-package dired+
     :ensure t)
 #+END_SRC
-
 *** Scala-mode
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -496,6 +495,20 @@ favorite feature is that pressing =F= will open all marked files.
       (subword-mode +1))
     (add-hook 'scala-mode-hook 'my/scala-mode-hook-defaults))
 #+END_SRC
+
+*** OCaml
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package tuareg
+    :ensure t
+    :config
+    (add-hook 'tuareg-mode-hook 'tuareg-imenu-set-imenu)
+    (setq auto-mode-alist
+          (append '(("\\.ml[ily]?$" . tuareg-mode)
+                    ("\\.topml$" . tuareg-mode))
+                  auto-mode-alist)))
+#+end_src
+
 *** Markdown
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -615,6 +628,28 @@ Type =clear= to clear the buffer like in other terminal emulators.
 #+END_SRC
 
 ** Minor Modes
+*** Company
+
+[[https://github.com/company-mode/company-mode][Company]] is a code completion framework for Emacs. The name stands for
+"complete anything".
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package company
+    :ensure t
+    :diminish (company-mode . "CPY")
+    :config
+    (setq company-tooltip-align-annotations t)
+    (setq company-dabbrev-ignore-case nil)
+    (setq company-dabbrev-downcase nil)
+    (eval-after-load 'company-dabbrev-code
+      '(dolist (mode '(coq-mode oz-mode))
+         (add-to-list 'company-dabbrev-code-modes mode)))
+    ;; invert the navigation direction if the the completion popup-isearch-match
+    ;; is displayed on top (happens near the bottom of windows)
+    (setq company-tooltip-flip-when-above t)
+    (setq company-dabbrev-code-other-buffers 'code)
+    (global-company-mode))
+#+END_SRC
 *** Ido-related
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1240,27 +1275,23 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
       (smartparens-strict-mode +1))
     (add-hook 'cider-repl-mode-hook 'my/cider-repl-mode-defaults))
 #+end_src
-*** Company
 
-[[https://github.com/company-mode/company-mode][Company]] is a code completion framework for Emacs. The name stands for
-"complete anything".
+*** Merlin and utop
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package company
+  (use-package utop
     :ensure t
-    :diminish (company-mode . "CPY")
     :config
-    (setq company-tooltip-align-annotations t)
-    (setq company-dabbrev-ignore-case nil)
-    (setq company-dabbrev-downcase nil)
-    (eval-after-load 'company-dabbrev-code
-      '(dolist (mode '(coq-mode oz-mode))
-         (add-to-list 'company-dabbrev-code-modes mode)))
-    ;; invert the navigation direction if the the completion popup-isearch-match
-    ;; is displayed on top (happens near the bottom of windows)
-    (setq company-tooltip-flip-when-above t)
-    (setq company-dabbrev-code-other-buffers 'code)
-    (global-company-mode))
+    (autoload 'utop-setup-ocaml-buffer "utop" "Toplevel for OCaml" t)
+    (add-hook 'tuareg-mode-hook 'utop-setup-ocaml-buffer))
+
+  (use-package merlin
+    :ensure t
+    :config
+    (add-hook 'tuareg-mode-hook 'merlin-mode)
+    (setq merlin-error-after-save nil)
+    ; Make company aware of merlin
+    (add-to-list 'company-backends 'merlin-company-backend))
 #+END_SRC
 
 *** Company-ghc
