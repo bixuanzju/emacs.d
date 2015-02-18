@@ -455,7 +455,7 @@ If you are not using it, you need to start.
 [[https://github.com/jkitchin/jmax/blob/master/org-ref.org][Org-ref]] is an emacs-lisp module to handle bibliographic citations, and
 references to figures, tables and sections in org-mode.
 
-*** Dired and dired+
+*** Dired
 
 Dired Plus is an extension to the =dired= file manager in Emacs.  My
 favorite feature is that pressing =F= will open all marked files.
@@ -772,6 +772,7 @@ files.
   (use-package hydra-examples
     :ensure hydra
     :config
+    (hydra-add-font-lock)
     (defhydra hydra-move (global-map "C-S-o")
       "move"
       ("h" hydra-move-splitter-left "→")
