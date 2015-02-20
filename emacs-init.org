@@ -867,7 +867,7 @@ files.
 #+end_src
 *** Elpy
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package elpy
     :ensure t
     :config

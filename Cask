@@ -15,6 +15,7 @@
 (depends-on "auto-complete")
 (depends-on "bind-key")
 (depends-on "browse-kill-ring")
+(depends-on "caml")
 (depends-on "cask")
 (depends-on "cdlatex")
 (depends-on "chinese-fonts-setup")
