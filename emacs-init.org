@@ -6,7 +6,7 @@
 This file is tangled using =org-babel-load-file=. What this does is
 generate a =emacs-init.el= from the =emacs-lisp= source blocks.
 
-This emacs.d is currently designed for [[https://github.com/railwaycat/emacs-mac-port][Emacs Mac Port]].
+~This emacs.d is currently designed for [[https://github.com/railwaycat/emacs-mac-port][Emacs Mac Port]].~
 
 *** Credits:
 

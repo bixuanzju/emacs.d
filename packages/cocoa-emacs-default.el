@@ -38,6 +38,8 @@
 ;; (setq-default locate-command "mdfind")
 (setq mac-right-command-modifier 'super)
 
+(setq mac-command-modifier 'meta)
+(setq mac-option-modifier 'super)
 
 ;; (global-set-key (kbd "M-`") 'ns-next-frame)
 ;; (global-set-key (kbd "M-h") 'ns-do-hide-emacs)
