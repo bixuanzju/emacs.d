@@ -782,13 +782,20 @@ files.
 
     (global-set-key
      (kbd "C-x t")
-     (defhydra toggle (:color amaranth)
-       "toggle"
-       ("a" abbrev-mode "abbrev" :color blue)
-       ("d" toggle-debug-on-error "debug" :color blue)
-       ("f" auto-fill-mode "fill" :color blue)
-       ("t" toggle-truncate-lines "truncate" :color blue)
-       ("w" whitespace-mode "whitespace" :color blue)
+     (defhydra toggle (:color teal)
+  "
+  _a_ abbrev-mode:      %`abbrev-mode
+  _d_ debug-on-error    %`debug-on-error
+  _f_ auto-fill-mode    %`auto-fill-function
+  _t_ truncate-lines    %`truncate-lines
+  _w_ whitespace-mode   %`whitespace-mode
+
+  "
+       ("a" abbrev-mode nil)
+       ("d" toggle-debug-on-error nil)
+       ("f" auto-fill-mode nil)
+       ("t" toggle-truncate-lines nil)
+       ("w" whitespace-mode nil)
        ("q" nil "cancel")))
 
     (key-chord-define-global
@@ -811,7 +818,7 @@ files.
 
     (global-set-key
      (kbd "C-M-o")
-     (defhydra hydra-window (:color amaranth)
+     (defhydra hydra-window (:color pink)
        "window"
        ("h" windmove-left nil)
        ("j" windmove-down nil)
@@ -1087,7 +1094,7 @@ highlights parentheses, brackets, and braces according to their depth
 
 *** Operate-on-numbes
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package operate-on-number
     :config
     (require 'smartrep)
