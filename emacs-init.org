@@ -1306,7 +1306,6 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
     ; Make company aware of merlin
     (add-to-list 'company-backends 'merlin-company-backend))
 #+END_SRC
-
 *** Company-ghc
 
 #+begin_src emacs-lisp :tangle yes
@@ -1314,6 +1313,32 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
     :ensure t
     :config
     (add-to-list 'company-backends '(company-ghc :with company-dabbrev-code)))
+#+end_src
+*** Company-math
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package company-math
+    :ensure t
+    :config
+    ;; global activation of the unicode symbol completion
+    (add-to-list 'company-backends 'company-math-symbols-unicode)
+    ;; local configuration for TeX modes
+    (defun my/latex-mode-setup ()
+      (setq-local company-backends
+                  (append '(company-math-symbols-latex company-latex-commands)
+                          company-backends)))
+
+    (add-hook 'TeX-mode-hook 'my/latex-mode-setup))
+#+end_src
+
+*** Company-coq
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package company-coq
+    :ensure t
+    :config
+    ;; Load company-coq when opening Coq files
+    (add-hook 'coq-mode-hook (lambda () (company-coq-initialize))))
 #+end_src
 
 *** Flyspell
