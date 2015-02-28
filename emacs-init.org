@@ -341,7 +341,7 @@ Sane setup for LaTeX writers.
     (setq TeX-auto-save t)
     (setq TeX-parse-self t)
 
-    ;; (setq-default TeX-master nil)
+    (setq-default TeX-master nil)
 
     (setq TeX-PDF-mode t)
 
@@ -364,7 +364,7 @@ Sane setup for LaTeX writers.
 
 **** Latex extra
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package latex-extra
     :config
     (add-hook 'LaTeX-mode-hook #'latex-extra-mode))
@@ -511,7 +511,7 @@ favorite feature is that pressing =F= will open all marked files.
 *** Markdown
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package gfm-mode
+  (use-package markdown-mode
     :ensure markdown-mode
     :mode "\\.md\\'")
 #+END_SRC
@@ -809,7 +809,7 @@ files.
 
     (global-set-key
      (kbd "C-M-o")
-     (defhydra hydra-window (:color pink)
+     (defhydra hydra-window (:color amaranth)
        "
   Move Point^^^^   Move Splitter   ^Ace^                       ^Split^                          Tranpose
   --------------------------------------------------------------------------------------------------
@@ -1068,6 +1068,7 @@ interface.
     :ensure t
     :bind ("C-x o" . ace-window)
     :config
+    (setq aw-background nil)
     (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
     (setq aw-scope 'frame))
 #+END_SRC
