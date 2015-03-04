@@ -861,7 +861,7 @@ files.
 
 *** Pretty-mode
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package pretty-mode
     :ensure t
     :idle (global-pretty-mode t))
@@ -917,6 +917,8 @@ helm interface.
            ("C-c M-i" . helm-multi-swoop)
            ("C-x M-i" . helm-multi-swoop-all))
     :config
+    ;; Save buffer when helm-multi-swoop-edit complete
+    (setq helm-multi-swoop-edit-save t)
     ;; When doing isearch, hand the word over to helm-swoop
     (bind-key "M-i" 'helm-swoop-from-isearch isearch-mode-map)
     ;; From helm-swoop to helm-multi-swoop-all
@@ -995,7 +997,7 @@ single keybind.
 
 *** Ace-jump-mode
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package ace-jump-mode
     :ensure t
     :bind ("C-c SPC" . ace-jump-mode)
@@ -1066,8 +1068,9 @@ interface.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ace-window
     :ensure t
-    :bind ("C-x o" . ace-window)
+    :bind ("s-l" . avi-goto-line)
     :config
+    (setq aw-leading-char-style 'path)
     (setq aw-background nil)
     (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
     (setq aw-scope 'frame))
@@ -1338,7 +1341,7 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
     :ensure t
     :config
     ;; Load company-coq when opening Coq files
-    (add-hook 'coq-mode-hook (lambda () (company-coq-initialize))))
+    (add-hook 'coq-mode-hook 'company-coq-initialize))
 #+end_src
 
 *** Flyspell
