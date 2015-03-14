@@ -31,6 +31,7 @@ Only modes that don't derive from `prog-mode' should be listed here.")
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(cfs--current-profile-name "profile1" t)
+ '(cfs--profiles-english-fontsizes (quote (18 12.5 12.5)) t)
  '(cfs--profiles-fontsizes (quote (18 12.5 12.5)) t)
  '(column-number-mode t)
  '(coq-prog-args (quote ("-I" "/Users/jeremybi/Dropbox/cpdt/src")))
