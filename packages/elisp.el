@@ -32,7 +32,7 @@
 ;;; Code:
 
 (use-package dash-functional
-  :ensure t
+  :ensure
   :config
   (dash-enable-font-lock))
 

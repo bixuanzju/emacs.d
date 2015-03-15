@@ -62,7 +62,7 @@ and byte-compile the =org=-document after changes asynchronously.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package async
-    :ensure t
+    :ensure
     :config
     (require 'dired-async)
     (defun my/init-hook ()
@@ -86,7 +86,7 @@ and byte-compile the =org=-document after changes asynchronously.
 Set custom theme path and load theme
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package zenburn-theme
-    :ensure t
+    :ensure
     :config
     (load-theme 'zenburn t))
 #+END_SRC
@@ -95,10 +95,9 @@ Set custom theme path and load theme
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package smart-mode-line
-    :ensure t
-    :init
-    (setq sml/no-confirm-load-theme t)
+    :ensure
     :config
+    (setq sml/no-confirm-load-theme t)
     (sml/setup))
 #+END_SRC
 
@@ -110,7 +109,6 @@ Set custom theme path and load theme
     :load-path "packages/"
     :bind (("M-/" . hippie-expand)
            ("C-x C-b" . ibuffer)
-           ([remap goto-line] . goto-line-with-feedback)
            ("C-:" . eval-expression)
            ("M-SPC" . cycle-spacing)
            ("s-k" . kill-this-buffer)
@@ -121,10 +119,12 @@ Set custom theme path and load theme
            ("C-^" . prelude-top-join-line)
            ("C-x \\" . align-regexp)
            ("C-S-n" . my/forward-line-by-many)
-           ("C-S-p" . my/backward-line-by-many)
-           ([remap kill-whole-line] . prelude-kill-whole-line)
-           ([(control shift return)] . prelude-smart-open-line-above))
+           ("C-S-p" . my/backward-line-by-many))
     :bind* (("C-M-h" . backward-kill-word)))
+
+  (bind-key [remap goto-line] 'goto-line-with-feedback)
+  (bind-key [remap kill-whole-line] 'prelude-kill-whole-line)
+  (bind-key [control shift return] 'prelude-smart-open-line-above)
 
   ;; (bind-key "C-f" 'find-function 'help-command)
   ;; (bind-key "C-k" 'find-function-on-key 'help-command)
@@ -139,7 +139,7 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package key-chord
-    :ensure t
+    :ensure
     :config
     (setq key-chord-two-keys-delay 0.05)
     (key-chord-define-global "x1" 'delete-other-windows)
@@ -253,7 +253,7 @@ All packages and modes are configured here.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package clojure-mode
-    :ensure t
+    :ensure
     :config
     (defun my/clojure-mode-defaults ()
       (subword-mode +1)
@@ -309,7 +309,7 @@ All packages and modes are configured here.
   ;;   (setq geiser-active-implementations '(racket)))
 
   (use-package racket-mode
-    :ensure t
+    :ensure
     :config
     (add-hook 'racket-mode-hook
               '(lambda ()
@@ -328,7 +328,6 @@ Sane setup for LaTeX writers.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package tex-site
-    :ensure auctex
     :config
     (defun my/latex-mode-defaults ()
       (turn-on-auto-fill)
@@ -481,13 +480,13 @@ favorite feature is that pressing =F= will open all marked files.
                   dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$\\|^\\."))
 
   (use-package dired+
-    :ensure t)
+    :ensure)
 #+END_SRC
 *** Scala-mode
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package scala-mode2
-    :ensure t
+    :ensure
     :config
     (setq scala-indent:align-forms t
           scala-indent:align-parameters t)
@@ -500,7 +499,7 @@ favorite feature is that pressing =F= will open all marked files.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package tuareg
-    :ensure t
+    :ensure
     :config
     (setq auto-mode-alist
           (append '(("\\.ml[ily]?$" . tuareg-mode)
@@ -512,7 +511,7 @@ favorite feature is that pressing =F= will open all marked files.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package markdown-mode
-    :ensure markdown-mode
+    :ensure
     :mode "\\.md\\'")
 #+END_SRC
 
@@ -544,7 +543,6 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package cc-mode
-    :defer t
     :init
     (add-hook 'java-mode-hook (lambda ()
                                 (setq c-basic-offset 2))))
@@ -554,7 +552,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package haskell-mode
-    :ensure t
+    :ensure
     :config
     (defun my/haskell-mode-defaults ()
       (subword-mode +1)
@@ -587,7 +585,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package sml-mode
-    :ensure t
+    :ensure
     :mode "\\.sml\\'"
     :config
     (defun my-sml-prog-proc-send-buffer ()
@@ -608,21 +606,21 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package idris-mode
-    :ensure t)
+    :ensure)
 #+end_src
 
 *** Lua Mode
 
 #+begin_src emacs-lisp :tangle yes
   (use-package lua-mode
-    :ensure t)
+    :ensure)
 #+end_src
 
 *** Js2 Mode
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package js2-mode
-    :ensure t
+    :ensure
     :mode "\\.js\\'")
 #+END_SRC
 
@@ -634,7 +632,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package company
-    :ensure t
+    :ensure
     :diminish (company-mode . "CPY")
     :config
     (setq company-tooltip-align-annotations t)
@@ -677,7 +675,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
     (flx-ido-mode +1))
 
   (use-package ido-vertical-mode
-    :ensure t
+    :ensure
     :config
     (ido-vertical-mode +1))
 #+END_SRC
@@ -688,16 +686,16 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package magit
-    :ensure t
-    :pin melpa
-    :commands magit-status
-    :diminish (magit-auto-revert-mode ""))
+    :ensure
+    :diminish (magit-auto-revert-mode . "")
+    :pin "melpa"
+    :commands magit-status)
 #+END_SRC
 *** hindent
 
 #+begin_src emacs-lisp :tangle yes
   (use-package hindent
-    :ensure t
+    :ensure
     :config
     (setq hindent-style "chris-done")
     (add-hook 'haskell-mode-hook #'hindent-mode))
@@ -706,7 +704,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
 *** quickrun
 
 #+begin_src emacs-lisp :tangle yes
-  (use-package quickrun :ensure t)
+  (use-package quickrun :ensure)
 #+end_src
 
 *** Wgrep
@@ -716,7 +714,7 @@ file buffer.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package wgrep-ag
-    :ensure t
+    :ensure
     :init
     (autoload 'wgrep-ag-setup "wgrep-ag")
     (add-hook 'ag-mode-hook 'wgrep-ag-setup))
@@ -729,7 +727,7 @@ files.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package helm
-    :ensure t
+    :ensure
     :bind (("C-x C-f" . helm-find-files)
            ("M-y" . helm-show-kill-ring)
            ("C-h r" . helm-info-emacs)
@@ -763,7 +761,7 @@ files.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package zop-to-char
-    :ensure t
+    :ensure
     :bind ("M-z" . zop-to-char))
 #+end_src
 
@@ -773,7 +771,6 @@ files.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package hydra-examples
-    :ensure hydra
     :config
     (hydra-add-font-lock)
     (global-set-key
@@ -905,29 +902,11 @@ files.
             (self-insert-command 1))))))
 #+end_src
 
-*** Paradox
-
-#+begin_src emacs-lisp :tangle no
-  (use-package paradox
-    :ensure t
-    :config
-    (setq paradox-github-token t)
-    (setq paradox-execute-asynchronously t))
-#+end_src
-
-*** Pretty-mode
-
-#+begin_src emacs-lisp :tangle no
-  (use-package pretty-mode
-    :ensure t
-    :idle (global-pretty-mode t))
-#+end_src
-
 *** Pandoc-mode
 
 #+begin_src emacs-lisp :tangle yes
   (use-package pandoc-mode
-    :ensure t
+    :ensure
     :config
     (add-hook 'markdown-mode-hook 'pandoc-mode)
     (add-hook 'org-mode-hook 'pandoc-mode)
@@ -937,7 +916,7 @@ files.
 
 #+begin_src emacs-lisp :tangle no
   (use-package elpy
-    :ensure t
+    :ensure
     :config
     (remove-hook 'elpy-modules 'elpy-module-flymake)
     (remove-hook 'elpy-modules 'elpy-module-yasnippet)
@@ -947,7 +926,7 @@ files.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package chinese-fonts-setup
-    :ensure t)
+    :ensure)
 #+end_src
 
 *** mwim
@@ -966,7 +945,7 @@ helm interface.
 
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package helm-swoop
-    :ensure t
+    :ensure
     :bind (("M-i" . helm-swoop)
            ("M-I" . helm-swoop-back-to-last-point)
            ("C-c M-i" . helm-multi-swoop)
@@ -984,7 +963,7 @@ helm interface.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package swoop
-    :ensure t
+    :ensure
     :bind (("C-o" . swoop)
            ("C-S-o" . swoop-back-to-last-position))
     :config
@@ -1000,7 +979,7 @@ with helm.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package helm-descbinds
     :defer t
-    :ensure t
+    :ensure
     :idle (helm-descbinds-mode 1))
 #+END_SRC
 
@@ -1011,7 +990,7 @@ setup when exiting.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package fullframe
-    :ensure t
+    :ensure
     :config
     (fullframe magit-status magit-mode-quit-window)
     (fullframe monky-status monky-quit-window)
@@ -1025,7 +1004,7 @@ shell.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package exec-path-from-shell
-    :ensure t
+    :ensure
     :if (memq window-system '(mac ns))
     :config
     (exec-path-from-shell-initialize))
@@ -1039,108 +1018,38 @@ shell.
                    (shell-command-to-string "agda-mode locate"))))
 #+end_src
 
-*** Mykie
-
-[[https://github.com/yuutayamada/mykie-el][Mykie]] is a command multiplexer, which can add other functions to a
-single keybind.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package mykie
-    :ensure t
-    :config
-    (setq mykie:use-major-mode-key-override 'global)
-    (mykie:initialize)
-    (mykie:set-keys nil
-      "C-e"
-      :default (move-end-of-line 1)
-      :repeat  (end-of-buffer)
-      :C-u (beginning-of-buffer)
-      "C-S-n"
-      :default (next-line 4)
-      "C-S-p"
-      :default (previous-line 4)))
-#+END_SRC
-
 *** Ace-jump-mode
 
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package ace-jump-mode
-    :ensure t
+    :ensure
     :bind ("C-c SPC" . ace-jump-mode)
     :config
     (setq ace-jump-mode-move-keys
         '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?q ?w ?e ?r ?t ?y ?u ?i ?o ?p ?z ?x ?c ?v ?b ?n ?m)))
 #+END_SRC
-*** Alert
-
-[[https://github.com/jwiegley/alert][Alert]] is a Growl-workalike for Emacs which uses a common notification
-interface.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package alert
-    :config
-    (setq terminal-notifier-command (executable-find "terminal-notifier"))
-    (alert-define-style 'timed-notification :title "Notify using terminal-notifier"
-                        :notifier
-                        (lambda (info)
-                          (if terminal-notifier-command
-                              (let ((args
-                                     (list "-title" (alert-encode-string (plist-get info :title))
-                                           "-message" (alert-encode-string (plist-get info :message))
-                                           "-sound" "default"
-                                           "-sender" "org.gnu.Emacs")))
-                                (apply #'call-process terminal-notifier-command nil nil nil args))
-                            (alert-message-notify info))))
-    (setq alert-default-style 'timed-notification)
-
-    ;; To reminder me to stand up from long time coding
-    (defvar my-timer-obj nil
-      "For canceling if I cannot bear")
-
-    (defun start-my-timer ()
-      "Timer for long time coding."
-      (if my-timer-obj (cancel-timer my-timer-obj))
-      (setq my-timer-obj
-            (run-at-time "42 minutes" 2600
-                         (lambda () (alert "Stand up, stretch out!" :title "Stop Watering"))))
-      ;; (alert "Start timing!" :title "Emacs")
-      )
-
-    (defun stop-my-timer ()
-      (if my-timer-obj (cancel-timer my-timer-obj))
-      ;; (alert "Stop timing!" :title "Emacs")
-      )
-
-    (add-hook 'focus-in-hook #'start-my-timer)
-    (add-hook 'focus-out-hook #'stop-my-timer))
-
-#+END_SRC
-
-*** Ace-isearch
-
-#+begin_src emacs-lisp :tangle no
-  (use-package ace-isearch
-    :ensure t
-    :config
-    (setq ace-isearch-use-ace-jump 'printing-char)
-    (setq ace-isearch-input-idle-delay 0.8)
-    (global-ace-isearch-mode +1))
-#+end_src
-
 *** Ace-window
 
 [[https://github.com/abo-abo/ace-window][Ace-window]] provides window switching, the visual way.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ace-window
-    :ensure t
-    :bind ("s-l" . avi-goto-line)
+    :ensure
     :config
     (setq aw-leading-char-style 'path)
     (setq aw-background nil)
     (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
     (setq aw-scope 'frame))
+
+  (use-package avy-jump
+    :bind ("s-l" . avi-goto-line))
 #+END_SRC
+*** Swiper
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package swiper
+    :ensure)
+#+end_src
 
 *** Rainbow mode
 
@@ -1149,7 +1058,7 @@ represent as their background.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package rainbow-mode
-    :ensure t
+    :ensure
     :diminish (rainbow-mode . "")
     :config
     (add-hook 'prog-mode-hook 'rainbow-mode))
@@ -1162,7 +1071,7 @@ highlights parentheses, brackets, and braces according to their depth
 
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package rainbow-delimiters
-    :ensure t
+    :ensure
     :config
     (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 #+END_SRC
@@ -1192,7 +1101,7 @@ keep pressing the key until it selects what you want.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package expand-region
-    :ensure t
+    :ensure
     :bind ("M-2" . er/expand-region))
 #+END_SRC
 
@@ -1221,27 +1130,17 @@ Whitespace-mode configuration.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package whitespace-cleanup-mode
-    :ensure t
+    :ensure
     :diminish (whitespace-cleanup-mode . "")
     :config
     (add-hook 'prog-mode-hook 'whitespace-cleanup-mode))
 #+end_src
 
-*** Ag
-
-[[https://github.com/Wilfred/ag.el][Ag.el]] is a simple ag frontend, loosely based on ack-and-half.el.
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package ag
-    :ensure t
-    :config
-    (setq ag-highlight-search t))
-#+END_SRC
 *** Projectile
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package projectile
-    :ensure t
+    :ensure
     :diminish ""
     :config
     (setq projectile-cache-file
@@ -1255,7 +1154,7 @@ Whitespace-mode configuration.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package helm-projectile
-    :ensure t
+    :ensure
     :bind (("s-p" . helm-projectile-switch-project)
            ("s-f" . helm-projectile-find-file)
            ("s-g" . helm-projectile-ag))
@@ -1269,16 +1168,8 @@ Whitespace-mode configuration.
 #+begin_src emacs-lisp :tangle yes
   (use-package helm-ag
     :defer t
-    :ensure t)
+    :ensure)
 #+end_src
-
-*** Discover-my-major
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package discover-my-major
-    :config
-    (bind-key "C-m" 'discover-my-major 'help-command))
-#+END_SRC
 
 *** Lispy
 
@@ -1287,7 +1178,7 @@ Lisp code.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package lispy
-    :ensure t
+    :ensure
     :init
     (dolist (hook '(emacs-lisp-mode-hook
                     lisp-mode-hook
@@ -1311,7 +1202,7 @@ Snippets are keys.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package yasnippet
-    :ensure t
+    :ensure
     :diminish (yas-minor-mode . "")
     :config
     (add-to-list 'auto-mode-alist '("\\.yasnippet$" . snippet-mode))
@@ -1328,7 +1219,7 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package undo-tree
-    :ensure t
+    :ensure
     :diminish (undo-tree-mode . "")
     :config
     ;; autosave the undo-tree history
@@ -1343,7 +1234,7 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 #+begin_src emacs-lisp :tangle yes
   (use-package cider
     :defer t
-    :ensure t
+    :ensure
     :config
     (setq nrepl-log-messages t)
     (setq nrepl-hide-special-buffers t)
@@ -1361,14 +1252,14 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package utop
-    :ensure t
+    :ensure
     :config
     ;; Automatically load utop.el
     (autoload 'utop-minor-mode "utop" "Minor mode for utop" t)
     (add-hook 'tuareg-mode-hook 'utop-minor-mode))
 
   (use-package merlin
-    :ensure t
+    :ensure
     :config
     (add-hook 'tuareg-mode-hook 'merlin-mode)
     (setq merlin-error-after-save nil)
@@ -1379,7 +1270,7 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package company-ghc
-    :ensure t
+    :ensure
     :config
     (add-to-list 'company-backends '(company-ghc :with company-dabbrev-code)))
 #+end_src
@@ -1387,7 +1278,7 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package company-math
-    :ensure t
+    :ensure
     :config
     ;; global activation of the unicode symbol completion
     (add-to-list 'company-backends 'company-math-symbols-unicode)
@@ -1404,7 +1295,7 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package company-coq
-    :ensure t
+    :ensure
     :config
     ;; Load company-coq when opening Coq files
     (add-hook 'coq-mode-hook 'company-coq-initialize))
@@ -1454,7 +1345,7 @@ A great syntax checker.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package flycheck
-    :ensure t
+    :ensure
     :init
     (add-hook 'after-init-hook #'global-flycheck-mode)
     :config
@@ -1463,23 +1354,13 @@ A great syntax checker.
     (setq flycheck-completion-system 'ido))
 #+END_SRC
 
-*** Flycheck-haskell
-
-#+begin_src emacs-lisp :tangle no
-  (use-package flycheck-haskell
-    :ensure t
-    :init
-    (eval-after-load 'flycheck
-      '(add-hook 'flycheck-mode-hook #'flycheck-haskell-setup)))
-#+end_src
-
 *** Pop Win
 
 [[https://github.com/m2ym/popwin-el][popwin]] is used to manage the size of "popup" buffers.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package popwin
-    :ensure t
+    :ensure
     :config
     (popwin-mode 1))
 #+END_SRC
@@ -1490,7 +1371,7 @@ A great syntax checker.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package multiple-cursors
-    :ensure t
+    :ensure
     :bind (("C->" . mc/mark-next-like-this)
            ("C-<" . mc/mark-previous-like-this)
            ("C-c C-<" . mc/mark-all-like-this)
@@ -1505,29 +1386,9 @@ Move lines or a region up or down.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package move-text
-    :ensure t
+    :ensure
     :bind (("<C-M-up>" . move-text-up)
            ("<C-M-down>" . move-text-down)))
-#+END_SRC
-
-*** Guide-key
-
-[[https://github.com/kbkbkbkb1/guide-key][Guide-key.el]] displays the available key bindings automatically and
-dynamically.
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package guide-key
-    :ensure t
-    :diminish (guide-key-mode . "")
-    :config
-    (guide-key-mode 1)
-    (setq guide-key/guide-key-sequence
-          '("C-x r" "C-c h" "C-x 4" "C-x 5"
-            (org-mode "C-c C-x")))
-    (setq guide-key/popup-window-position 'bottom)
-    (setq guide-key/highlight-command-regexp
-          '(("rectangle" . font-lock-warning-face)
-            ("register"  . font-lock-type-face))))
 #+END_SRC
 
 *** Reveal-in-finder
@@ -1536,7 +1397,7 @@ Open file in Finder
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package reveal-in-finder
-    :ensure t
+    :ensure
     :if (eq system-type 'darwin)
     :bind
     ("C-c o" . reveal-in-finder))
@@ -1549,7 +1410,7 @@ Open file in Finder
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package sbt-mode
-    :ensure t
+    :ensure
     :config
     (add-hook 'scala-mode-hook
               '(lambda ()
@@ -1567,21 +1428,9 @@ Open file in Finder
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ensime
-    :ensure t
+    :ensure
     :init
     (add-hook 'scala-mode-hook 'ensime-scala-mode-hook))
-#+END_SRC
-
-*** Color-identifiers-mode
-
-[[https://github.com/ankurdave/color-identifiers-mode][Color Identifiers]] is a minor mode for Emacs that highlights each
-source code identifier uniquely based on its name.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package color-identifiers-mode
-    :diminish (color-identifiers-mode . "")
-    :init
-    (add-hook 'after-init-hook #'global-color-identifiers-mode))
 #+END_SRC
 
 *** Ebib
@@ -1590,7 +1439,7 @@ source code identifier uniquely based on its name.
 
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package ebib
-    :ensure t
+    :ensure
     :config
     (setq ebib-preload-bib-files (quote ("~/research/refs.bib")))
     (bind-key "C-c b" 'ebib-insert-bibtex-key org-mode-map))
@@ -1604,7 +1453,7 @@ variable binding forms in Emacs Lisp.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package lexbind-mode
-    :ensure t
+    :ensure
     :init
     (setq initial-buffer-choice 'lexbind-lexscratch)
     :config
@@ -1617,7 +1466,6 @@ Show matching and unmatched delimiters, and auto-close them as well.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package smartparens-config
-    :ensure smartparens
     :config
     ;; highlights matching pairs
     (setq sp-base-key-bindings 'paredit)
@@ -1634,8 +1482,8 @@ Show matching and unmatched delimiters, and auto-close them as well.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ghc
-    :ensure t
-    :pin melpa-stable
+    :ensure
+    :pin "melpa-stable"
     :config
     (autoload 'ghc-init "ghc" nil t)
     (autoload 'ghc-debug "ghc" nil t)
@@ -1673,7 +1521,7 @@ operations based on the syntax of Haskell.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package easy-kill
-    :ensure t
+    :ensure
     :config
     (global-set-key [remap kill-ring-save] 'easy-kill))
 #+END_SRC
@@ -1686,7 +1534,7 @@ Dash.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package dash-at-point
-    :ensure t
+    :ensure
     :if (eq system-type 'darwin))
 #+END_SRC
 
@@ -1697,24 +1545,15 @@ more escaped group parentheses, and other goodies!).
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package visual-regexp-steroids
-    :ensure t
+    :ensure
     :bind ("C-c r" . vr/replace))
-#+END_SRC
-
-*** Pcre2el
-
-[[https://github.com/joddie/pcre2el][pcre2el]] is a utility for working with regular expressions in Emacs,
-based on a recursive-descent parser for regexp syntax.
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-(use-package pcre2el)
 #+END_SRC
 
 *** Worf Mode
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package worf
-    :ensure t
+    :ensure
     :config
     (add-hook 'org-mode-hook 'worf-mode))
 #+END_SRC
@@ -1723,7 +1562,7 @@ based on a recursive-descent parser for regexp syntax.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package skeletor
-    :ensure t
+    :ensure
     :config
     (setq skeletor-scala-use-ensime t))
 #+END_SRC
@@ -1732,7 +1571,7 @@ based on a recursive-descent parser for regexp syntax.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ggtags
-    :ensure t
+    :ensure
     :config
     (add-hook 'c-mode-common-hook
               (lambda ()
@@ -1741,26 +1580,12 @@ based on a recursive-descent parser for regexp syntax.
                   (setq-local eldoc-documentation-function #'ggtags-eldoc-function)))))
 #+END_SRC
 
-*** electric-spacing
-
-#+begin_src emacs-lisp :tangle no
-  (use-package electric-spacing
-    :ensure t
-    :config
-    (add-hook 'text-mode-hook 'electric-spacing-mode)
-    (add-to-list 'electric-spacing-regexp-pairs
-                 '("\\cA\\|\\cC\\|\\ck\\|\\cK\\|\\cH" . "[0-9A-Za-z]"))
-    (add-to-list 'electric-spacing-regexp-pairs
-                 '("[0-9A-Za-z]" . "\\cA\\|\\cC\\|\\ck\\|\\cK\\|\\cH")))
-#+end_src
-
 *** VLFI
 
 View Large Files in Emacs
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package vlf-setup
-    :ensure vlf
     :config
     (setq vlf-batch-size 10240)
     (setq vlf-application 'dont-ask))
@@ -1769,7 +1594,7 @@ View Large Files in Emacs
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package anzu
-    :ensure t
+    :ensure
     :bind (("M-%" . anzu-query-replace)
            ("C-M-%" . anzu-query-replace-regexp))
     :diminish (anzu-mode . "")
@@ -1792,7 +1617,7 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package multi-term
-    :ensure t
+    :ensure
     :bind (("C-c t" . multi-term)
            ("C-c \"" . multi-term-dedicated-toggle))
     :config
@@ -1812,7 +1637,7 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
 
 #+begin_src emacs-lisp :tangle yes
   (use-package git-timemachine
-    :ensure t)
+    :ensure)
 #+end_src
 
 ** Buffer
@@ -2907,18 +2732,5 @@ Idea borrowed from [[http://endlessparentheses.com/ispell-and-abbrev-the-perfect
         (define-abbrev
           (if p global-abbrev-table local-abbrev-table)
           bef aft))))
-#+end_src
-
-*** The Toggle-map
-
-#+begin_src emacs-lisp :tangle no
-  (define-prefix-command 'endless/toggle-map)
-  ;; The manual recommends C-c for user keys, but C-x t is
-  ;; always free, whereas C-c t is used by some modes.
-  (define-key ctl-x-map "t" 'endless/toggle-map)
-  (define-key endless/toggle-map "d" 'toggle-debug-on-error)
-  (define-key endless/toggle-map "e" 'toggle-debug-on-error)
-  (define-key endless/toggle-map "f" 'auto-fill-mode)
-  (define-key endless/toggle-map "q" 'toggle-debug-on-quit)
 #+end_src
 
