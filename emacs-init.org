@@ -754,7 +754,7 @@ files.
     ;; shell history.
     (bind-key "C-c C-l" 'helm-comint-input-ring shell-mode-map)
 
-    (helm-autoresize-mode 1)
+    ;; (helm-autoresize-mode 1)
 
     (helm-mode +1))
 #+END_SRC
@@ -1038,10 +1038,11 @@ shell.
   (use-package ace-window
     :ensure
     :config
-    (setq aw-leading-char-style 'path)
+    ;; (setq aw-leading-char-style 'path)
     (setq aw-background nil)
     (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
-    (setq aw-scope 'frame))
+    (setq aw-scope 'frame)
+    (ace-window-display-mode +1))
 
   (use-package avy-jump
     :bind ("s-l" . avi-goto-line))
