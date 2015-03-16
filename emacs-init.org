@@ -328,6 +328,7 @@ Sane setup for LaTeX writers.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package tex-site
+    :ensure auctex
     :config
     (defun my/latex-mode-defaults ()
       (turn-on-auto-fill)
@@ -771,6 +772,7 @@ files.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package hydra-examples
+    :ensure hydra
     :config
     (hydra-add-font-lock)
     (global-set-key
@@ -980,7 +982,7 @@ with helm.
   (use-package helm-descbinds
     :defer t
     :ensure
-    :idle (helm-descbinds-mode 1))
+    :config (helm-descbinds-mode 1))
 #+END_SRC
 
 *** Fullframe
@@ -1048,7 +1050,8 @@ shell.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package swiper
-    :ensure)
+    :ensure
+    :bind ("C-s" . swiper))
 #+end_src
 
 *** Rainbow mode
@@ -1210,7 +1213,7 @@ Snippets are keys.
     (setq yas-wrap-around-region t)
     (setq-default yas-prompt-functions '(yas-ido-prompt))
     (bind-key "<return>" 'yas-exit-all-snippets yas-keymap)
-    :idle (yas-global-mode 1))
+    (yas-global-mode 1))
 #+END_SRC
 
 *** Undo-Tree

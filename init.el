@@ -3,6 +3,8 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load-file custom-file)
 
+;; (add-to-list 'load-path my-vendor-dir)
+
 (if (file-exists-p my-init-file)
     (load-file my-init-file)
   (progn
