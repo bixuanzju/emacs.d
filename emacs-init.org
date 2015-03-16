@@ -109,6 +109,7 @@ Set custom theme path and load theme
     :load-path "packages/"
     :bind (("M-/" . hippie-expand)
            ("C-x C-b" . ibuffer)
+           ([remap goto-line] . goto-line-with-feedback)
            ("C-:" . eval-expression)
            ("M-SPC" . cycle-spacing)
            ("s-k" . kill-this-buffer)
@@ -119,12 +120,10 @@ Set custom theme path and load theme
            ("C-^" . prelude-top-join-line)
            ("C-x \\" . align-regexp)
            ("C-S-n" . my/forward-line-by-many)
-           ("C-S-p" . my/backward-line-by-many))
+           ("C-S-p" . my/backward-line-by-many)
+           ([remap kill-whole-line] . prelude-kill-whole-line)
+           ([(control shift return)] . prelude-smart-open-line-above))
     :bind* (("C-M-h" . backward-kill-word)))
-
-  (bind-key [remap goto-line] 'goto-line-with-feedback)
-  (bind-key [remap kill-whole-line] 'prelude-kill-whole-line)
-  (bind-key [control shift return] 'prelude-smart-open-line-above)
 
   ;; (bind-key "C-f" 'find-function 'help-command)
   ;; (bind-key "C-k" 'find-function-on-key 'help-command)
