@@ -51,7 +51,10 @@ configurations.
 
 Start using =use-package=
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (require 'use-package)
+  (eval-when-compile
+    (require 'use-package))
+  (require 'bind-key)
+  (require 'diminish)
 #+END_SRC
 * Meta
 
@@ -477,10 +480,10 @@ favorite feature is that pressing =F= will open all marked files.
     (require 'dired-x)
 
     (setq-default dired-omit-mode t
-                  dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$\\|^\\."))
+                  dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$\\|^\\.")
+    (use-package dired+ :ensure))
 
-  (use-package dired+
-    :ensure)
+
 #+END_SRC
 *** Scala-mode
 
@@ -1182,6 +1185,7 @@ Lisp code.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package lispy
     :ensure
+    :defer t
     :init
     (dolist (hook '(emacs-lisp-mode-hook
                     lisp-mode-hook
@@ -1556,8 +1560,9 @@ more escaped group parentheses, and other goodies!).
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package worf
+    :defer t
     :ensure
-    :config
+    :init
     (add-hook 'org-mode-hook 'worf-mode))
 #+END_SRC
 

@@ -5,6 +5,8 @@
 
 ;; (add-to-list 'load-path my-vendor-dir)
 
+;; (setq use-package-verbose t)
+
 (if (file-exists-p my-init-file)
     (load-file my-init-file)
   (progn
