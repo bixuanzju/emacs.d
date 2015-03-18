@@ -45,9 +45,8 @@ pallet-install=. However, this should not be necessary.
 
 ** Dependency Management with =use-package=
 
-Where Pallet keeps track of the packages we have installed,
-=use-package= handles all our internal package dependencies and
-configurations.
+While Pallet keeps track of the packages we have installed,
+=use-package= allows you to isolate package configuration.
 
 Start using =use-package=
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -101,6 +100,7 @@ Set custom theme path and load theme
     :ensure
     :config
     (setq sml/no-confirm-load-theme t)
+    (sml/apply-theme 'powerline)
     (sml/setup))
 #+END_SRC
 
@@ -148,6 +148,7 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
     (key-chord-define-global "xk" 'ace-window)
     (key-chord-define-global "0o" 'delete-window)
     (key-chord-define-global "xn" 'helm-mini)
+    (key-chord-define-global "xb" 'projectile-switch-to-buffer)
     (key-chord-define-global "jk" 'magit-status)
     (key-chord-define-global "xm" 'helm-M-x)
     ;; (key-chord-define-global "1q" "!")
@@ -560,7 +561,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
     (defun my/haskell-mode-defaults ()
       (subword-mode +1)
       (turn-on-haskell-doc-mode)
-      (turn-on-haskell-indent)
+      (turn-on-haskell-indentation)
       (smartparens-mode -1)
       (flycheck-mode -1))
 
