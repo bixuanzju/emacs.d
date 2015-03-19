@@ -1558,6 +1558,7 @@ more escaped group parentheses, and other goodies!).
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package visual-regexp-steroids
     :ensure
+    :defines regexp-string replace-string
     :bind ("C-c r" . vr/replace))
 #+END_SRC
 
