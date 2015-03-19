@@ -74,11 +74,19 @@ and byte-compile the =org=-document after changes asynchronously.
         (async-start
          `(lambda ()
             (require 'org)
-            (org-babel-tangle-file ,my-org-file)
-            (byte-compile-file ,my-init-file))
+            (org-babel-tangle-file ,my-org-file))
          (lambda (result)
            (message "Tangled file compiled.")))))
     (add-hook 'after-save-hook 'my/init-hook))
+
+  (defun my/compile-init-file ()
+    (interactive)
+    (if (and
+         (string-equal buffer-file-name my-org-file)
+         (file-newer-than-file-p my-init-file (concat my-init-file "c")))
+        (byte-compile-file my-init-file)))
+
+  (add-hook 'kill-buffer-hook 'my/compile-init-file)
 #+END_SRC
 
 * Appearance
@@ -336,7 +344,7 @@ Sane setup for LaTeX writers.
     (defun my/latex-mode-defaults ()
       (turn-on-auto-fill)
       (abbrev-mode 1)
-      (LaTeX-math-mode 1)
+      ;; (LaTeX-math-mode 1)
       (turn-on-cdlatex))
 
     (add-hook 'LaTeX-mode-hook 'my/latex-mode-defaults)
@@ -591,6 +599,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
   (use-package sml-mode
     :ensure
     :mode "\\.sml\\'"
+    :functions sml-prog-proc-send-buffer
     :config
     (defun my-sml-prog-proc-send-buffer ()
       "If sml repl exists, then restart it else create a new repl."
@@ -816,12 +825,12 @@ files.
      (kbd "C-M-o")
      (defhydra hydra-window (:color amaranth)
        "
-  Move Point^^^^   Move Splitter   ^Ace^                       ^Split^                          Tranpose
-  --------------------------------------------------------------------------------------------------
-  _w_, _<up>_      Shift + Move    _C-a_: ace-window           _2_: split-window-below         _1_: transpose-frame
-  _a_, _<left>_                    _C-s_: ace-window-swap      _3_: split-window-right         _e_: rotate-frame-clockwise
-  _s_, _<down>_                    _C-d_: ace-window-delete    _<_: toggle-split-direction     _y_: flip-frame vertically
-  _d_, _<right>_                   ^   ^                       ^ ^                             _c_: flop-frame horizontally
+  Move Point^^^^   Move Splitter   ^Ace^                       ^Split^
+  --------------------------------------------------------------------------------
+  _w_, _<up>_      Shift + Move    _C-a_: ace-window           _2_: split-window-below
+  _a_, _<left>_                    _C-s_: ace-window-swap      _3_: split-window-right
+  _s_, _<down>_                    _C-d_: ace-window-delete    ^ ^
+  _d_, _<right>_                   ^   ^                       ^ ^
   You can use arrow-keys or WASD.
   "
        ("2" split-window-below nil)
@@ -843,14 +852,9 @@ files.
        ("<S-up>" hydra-move-splitter-up nil)
        ("<S-right>" hydra-move-splitter-right nil)
        ("C-a" ace-window nil)
-       ("u" hydra-universal-argument nil)
+       ("u" hydra--universal-argument nil)
        ("C-s" (lambda () (interactive) (ace-window 4)) nil)
        ("C-d" (lambda () (interactive) (ace-window 16)) nil)
-       ("<" window-toggle-split-direction nil)
-       ("1" transpose-frame nil)
-       ("e" rotate-frame-clockwise nil)
-       ("y" flip-frame nil)
-       ("c" flop-frame nil)
        ("q" nil "quit")))
 
     (defhydra hydra-org-template (:color blue :hint nil)
