@@ -1,7 +1,7 @@
 ;; Load customization
 ;; Keep emacs custom-settings in separate file
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(load-file custom-file)
+(defvar my-custom-file (expand-file-name "custom.el" user-emacs-directory))
+(load-file my-custom-file)
 
 ;; (add-to-list 'load-path my-vendor-dir)
 

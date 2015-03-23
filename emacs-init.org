@@ -1059,7 +1059,9 @@ shell.
 #+begin_src emacs-lisp :tangle yes
   (use-package swiper
     :ensure
-    :bind ("C-s" . swiper))
+    :bind ("C-s" . swiper)
+    :config
+    (setq ivy-wrap t))
 #+end_src
 
 *** Rainbow mode
@@ -1334,10 +1336,7 @@ Enable spell-checking in Emacs.
     (define-key flyspell-mouse-map [down-mouse-3] 'flyspell-correct-word)
     (define-key flyspell-mouse-map [mouse-3] 'undefined)
     (define-key flyspell-mode-map (kbd "C-M-i") nil)
-    (define-key flyspell-mode-map (kbd "C-;") nil)
-    ;; Work with auto-complete
-    (require 'auto-complete)
-    (ac-flyspell-workaround))
+    (define-key flyspell-mode-map (kbd "C-;") nil))
 
 #+END_SRC
 
@@ -1440,8 +1439,9 @@ Open file in Finder
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ensime
+    :defer 2
     :ensure
-    :init
+    :config
     (add-hook 'scala-mode-hook 'ensime-scala-mode-hook))
 #+END_SRC
 
@@ -1556,10 +1556,11 @@ Dash.
 more escaped group parentheses, and other goodies!).
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package visual-regexp-steroids
-    :ensure
-    :defines regexp-string replace-string
-    :bind ("C-c r" . vr/replace))
+  (use-package visual-regexp
+    :bind (("C-c r" . vr/replace)
+           ("C-c q" . vr/query-replace))
+    :config
+    (use-package visual-regexp-steroids))
 #+END_SRC
 
 *** Worf Mode
