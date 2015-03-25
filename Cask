@@ -51,6 +51,8 @@
 (depends-on "git-rebase-mode")
 (depends-on "git-timemachine")
 (depends-on "gntp")
+(depends-on "goto-chg")
+(depends-on "gscholar-bibtex")
 (depends-on "haskell-emacs")
 (depends-on "haskell-mode")
 (depends-on "helm")
