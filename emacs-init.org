@@ -118,6 +118,7 @@ Set custom theme path and load theme
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package elisp
     :load-path "packages/"
+    :commands comment-line
     :bind (("M-/" . hippie-expand)
            ("C-x C-b" . ibuffer)
            ([remap goto-line] . goto-line-with-feedback)
@@ -134,7 +135,9 @@ Set custom theme path and load theme
            ("C-S-p" . my/backward-line-by-many)
            ([remap kill-whole-line] . prelude-kill-whole-line)
            ([(control shift return)] . prelude-smart-open-line-above))
-    :bind* (("C-M-h" . backward-kill-word)))
+    :bind* (("C-M-h" . backward-kill-word))
+    :init
+    (bind-key "C-;" 'comment-line ctl-x-map))
 
   ;; (bind-key "C-f" 'find-function 'help-command)
   ;; (bind-key "C-k" 'find-function-on-key 'help-command)
