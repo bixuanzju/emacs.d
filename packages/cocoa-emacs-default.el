@@ -46,8 +46,8 @@
 ;; (global-set-key (kbd "M-'") 'ns-do-hide-others)
 
 (when (string= user-login-name "jeremybi")
-  (setq display-time-world-list '(("Asia/Shanghai" "Shanghai")
-                                  ("America/Vancouver" "Vancouver")))
+  ;; (setq display-time-world-list '(("Asia/Shanghai" "Shanghai")
+  ;;                                 ("America/Vancouver" "Vancouver")))
   ;; Use GNU ls - install with:
   (setq insert-directory-program "/usr/local/opt/coreutils/libexec/gnubin/ls")
   ;; ProofGeneral
