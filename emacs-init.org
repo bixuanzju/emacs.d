@@ -591,10 +591,11 @@ Type =clear= to clear the buffer like in other terminal emulators.
           haskell-process-log t
           haskell-indentation-show-indentations nil)
 
-    (setq haskell-process-args-cabal-repl
-          '("--ghc-option=-ferror-spans" "--with-ghc=ghci-ng"))
+    ;; (setq haskell-process-args-cabal-repl
+    ;;       '("--ghc-option=-ferror-spans" "--with-ghc=ghci-ng"))
 
-    (setq haskell-process-path-ghci "ghci-ng"))
+    ;; (setq haskell-process-path-ghci "ghci-ng")
+    )
 #+END_SRC
 
 *** SML Mode
@@ -696,7 +697,6 @@ Type =clear= to clear the buffer like in other terminal emulators.
     :config
     (ido-vertical-mode +1))
 #+END_SRC
-
 *** Magit
 
 [[https://github.com/magit/magit][Magit]] is the ultimate =git= interface for Emacs.
@@ -708,6 +708,15 @@ Type =clear= to clear the buffer like in other terminal emulators.
     :pin "melpa"
     :commands magit-status)
 #+END_SRC
+
+*** magit-gh-pulls
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package magit-gh-pulls
+    :config
+    (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls))
+#+end_src
+
 *** hindent
 
 #+begin_src emacs-lisp :tangle yes

@@ -82,6 +82,7 @@
 (depends-on "lua-mode")
 (depends-on "m-buffer")
 (depends-on "magit")
+(depends-on "magit-gh-pulls")
 (depends-on "makey")
 (depends-on "markdown-mode")
 (depends-on "math-symbol-lists")
