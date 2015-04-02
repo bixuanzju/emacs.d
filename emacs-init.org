@@ -709,14 +709,6 @@ Type =clear= to clear the buffer like in other terminal emulators.
     :commands magit-status)
 #+END_SRC
 
-*** magit-gh-pulls
-
-#+begin_src emacs-lisp :tangle no
-  (use-package magit-gh-pulls
-    :config
-    (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls))
-#+end_src
-
 *** hindent
 
 #+begin_src emacs-lisp :tangle yes
@@ -964,8 +956,7 @@ Move to the beginning/end of line or code
 
 #+begin_src emacs-lisp :tangle yes
   (use-package mwim
-    :bind (("C-a" . mwim-beginning-of-code-or-line)
-           ("C-e" . mwim-end-of-code-or-line)))
+    :bind ("C-a" . mwim-beginning-of-code-or-line))
 #+end_src
 *** Helm-swoop
 
@@ -990,7 +981,7 @@ helm interface.
 
 *** Swoop
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package swoop
     :ensure
     :bind (("C-o" . swoop)
@@ -1077,11 +1068,8 @@ shell.
 *** Swiper
 
 #+begin_src emacs-lisp :tangle yes
-  (use-package swiper
-    :ensure
-    :bind ("C-s" . swiper)
-    :config
-    (setq ivy-wrap t))
+  (use-package swiper-helm
+    :bind ("C-s" . swiper-helm))
 #+end_src
 
 *** Rainbow mode
