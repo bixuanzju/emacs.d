@@ -108,7 +108,7 @@ Set custom theme path and load theme
     :ensure
     :config
     (setq sml/no-confirm-load-theme t)
-    (sml/apply-theme 'powerline)
+    ;; (sml/apply-theme 'powerline)
     (sml/setup))
 #+END_SRC
 
@@ -711,7 +711,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
 *** magit-gh-pulls
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package magit-gh-pulls
     :config
     (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls))
@@ -1510,8 +1510,6 @@ Show matching and unmatched delimiters, and auto-close them as well.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ghc
-    :ensure
-    :pin "melpa-stable"
     :config
     (autoload 'ghc-init "ghc" nil t)
     (autoload 'ghc-debug "ghc" nil t)
