@@ -118,7 +118,6 @@ Set custom theme path and load theme
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package elisp
     :load-path "packages/"
-    :commands comment-line
     :bind (("M-/" . hippie-expand)
            ("C-x C-b" . ibuffer)
            ([remap goto-line] . goto-line-with-feedback)
@@ -135,9 +134,7 @@ Set custom theme path and load theme
            ("C-S-p" . my/backward-line-by-many)
            ([remap kill-whole-line] . prelude-kill-whole-line)
            ([(control shift return)] . prelude-smart-open-line-above))
-    :bind* (("C-M-h" . backward-kill-word))
-    :init
-    (bind-key "C-;" 'comment-line ctl-x-map))
+    :bind* (("C-M-h" . backward-kill-word)))
 
   ;; (bind-key "C-f" 'find-function 'help-command)
   ;; (bind-key "C-k" 'find-function-on-key 'help-command)
@@ -323,7 +320,6 @@ All packages and modes are configured here.
   ;;   (setq geiser-active-implementations '(racket)))
 
   (use-package racket-mode
-    :ensure
     :config
     (add-hook 'racket-mode-hook
               '(lambda ()
@@ -348,7 +344,8 @@ Sane setup for LaTeX writers.
       (turn-on-auto-fill)
       (abbrev-mode 1)
       ;; (LaTeX-math-mode 1)
-      (turn-on-cdlatex))
+      ;; (turn-on-cdlatex)
+      )
 
     (add-hook 'LaTeX-mode-hook 'my/latex-mode-defaults)
 
@@ -512,9 +509,8 @@ favorite feature is that pressing =F= will open all marked files.
 
 *** OCaml
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package tuareg
-    :ensure
     :config
     (setq auto-mode-alist
           (append '(("\\.ml[ily]?$" . tuareg-mode)
@@ -558,7 +554,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package cc-mode
-    :init
+    :config
     (add-hook 'java-mode-hook (lambda ()
                                 (setq c-basic-offset 2))))
 #+end_src
@@ -567,13 +563,12 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package haskell-mode
-    :ensure
     :config
     (defun my/haskell-mode-defaults ()
       (subword-mode +1)
       (turn-on-haskell-doc-mode)
       (turn-on-haskell-indentation)
-      (smartparens-mode -1)
+      ;; (smartparens-mode -1)
       (flycheck-mode -1))
 
     (add-hook 'haskell-mode-hook 'my/haskell-mode-defaults)
@@ -998,9 +993,7 @@ with helm.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package helm-descbinds
-    :defer t
-    :ensure
-    :config (helm-descbinds-mode 1))
+    :bind ("C-c b" . helm-descbinds))
 #+END_SRC
 
 *** Fullframe
@@ -1024,7 +1017,6 @@ shell.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package exec-path-from-shell
-    :ensure
     :if (memq window-system '(mac ns))
     :config
     (exec-path-from-shell-initialize))
@@ -1188,8 +1180,7 @@ Whitespace-mode configuration.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package helm-ag
-    :defer t
-    :ensure)
+    :defer t)
 #+end_src
 
 *** Lispy
@@ -1199,8 +1190,7 @@ Lisp code.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package lispy
-    :ensure
-    :defer t
+    :defer 2
     :init
     (dolist (hook '(emacs-lisp-mode-hook
                     lisp-mode-hook
@@ -1224,7 +1214,7 @@ Snippets are keys.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package yasnippet
-    :ensure
+    :defer 2
     :diminish (yas-minor-mode . "")
     :config
     (add-to-list 'auto-mode-alist '("\\.yasnippet$" . snippet-mode))
@@ -1251,15 +1241,14 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package cider
-    :defer t
-    :ensure
+    :defer 3
     :config
     (setq nrepl-log-messages t)
     (setq nrepl-hide-special-buffers t)
     (setq cider-repl-use-clojure-font-lock t)
     (setq cider-repl-result-prefix ";; => ")
     (setq cider-interactive-eval-result-prefix ";; => ")
-    (add-hook 'cider-mode-hook 'eldoc-mode)
+    ;; (add-hook 'cider-mode-hook 'eldoc-mode)
     (defun my/cider-repl-mode-defaults ()
       (subword-mode +1)
       (smartparens-strict-mode +1))
@@ -1313,7 +1302,7 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package company-coq
-    :ensure
+    :defer 3
     :config
     ;; Load company-coq when opening Coq files
     (add-hook 'coq-mode-hook 'company-coq-initialize))
@@ -1570,8 +1559,7 @@ more escaped group parentheses, and other goodies!).
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package worf
-    :defer t
-    :ensure
+    :defer 2
     :init
     (add-hook 'org-mode-hook 'worf-mode))
 #+END_SRC
