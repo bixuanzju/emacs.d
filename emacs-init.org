@@ -36,7 +36,7 @@ Cask is initialized in =init.el= with the following:
 
 You can download all packages in your =Cask= file by using =M-x
 pallet-install=. However, this should not be necessary.
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (require 'pallet)
   (pallet-mode t)
 #+END_SRC
@@ -569,7 +569,8 @@ Type =clear= to clear the buffer like in other terminal emulators.
       (turn-on-haskell-doc-mode)
       (turn-on-haskell-indentation)
       ;; (smartparens-mode -1)
-      (flycheck-mode -1))
+      ;; (flycheck-mode -1)
+      )
 
     (add-hook 'haskell-mode-hook 'my/haskell-mode-defaults)
     (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
@@ -1275,12 +1276,21 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 #+END_SRC
 *** Company-ghc
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package company-ghc
     :ensure
     :config
     (add-to-list 'company-backends '(company-ghc :with company-dabbrev-code)))
 #+end_src
+*** Company-ghci
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package company-ghci
+    :config
+    (add-to-list 'company-backends 'company-ghci)
+    (add-hook 'haskell-interactive-mode-hook 'company-mode))
+#+end_src
+
 *** Company-math
 
 #+begin_src emacs-lisp :tangle yes
@@ -1357,6 +1367,14 @@ A great syntax checker.
     (setq flycheck-indication-mode 'left-fringe)
     (setq flycheck-completion-system 'ido))
 #+END_SRC
+
+*** Flycheck-haskell
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package flycheck-haskell
+    :config
+    (add-hook 'flycheck-mode-hook #'flycheck-haskell-setup))
+#+end_src
 
 *** Pop Win
 
@@ -1485,7 +1503,7 @@ Show matching and unmatched delimiters, and auto-close them as well.
 
 *** GHC
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package ghc
     :config
     (autoload 'ghc-init "ghc" nil t)

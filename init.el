@@ -1,3 +1,8 @@
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; (package-initialize)
+
 ;; Define vars here
 (defvar my-init-file (expand-file-name "emacs-init.el" user-emacs-directory)
   "All configurations stored in this file.")
@@ -42,7 +47,7 @@ Only modes that don't derive from `prog-mode' should be listed here.")
  '(max-lisp-eval-depth 2000)
  '(package-selected-packages
    (quote
-    (swiper-helm ensime zop-to-char zenburn-theme worf whitespace-cleanup-mode wgrep-ag vlf visual-regexp-steroids utop use-package undo-tree tuareg sml-mode smartparens smart-mode-line-powerline-theme skeletor reveal-in-finder rainbow-mode racket-mode quickrun popwin pandoc-mode pallet ox-pandoc ov mwim multi-term move-text merlin markdown-mode magit lua-mode lispy lexbind-mode latex-extra key-chord js2-mode idris-mode ido-vertical-mode ido-ubiquitous hindent helm-projectile helm-descbinds helm-ag haskell-mode haskell-emacs gscholar-bibtex goto-chg git-timemachine ggtags fullframe fold-this flycheck flx-ido expand-region exec-path-from-shell elpy elisp-slime-nav ebib easy-kill dired+ dash-functional dash-at-point company-ghc company-coq cider chinese-fonts-setup cdlatex browse-kill-ring anzu)))
+    (flycheck-haskell buffer-utils company-ghci swiper-helm ensime zop-to-char zenburn-theme worf whitespace-cleanup-mode wgrep-ag vlf visual-regexp-steroids utop use-package undo-tree tuareg sml-mode smartparens smart-mode-line-powerline-theme skeletor reveal-in-finder rainbow-mode racket-mode quickrun popwin pandoc-mode pallet ox-pandoc ov mwim multi-term move-text merlin markdown-mode magit lua-mode lispy lexbind-mode latex-extra key-chord js2-mode idris-mode ido-vertical-mode ido-ubiquitous hindent helm-projectile helm-descbinds helm-ag haskell-mode haskell-emacs gscholar-bibtex goto-chg git-timemachine ggtags fullframe fold-this flycheck flx-ido expand-region exec-path-from-shell elpy elisp-slime-nav ebib easy-kill dired+ dash-functional dash-at-point company-ghc company-coq cider chinese-fonts-setup cdlatex browse-kill-ring anzu)))
  '(set-mark-command-repeat-pop t)
  '(shift-select-mode nil)
  '(split-height-threshold nil)
@@ -74,8 +79,6 @@ Only modes that don't derive from `prog-mode' should be listed here.")
  '(sr-active-path-face ((t (:weight bold :height 180)))))
 
 ;; (add-to-list 'load-path my-vendor-dir)
-
-;; (setq use-package-verbose t)
 
 (if (file-exists-p my-init-file)
     (load-file my-init-file)

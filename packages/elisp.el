@@ -49,6 +49,43 @@ Repeated invocations toggle between the two most recently open buffers."
   (interactive)
   (switch-to-buffer (other-buffer (current-buffer) 1)))
 
+;; (defvar my-use-next-or-previous t "If t, call `my-previous-user-buffer', or call `my-next-user-buffer'")
+
+;; (defun my-goto-most-recently-visied-user-buffer ()
+;;   "Switch to previously open user buffer.
+;; Repeated invocations toggle between the two most recently open
+;; buffers."
+;;   (interactive)
+;;   (if my-use-next-or-previous
+;;       (progn (my-previous-user-buffer)
+;;              (setq my-use-next-or-previous nil))
+;;     (progn (my-next-user-buffer)
+;;            (setq my-use-next-or-previous t))))
+
+;; (defun my-next-user-buffer ()
+;;   "Switch to the next user buffer.
+;;  “user buffer” is a buffer whose name does not start with “*”"
+;;   (interactive)
+;;   (next-buffer)
+;;   (let ((i 0))
+;;     (while (< i 20)
+;;       (if (string-equal "*" (substring (buffer-name) 0 1))
+;;           (progn (next-buffer)
+;;                  (setq i (1+ i)))
+;;         (progn (setq i 100))))))
+
+;; (defun my-previous-user-buffer ()
+;;   "Switch to the previous user buffer.
+;;  “user buffer” is a buffer whose name does not start with “*”"
+;;   (interactive)
+;;   (previous-buffer)
+;;   (let ((i 0))
+;;     (while (< i 20)
+;;       (if (string-equal "*" (substring (buffer-name) 0 1))
+;;           (progn (previous-buffer)
+;;                  (setq i (1+ i)))
+;;         (progn (setq i 100))))))
+
 (defun prelude-kill-whole-line (&optional arg)
   "A simple wrapper around command `kill-whole-line' that respects indentation.
 Passes ARG to command `kill-whole-line' when provided."
