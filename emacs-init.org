@@ -517,7 +517,6 @@ favorite feature is that pressing =F= will open all marked files.
                     ("\\.topml$" . tuareg-mode))
                   auto-mode-alist)))
 #+end_src
-
 *** Markdown
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -525,6 +524,15 @@ favorite feature is that pressing =F= will open all marked files.
     :ensure
     :mode "\\.md\\'")
 #+END_SRC
+
+*** C# mode
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package csharp-mode
+    :config
+    (bind-key "C-c C-r" 'quickrun csharp-mode-map)
+    (quickrun-set-default "c#" "c#/mono"))
+#+end_src
 
 *** F2j-mode
 
@@ -661,6 +669,18 @@ Type =clear= to clear the buffer like in other terminal emulators.
     (setq company-dabbrev-code-other-buffers 'code)
     (global-company-mode))
 #+END_SRC
+*** Omnisharp-Emacs
+
+Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] first.
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package omnisharp
+    :config
+    (add-to-list 'company-backends 'company-omnisharp)
+    (add-hook 'csharp-mode-hook 'omnisharp-mode)
+    (setq omnisharp-server-executable-path "/Users/jeremybi/Projects/OmniSharpServer/OmniSharp/bin/Debug/OmniSharp.exe"))
+#+end_src
+
 *** Ido-related
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -711,7 +731,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
   (use-package hindent
     :ensure
     :config
-    (setq hindent-style "chris-done")
+    (setq hindent-style "gibiansky")
     (add-hook 'haskell-mode-hook #'hindent-mode))
 #+end_src
 
@@ -747,14 +767,13 @@ recent files using =recentf=.  It is a great way to manage many open
 files.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package helm
-    :ensure
+  (use-package helm-config
+    :ensure helm
     :bind (("C-x C-f" . helm-find-files)
            ("M-y" . helm-show-kill-ring)
            ("C-h r" . helm-info-emacs)
            ("C-h a" . helm-apropos))
     :config
-    (require 'helm-config)
     (require 'helm-files)
 
     (when (executable-find "curl")
