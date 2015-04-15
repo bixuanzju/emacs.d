@@ -342,12 +342,10 @@ Sane setup for LaTeX writers.
     :config
     (defun my/latex-mode-defaults ()
       (turn-on-auto-fill)
-      (abbrev-mode 1)
-      ;; (LaTeX-math-mode 1)
-      ;; (turn-on-cdlatex)
-      )
+      (abbrev-mode 1))
 
     (add-hook 'LaTeX-mode-hook 'my/latex-mode-defaults)
+    (add-hook 'LaTeX-mode-hook 'turn-on-cdlatex)
 
     (setq TeX-auto-save t)
     (setq TeX-parse-self t)
