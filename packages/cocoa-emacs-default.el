@@ -51,7 +51,7 @@
   ;; Use GNU ls - install with:
   (setq insert-directory-program "/usr/local/opt/coreutils/libexec/gnubin/ls")
   ;; ProofGeneral
-  (load-file "/Users/jeremybi/scratch/ProofGeneral/ProofGeneral/generic/proof-site.el"))
+  (load-file "/Users/jeremybi/Projects/ProofGeneral/generic/proof-site.el"))
 
 (provide 'cocoa-emacs-default)
 

@@ -79,14 +79,14 @@ and byte-compile the =org=-document after changes asynchronously.
            (message "Tangled file compiled.")))))
     (add-hook 'after-save-hook 'my/init-hook))
 
-  (defun my/compile-init-file ()
-    (interactive)
-    (if (and
-         (string-equal buffer-file-name my-org-file)
-         (file-newer-than-file-p my-init-file (concat my-init-file "c")))
-        (byte-compile-file my-init-file)))
+  ;; (defun my/compile-init-file ()
+  ;;   (interactive)
+  ;;   (if (and
+  ;;        (string-equal buffer-file-name my-org-file)
+  ;;        (file-newer-than-file-p my-init-file (concat my-init-file "c")))
+  ;;       (byte-compile-file my-init-file)))
 
-  (add-hook 'kill-buffer-hook 'my/compile-init-file)
+  ;; (add-hook 'kill-buffer-hook 'my/compile-init-file)
 #+END_SRC
 
 * Appearance
@@ -341,8 +341,7 @@ Sane setup for LaTeX writers.
     :ensure auctex
     :config
     (defun my/latex-mode-defaults ()
-      (turn-on-auto-fill)
-      (abbrev-mode 1))
+      (yas-minor-mode -1))
 
     (add-hook 'LaTeX-mode-hook 'my/latex-mode-defaults)
     (add-hook 'LaTeX-mode-hook 'turn-on-cdlatex)
@@ -1079,7 +1078,7 @@ shell.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package swiper-helm
-    :bind ("C-s" . swiper-helm))
+    :bind ("C-o" . swiper-helm))
 #+end_src
 
 *** Rainbow mode
@@ -1329,10 +1328,9 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package company-coq
-    :defer 3
     :config
     ;; Load company-coq when opening Coq files
-    (add-hook 'coq-mode-hook 'company-coq-initialize))
+    (add-hook 'coq-mode-hook #'company-coq-initialize))
 #+end_src
 
 *** Flyspell

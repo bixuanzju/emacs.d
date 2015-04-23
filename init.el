@@ -36,7 +36,7 @@ Only modes that don't derive from `prog-mode' should be listed here.")
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(cfs--current-profile-name "profile1" t)
- '(cfs--fontsize-steps (quote (7 4 4)) t)
+ '(cfs--fontsize-steps (quote (6 4 4)) t)
  '(cfs--profiles-english-fontsizes (quote (18 12.5 12.5)) t)
  '(cfs--profiles-fontsizes (quote (18 12.5 12.5)) t)
  '(column-number-mode t)
@@ -47,7 +47,7 @@ Only modes that don't derive from `prog-mode' should be listed here.")
  '(max-lisp-eval-depth 2000)
  '(package-selected-packages
    (quote
-    (omnisharp csharp-mode company-coq flycheck-haskell buffer-utils company-ghci swiper-helm ensime zop-to-char zenburn-theme worf whitespace-cleanup-mode wgrep-ag vlf visual-regexp-steroids utop use-package undo-tree tuareg sml-mode smartparens smart-mode-line-powerline-theme skeletor reveal-in-finder rainbow-mode racket-mode quickrun popwin pandoc-mode pallet ox-pandoc ov mwim multi-term move-text merlin markdown-mode magit lua-mode lispy lexbind-mode latex-extra key-chord js2-mode idris-mode ido-vertical-mode ido-ubiquitous hindent helm-projectile helm-descbinds helm-ag haskell-mode haskell-emacs gscholar-bibtex goto-chg git-timemachine ggtags fullframe fold-this flycheck flx-ido expand-region exec-path-from-shell elpy elisp-slime-nav ebib easy-kill dired+ dash-functional dash-at-point company-ghc cider chinese-fonts-setup cdlatex browse-kill-ring anzu)))
+    (omnisharp csharp-mode company-coq flycheck-haskell buffer-utils company-ghci swiper-helm ensime zop-to-char zenburn-theme worf whitespace-cleanup-mode wgrep-ag vlf visual-regexp-steroids utop use-package undo-tree tuareg sml-mode smartparens smart-mode-line-powerline-theme skeletor reveal-in-finder rainbow-mode racket-mode quickrun popwin pandoc-mode pallet ox-pandoc ov mwim multi-term move-text merlin markdown-mode magit lua-mode lispy lexbind-mode latex-extra key-chord js2-mode idris-mode ido-vertical-mode ido-ubiquitous hindent helm-projectile helm-descbinds helm-ag haskell-mode gscholar-bibtex goto-chg git-timemachine ggtags fullframe flycheck flx-ido expand-region exec-path-from-shell elpy ebib easy-kill dired+ dash-functional dash-at-point company-ghc cider chinese-fonts-setup cdlatex browse-kill-ring anzu)))
  '(set-mark-command-repeat-pop t)
  '(shift-select-mode nil)
  '(split-height-threshold nil)
@@ -58,13 +58,11 @@ Only modes that don't derive from `prog-mode' should be listed here.")
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Menlo" :foundry "nil" :slant normal :weight normal :height 171 :width normal))))
  '(agda2-highlight-datatype-face ((t (:foreground "azure4"))))
  '(agda2-highlight-function-face ((t (:foreground "aquamarine3"))))
  '(agda2-highlight-module-face ((t (:foreground "DarkOliveGreen2"))))
  '(agda2-highlight-primitive-type-face ((t (:foreground "SkyBlue3"))))
  '(company-tooltip-annotation ((t (:inherit company-tooltip :foreground "orange1"))))
- '(cursor ((t (:background "gray78" :foreground "#DCDCCC"))))
  '(flyspell-incorrect ((t (:inherit nil :underline (:color "yellow" :style wave)))))
  '(hydra-face-amaranth ((t (:foreground "dark salmon" :weight bold))))
  '(hydra-face-blue ((t (:foreground "white" :weight bold))))
