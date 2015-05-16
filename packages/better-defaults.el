@@ -234,17 +234,17 @@ This functions should be added to the hooks of major modes for programming."
 
 
 ;; Copy from http://emacs.stackexchange.com/a/10360
-(defun my/delete ()
-  "Delete the failed portion of the search string, or the last char if successful."
-  (interactive)
-  (with-isearch-suspended
-   (setq isearch-new-string
-         (substring
-          isearch-string 0 (or (isearch-fail-pos) (1- (length isearch-string))))
-         isearch-new-message
-         (mapconcat 'isearch-text-char-description isearch-new-string ""))))
+;; (defun my/delete ()
+;;   "Delete the failed portion of the search string, or the last char if successful."
+;;   (interactive)
+;;   (with-isearch-suspended
+;;    (setq isearch-new-string
+;;          (substring
+;;           isearch-string 0 (or (isearch-fail-pos) (1- (length isearch-string))))
+;;          isearch-new-message
+;;          (mapconcat 'isearch-text-char-description isearch-new-string ""))))
 
-(define-key isearch-mode-map (kbd "<backspace>") #'my/delete)
+;; (define-key isearch-mode-map (kbd "<backspace>") #'my/delete)
 
 (provide 'better-defaults)
 

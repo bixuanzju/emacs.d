@@ -348,6 +348,7 @@ Sane setup for LaTeX writers.
 
     (setq TeX-auto-save t)
     (setq TeX-parse-self t)
+    (setq TeX-save-query nil)
 
     (setq-default TeX-master nil)
 
@@ -376,6 +377,13 @@ Sane setup for LaTeX writers.
   (use-package latex-extra
     :config
     (add-hook 'LaTeX-mode-hook #'latex-extra-mode))
+#+end_src
+**** LatexMk
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package auctex-latexmk
+    :config
+    (auctex-latexmk-setup))
 #+end_src
 
 *** Org Mode
@@ -524,7 +532,7 @@ favorite feature is that pressing =F= will open all marked files.
 
 *** C# mode
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package csharp-mode
     :config
     (bind-key "C-c C-r" 'quickrun csharp-mode-map)
@@ -574,8 +582,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
       (turn-on-haskell-doc-mode)
       (turn-on-haskell-indentation)
       ;; (smartparens-mode -1)
-      ;; (flycheck-mode -1)
-      )
+      (flycheck-mode -1))
 
     (add-hook 'haskell-mode-hook 'my/haskell-mode-defaults)
     (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
@@ -584,8 +591,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
     (bind-keys :map interactive-haskell-mode-map
                ("M-." . haskell-mode-goto-loc)
                ("M-," . pop-tag-mark)
-               ("C-c C-t" . ghc-show-type)
-               ("C-M-?" . ghc-display-errors))
+               ("C-c C-t" . ghc-show-type))
 
     (setq haskell-process-auto-import-loaded-modules t
           haskell-interactive-types-for-show-ambiguous nil
@@ -670,7 +676,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
 Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] first.
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package omnisharp
     :config
     (add-to-list 'company-backends 'company-omnisharp)
@@ -764,14 +770,14 @@ recent files using =recentf=.  It is a great way to manage many open
 files.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package helm-config
-    :ensure helm
+  (use-package helm
+    :ensure
     :bind (("C-x C-f" . helm-find-files)
            ("M-y" . helm-show-kill-ring)
            ("C-h r" . helm-info-emacs)
            ("C-h a" . helm-apropos))
     :config
-    (require 'helm-files)
+    (require 'helm-config)
 
     (when (executable-find "curl")
       (setq helm-google-suggest-use-curl-p t))
@@ -1071,8 +1077,12 @@ shell.
     (setq aw-scope 'frame)
     (ace-window-display-mode +1))
 
-  (use-package avy-jump
-    :bind ("s-l" . avi-goto-line))
+  (use-package avy
+    :bind (("s-l" . avy-goto-line)
+           ("C-'" . avy-goto-char-2))
+    :config
+    (setq avy-background t)
+    (setq avy-style 'at-full))
 #+END_SRC
 *** Swiper
 
@@ -1292,7 +1302,7 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 #+END_SRC
 *** Company-ghc
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
   (use-package company-ghc
     :ensure
     :config
@@ -1300,13 +1310,12 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 #+end_src
 *** Company-ghci
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package company-ghci
     :config
     (add-to-list 'company-backends 'company-ghci)
     (add-hook 'haskell-interactive-mode-hook 'company-mode))
 #+end_src
-
 *** Company-math
 
 #+begin_src emacs-lisp :tangle yes
@@ -1330,6 +1339,7 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
   (use-package company-coq
     :config
     ;; Load company-coq when opening Coq files
+    (setq company-coq-prettify-symbols nil)
     (add-hook 'coq-mode-hook #'company-coq-initialize))
 #+end_src
 
@@ -1385,7 +1395,7 @@ A great syntax checker.
 
 *** Flycheck-haskell
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package flycheck-haskell
     :config
     (add-hook 'flycheck-mode-hook #'flycheck-haskell-setup))
@@ -1518,8 +1528,9 @@ Show matching and unmatched delimiters, and auto-close them as well.
 
 *** GHC
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ghc
+    :load-path "/Users/jeremybi/Projects/ghc-mod/elisp/"
     :config
     (autoload 'ghc-init "ghc" nil t)
     (autoload 'ghc-debug "ghc" nil t)
