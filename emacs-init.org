@@ -36,7 +36,7 @@ Cask is initialized in =init.el= with the following:
 
 You can download all packages in your =Cask= file by using =M-x
 pallet-install=. However, this should not be necessary.
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (require 'pallet)
   (pallet-mode t)
 #+END_SRC
@@ -371,13 +371,6 @@ Sane setup for LaTeX writers.
     )
 #+END_SRC
 
-**** Latex extra
-
-#+begin_src emacs-lisp :tangle no
-  (use-package latex-extra
-    :config
-    (add-hook 'LaTeX-mode-hook #'latex-extra-mode))
-#+end_src
 **** LatexMk
 
 #+begin_src emacs-lisp :tangle yes
@@ -976,38 +969,6 @@ Move to the beginning/end of line or code
   (use-package mwim
     :bind ("C-a" . mwim-beginning-of-code-or-line))
 #+end_src
-*** Helm-swoop
-
-[[https://github.com/ShingoFukuyama/helm-swoop][Helm-swoop]], efficiently hopping squeezed lines powered by Emacs
-helm interface.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package helm-swoop
-    :ensure
-    :bind (("M-i" . helm-swoop)
-           ("M-I" . helm-swoop-back-to-last-point)
-           ("C-c M-i" . helm-multi-swoop)
-           ("C-x M-i" . helm-multi-swoop-all))
-    :config
-    ;; Save buffer when helm-multi-swoop-edit complete
-    (setq helm-multi-swoop-edit-save t)
-    ;; When doing isearch, hand the word over to helm-swoop
-    (bind-key "M-i" 'helm-swoop-from-isearch isearch-mode-map)
-    ;; From helm-swoop to helm-multi-swoop-all
-    (bind-key "M-i" 'helm-multi-swoop-all-from-helm-swoop helm-swoop-map))
-#+END_SRC
-
-*** Swoop
-
-#+begin_src emacs-lisp :tangle no
-  (use-package swoop
-    :ensure
-    :bind (("C-o" . swoop)
-           ("C-S-o" . swoop-back-to-last-position))
-    :config
-    (setq swoop-font-size-change: nil))
-#+end_src
-
 *** Helm-descbinds
 
 [[https://github.com/emacs-helm/helm-descbinds][Helm Descbinds]] provides an interface to emacs' =describe-bindings=
@@ -1053,16 +1014,6 @@ shell.
                    (shell-command-to-string "agda-mode locate"))))
 #+end_src
 
-*** Ace-jump-mode
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package ace-jump-mode
-    :ensure
-    :bind ("C-c SPC" . ace-jump-mode)
-    :config
-    (setq ace-jump-mode-move-keys
-        '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?q ?w ?e ?r ?t ?y ?u ?i ?o ?p ?z ?x ?c ?v ?b ?n ?m)))
-#+END_SRC
 *** Ace-window
 
 [[https://github.com/abo-abo/ace-window][Ace-window]] provides window switching, the visual way.
