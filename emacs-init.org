@@ -946,13 +946,14 @@ files.
 #+end_src
 *** Elpy
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
   (use-package elpy
     :ensure
     :config
     (remove-hook 'elpy-modules 'elpy-module-flymake)
-    (remove-hook 'elpy-modules 'elpy-module-yasnippet)
-    (elpy-enable))
+    ;; (remove-hook 'elpy-modules 'elpy-module-yasnippet)
+    (elpy-enable)
+    (elpy-use-ipython))
 #+end_src
 *** Chinese-font-setup
 

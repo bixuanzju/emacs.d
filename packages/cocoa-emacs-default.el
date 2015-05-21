@@ -50,8 +50,49 @@
   ;;                                 ("America/Vancouver" "Vancouver")))
   ;; Use GNU ls - install with:
   (setq insert-directory-program "/usr/local/opt/coreutils/libexec/gnubin/ls")
+
+  ;; copy from http://endlessparentheses.com/proof-general-configuration-for-the-coq-software-foundations-tutorial.html
   ;; ProofGeneral
-  (load-file "/Users/jeremybi/Projects/ProofGeneral/generic/proof-site.el"))
+  (load-file "/Users/jeremybi/Projects/ProofGeneral/generic/proof-site.el")
+
+  ;; I appreciate the effort of writing a splash-screen, but the angry
+  ;; general on the gif scares me.
+  (setq proof-splash-seen t)
+
+  ;; Hybrid mode is by far the best.
+  (setq proof-three-window-mode-policy 'hybrid)
+
+  ;; I don't know who wants to evaluate comments
+  ;; one-by-one, but I don't.
+  (setq proof-script-fly-past-comments t)
+
+  (with-eval-after-load 'coq
+    ;; The most common command by far. Having a 3(!)
+    ;; keys long sequence for this command is just a
+    ;; crime.
+    (define-key coq-mode-map "\M-n"
+      #'proof-assert-next-command-interactive)
+
+    ;; Small convenience for commonly written commands.
+    (define-key coq-mode-map "\C-c\C-m" "\nend\t")
+    (define-key coq-mode-map "\C-c\C-e"
+      #'endless/qed)
+    (defun endless/qed ()
+      (interactive)
+      (unless (memq (char-before) '(?\s ?\n ?\r))
+        (insert " "))
+      (insert "Qed.")
+      (proof-assert-next-command-interactive))
+
+    (add-hook 'coq-mode-hook 'abbrev-mode)
+
+    (define-abbrev coq-mode-abbrev-table "re" "reflexivity.")
+    (define-abbrev coq-mode-abbrev-table "id" "induction")
+    (define-abbrev coq-mode-abbrev-table "si" "simpl.")
+    (advice-add 'proof-assert-next-command-interactive
+                :before #'expand-abbrev))
+
+  (require 'ottmode))
 
 (provide 'cocoa-emacs-default)
 
