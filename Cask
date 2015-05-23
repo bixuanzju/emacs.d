@@ -75,7 +75,6 @@
 (depends-on "idomenu")
 (depends-on "idris-mode")
 (depends-on "iedit")
-(depends-on "ivy")
 (depends-on "js2-mode")
 (depends-on "key-chord")
 (depends-on "let-alist")
