@@ -1050,7 +1050,8 @@ shell.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package swiper
-    :bind (("C-o" . swiper)
+    :bind (("C-r" . swiper)
+           ("C-s" . swiper)
            ("C-c C-r" . ivy-resume))
     :config
     (ivy-mode 1)
