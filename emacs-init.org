@@ -156,8 +156,8 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
     (key-chord-define-global "x1" 'delete-other-windows)
     ;; (key-chord-define-global "xk" 'ace-window)
     (key-chord-define-global "0o" 'delete-window)
-    (key-chord-define-global "xn" 'helm-mini)
-    (key-chord-define-global "xb" 'switch-to-buffer)
+    ;; (key-chord-define-global "xn" 'helm-mini)
+    (key-chord-define-global "xn" 'switch-to-buffer)
     (key-chord-define-global "jk" 'magit-status)
     (key-chord-define-global "xm" 'helm-M-x)
     ;; (key-chord-define-global "1q" "!")
@@ -366,15 +366,15 @@ Sane setup for LaTeX writers.
               ("PDF Viewer" "open %o")
               ("HTML Viewer" "open %o"))))
 
-    ;; (eval-after-load "tex"
-    ;;   '(add-to-list 'TeX-engine-alist-builtin
-    ;;                '(xetex "XeTeX" "xetex -shell-escape" "xelatex -shell-escape" "xetex")))
-    )
+    (eval-after-load "tex"
+      '(use-package auctex-latexmk
+         :config
+         (auctex-latexmk-setup))))
 #+END_SRC
 
 **** LatexMk
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package auctex-latexmk
     :config
     (auctex-latexmk-setup))
@@ -1040,11 +1040,11 @@ shell.
     )
 
   (use-package avy
-    :bind (("s-l" . avy-goto-line)
-           ("C-'" . avy-goto-char-2))
+    :bind ("s-l" . avy-goto-line)
     :config
     (setq avy-background t)
-    (setq avy-style 'at-full))
+    (setq avy-style 'at-full)
+    (bind-key* "C-'" 'avy-goto-word-or-subword-1))
 #+END_SRC
 *** Swiper
 
