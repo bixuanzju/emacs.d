@@ -46,10 +46,9 @@
 ;; (global-set-key (kbd "M-'") 'ns-do-hide-others)
 
 (when (string= user-login-name "jeremybi")
-  ;; (setq display-time-world-list '(("Asia/Shanghai" "Shanghai")
-  ;;                                 ("America/Vancouver" "Vancouver")))
-  ;; Use GNU ls - install with:
-  (setq insert-directory-program "/usr/local/opt/coreutils/libexec/gnubin/ls")
+  ;; Prefer g-prefixed coreutils version of standard utilities when available
+  (let ((gls (executable-find "gls")))
+    (when gls (setq insert-directory-program gls)))
 
   ;; copy from http://endlessparentheses.com/proof-general-configuration-for-the-coq-software-foundations-tutorial.html
   ;; ProofGeneral

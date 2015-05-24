@@ -232,8 +232,10 @@ Doesn't mess with special buffers."
   (forward-line -4))
 
 ;; borrowed from Emacs 25
-(defun my/comment-line (n)
-  "Comment or uncomment current line and leave point after it.
+
+(when (= emacs-major-version 24)
+  (defun my/comment-line (n)
+    "Comment or uncomment current line and leave point after it.
 With positive prefix, apply to N lines including current one.
 With negative prefix, apply to -N lines above.  Also, further
 consecutive invocations of this command will inherit the negative
@@ -241,27 +243,40 @@ argument.
 
 If region is active, comment lines in active region instead.
 Unlike `comment-dwim', this always comments whole lines."
-  (interactive "p")
-  (if (use-region-p)
-      (comment-or-uncomment-region
-       (save-excursion
-         (goto-char (region-beginning))
-         (line-beginning-position))
-       (save-excursion
-         (goto-char (region-end))
-         (line-end-position)))
-    (when (and (eq last-command 'comment-line-backward)
-               (natnump n))
-      (setq n (- n)))
-    (let ((range
-           (list (line-beginning-position)
-                 (goto-char (line-end-position n)))))
-      (comment-or-uncomment-region
-       (apply #'min range)
-       (apply #'max range)))
-    (forward-line 1)
-    (back-to-indentation)
-    (unless (natnump n) (setq this-command 'comment-line-backward))))
+    (interactive "p")
+    (if (use-region-p)
+        (comment-or-uncomment-region
+         (save-excursion
+           (goto-char (region-beginning))
+           (line-beginning-position))
+         (save-excursion
+           (goto-char (region-end))
+           (line-end-position)))
+      (when (and (eq last-command 'comment-line-backward)
+                 (natnump n))
+        (setq n (- n)))
+      (let ((range
+             (list (line-beginning-position)
+                   (goto-char (line-end-position n)))))
+        (comment-or-uncomment-region
+         (apply #'min range)
+         (apply #'max range)))
+      (forward-line 1)
+      (back-to-indentation)
+      (unless (natnump n) (setq this-command 'comment-line-backward))))
+  (bind-key [?\C-\;] 'my/comment-line ctl-x-map))
+
+
+
+;;; copy from https://github.com/purcell/emacs.d
+(defun sanityinc/maybe-set-bundled-elisp-readonly ()
+  "If this elisp appears to be part of Emacs, then disallow editing."
+  (when (and (buffer-file-name)
+             (string-match-p "\\.el\\.gz\\'" (buffer-file-name)))
+    (setq buffer-read-only t)
+    (view-mode +1)))
+
+(add-hook 'emacs-lisp-mode-hook 'sanityinc/maybe-set-bundled-elisp-readonly)
 
 (provide 'elisp)
 

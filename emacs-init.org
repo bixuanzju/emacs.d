@@ -132,7 +132,6 @@ Set custom theme path and load theme
            ("C-x \\" . align-regexp)
            ("C-S-n" . my/forward-line-by-many)
            ("C-S-p" . my/backward-line-by-many)
-           ("C-x C-;" . my/comment-line)
            ([remap kill-whole-line] . prelude-kill-whole-line)
            ([(control shift return)] . prelude-smart-open-line-above))
     :bind* (("C-M-h" . backward-kill-word)))
@@ -1038,14 +1037,19 @@ shell.
     (setq aw-scope 'frame)
     ;; (ace-window-display-mode +1)
     )
+#+END_SRC
 
+*** avy
+
+#+begin_src emacs-lisp :tangle yes
   (use-package avy
     :bind ("s-l" . avy-goto-line)
     :config
     (setq avy-background t)
     (setq avy-style 'at-full)
     (bind-key* "C-'" 'avy-goto-word-or-subword-1))
-#+END_SRC
+#+end_src
+
 *** Swiper
 
 #+begin_src emacs-lisp :tangle yes
