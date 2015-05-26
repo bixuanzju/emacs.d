@@ -120,7 +120,6 @@
 (depends-on "s")
 (depends-on "sbt-mode")
 (depends-on "scala-mode2")
-(depends-on "shm")
 (depends-on "shut-up")
 (depends-on "skeletor")
 (depends-on "smart-mode-line")

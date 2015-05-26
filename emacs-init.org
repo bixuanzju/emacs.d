@@ -584,7 +584,8 @@ Type =clear= to clear the buffer like in other terminal emulators.
     (bind-keys :map interactive-haskell-mode-map
                ("M-." . haskell-mode-goto-loc)
                ("M-," . pop-tag-mark)
-               ("C-c C-t" . ghc-show-type))
+               ("C-c C-t" . ghc-show-type)
+               ("C-M-?" . ghc-display-errors))
 
     (setq haskell-process-auto-import-loaded-modules t
           haskell-interactive-types-for-show-ambiguous nil
@@ -654,6 +655,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
     :diminish (company-mode . "CPY")
     :config
     (setq company-tooltip-align-annotations t)
+    (setq company-idle-delay 0.3)
     (setq company-dabbrev-ignore-case nil)
     (setq company-dabbrev-downcase nil)
     (eval-after-load 'company-dabbrev-code
@@ -1029,7 +1031,7 @@ shell.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ace-window
     :ensure
-    :bind ("M-p" . ace-window)
+    :bind ("M-[" . ace-window)
     :config
     ;; (setq aw-leading-char-style 'path)
     (setq aw-background nil)
