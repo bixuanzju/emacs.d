@@ -773,10 +773,7 @@ files.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package helm-config
     :ensure helm
-    ;; :bind (("C-x C-f" . helm-find-files)
-    ;;        ("M-y" . helm-show-kill-ring)
-    ;;        ("C-h r" . helm-info-emacs)
-    ;;        ("C-h a" . helm-apropos))
+    :bind ("M-y" . helm-show-kill-ring)
     :config
     ;; (require 'helm-config)
 
@@ -1049,7 +1046,7 @@ shell.
     :config
     (setq avy-background t)
     (setq avy-style 'at-full)
-    (bind-key* "C-'" 'avy-goto-word-or-subword-1))
+    (bind-key* "C-'" 'avy-goto-char-in-line))
 #+end_src
 
 *** Swiper
