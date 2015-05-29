@@ -695,21 +695,6 @@ Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] firs
 
   ;; disable ido faces to see flx highlights
   (setq ido-use-faces nil)
-
-  (use-package ido-ubiquitous
-    :disabled t
-    :config
-    (ido-ubiquitous-mode +1))
-
-  (use-package flx-ido
-    :disabled t
-    :config
-    (flx-ido-mode +1))
-
-  (use-package ido-vertical-mode
-    :ensure
-    :config
-    (ido-vertical-mode +1))
 #+END_SRC
 *** Magit
 
@@ -1072,6 +1057,14 @@ shell.
          cands "\n"))))
 #+end_src
 
+*** Counsel
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package counsel
+    :bind (("C-h f" . counsel-describe-function)
+           ("C-h v" . counsel-describe-variable)))
+#+end_src
+
 *** Rainbow mode
 
 =rainbow-mode= displays hexadecimal colors with the color they
@@ -1162,18 +1155,20 @@ Whitespace-mode configuration.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package projectile
     :ensure
+    :bind (("s-p" . projectile-switch-project)
+           ("s-f" . projectile-find-file))
     :diminish ""
     :config
     (setq projectile-cache-file
           (expand-file-name  "projectile.cache" savefile-dir)
-          projectile-completion-system 'helm
+          projectile-completion-system 'ivy
           projectile-sort-order 'modification-time)
     (projectile-global-mode t))
 #+END_SRC
 
 *** Helm-projectile
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package helm-projectile
     :ensure
     :bind (("s-p" . helm-projectile-switch-project)
@@ -1187,8 +1182,7 @@ Whitespace-mode configuration.
 *** Helm-ag
 
 #+begin_src emacs-lisp :tangle yes
-  (use-package helm-ag
-    :defer t)
+  (use-package helm-ag)
 #+end_src
 
 *** Lispy
@@ -1668,6 +1662,15 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
 #+begin_src emacs-lisp :tangle yes
   (use-package git-timemachine
     :ensure)
+#+end_src
+
+*** Fix-word
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package fix-word
+    :bind (("M-u" . fix-word-upcase)
+           ("M-l" . fix-word-downcase)
+           ("M-c" . fix-word-capitalize)))
 #+end_src
 
 ** Buffer
