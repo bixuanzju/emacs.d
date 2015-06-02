@@ -157,6 +157,7 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
     (key-chord-define-global "0o" 'delete-window)
     ;; (key-chord-define-global "xn" 'helm-mini)
     (key-chord-define-global "xn" 'switch-to-buffer)
+    (key-chord-define-global "xb" 'ivy-recentf)
     (key-chord-define-global "jk" 'magit-status)
     (key-chord-define-global "xm" 'helm-M-x)
     ;; (key-chord-define-global "1q" "!")
@@ -224,12 +225,6 @@ Some quick essential customizations.
         savehist-file (expand-file-name "savehist" savefile-dir))
   (savehist-mode +1)
 
-  ;; save recent files
-  (require 'recentf)
-  (setq recentf-save-file (expand-file-name "recentf" savefile-dir)
-        recentf-max-saved-items 500
-        recentf-max-menu-items 15)
-
   ;; reduce the frequency of garbage collection by making it happen on
   (setq gc-cons-threshold (* 1024 1024 20))
 
@@ -258,6 +253,7 @@ Some quick essential customizations.
 
 All packages and modes are configured here.
 ** Major Modes
+
 *** Lisp
 
 **** Clojure
@@ -582,7 +578,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
     (require 'haskell)
     (bind-keys :map interactive-haskell-mode-map
-               ("M-." . haskell-mode-goto-loc)
+               ;; ("M-." . haskell-mode-goto-loc)
                ("M-," . pop-tag-mark)
                ("C-c C-t" . ghc-show-type)
                ("C-M-?" . ghc-display-errors))
@@ -644,6 +640,19 @@ Type =clear= to clear the buffer like in other terminal emulators.
 #+END_SRC
 
 ** Minor Modes
+*** Recentf
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package recentf
+    :config
+    (setq recentf-exclude
+          '("COMMIT_MSG" "COMMIT_EDITMSG" "github.*txt$"
+            ".*png$"))
+    (setq recentf-save-file (expand-file-name "recentf" savefile-dir)
+          recentf-max-saved-items 60)
+    (recentf-mode +1))
+#+end_src
+
 *** Company
 
 [[https://github.com/company-mode/company-mode][Company]] is a code completion framework for Emacs. The name stands for
@@ -1043,8 +1052,10 @@ shell.
            ("C-c C-r" . ivy-resume))
     :config
     (ivy-mode 1)
-    (setq ivy-use-virtual-buffers t)
+    ;; (setq ivy-use-virtual-buffers t)
     (setq ivy-format-function 'eh-ivy-format-function)
+
+    (define-key ivy-minibuffer-map (kbd "C-w") 'ivy-yank-word)
 
     (defun eh-ivy-format-function (cands)
       (let ((i -1))
@@ -1062,7 +1073,10 @@ shell.
 #+begin_src emacs-lisp :tangle yes
   (use-package counsel
     :bind (("C-h f" . counsel-describe-function)
-           ("C-h v" . counsel-describe-variable)))
+           ("C-h v" . counsel-describe-variable)
+           ("C-x C-f" . counsel-find-file))
+    :config
+    (setq counsel-find-file-at-point t))
 #+end_src
 
 *** Rainbow mode
@@ -1168,15 +1182,9 @@ Whitespace-mode configuration.
 
 *** Helm-projectile
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
   (use-package helm-projectile
-    :ensure
-    :bind (("s-p" . helm-projectile-switch-project)
-           ("s-f" . helm-projectile-find-file)
-           ("s-g" . helm-projectile-ag))
-    :config
-    (setq projectile-switch-project-action 'helm-projectile-find-file)
-    (helm-projectile-on))
+    :bind ("s-g" . helm-projectile-ag))
 #+end_src
 
 *** Helm-ag
