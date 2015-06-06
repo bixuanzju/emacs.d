@@ -316,6 +316,7 @@ All packages and modes are configured here.
   ;;   (setq geiser-active-implementations '(racket)))
 
   (use-package racket-mode
+    :ensure
     :config
     (add-hook 'racket-mode-hook
               '(lambda ()
@@ -371,6 +372,7 @@ Sane setup for LaTeX writers.
 
 #+begin_src emacs-lisp :tangle no
   (use-package auctex-latexmk
+    :ensure
     :config
     (auctex-latexmk-setup))
 #+end_src
@@ -571,7 +573,8 @@ Type =clear= to clear the buffer like in other terminal emulators.
       (turn-on-haskell-doc-mode)
       (turn-on-haskell-indentation)
       ;; (smartparens-mode -1)
-      (flycheck-mode -1))
+      ;; (flycheck-mode -1)
+      )
 
     (add-hook 'haskell-mode-hook 'my/haskell-mode-defaults)
     (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
@@ -580,8 +583,9 @@ Type =clear= to clear the buffer like in other terminal emulators.
     (bind-keys :map interactive-haskell-mode-map
                ;; ("M-." . haskell-mode-goto-loc)
                ("M-," . pop-tag-mark)
-               ("C-c C-t" . ghc-show-type)
-               ("C-M-?" . ghc-display-errors))
+               ;; ("C-c C-t" . ghc-show-type)
+               ;; ("C-M-?" . ghc-display-errors)
+               )
 
     (setq haskell-process-auto-import-loaded-modules t
           haskell-interactive-types-for-show-ambiguous nil
@@ -749,13 +753,15 @@ file buffer.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package goto-chg
+    :ensure
     :bind ("C-M-." . goto-last-change))
 #+end_src
 
 *** gscholar bibtex
 
 #+begin_src emacs-lisp :tangle yes
-  (use-package gscholar-bibtex)
+  (use-package gscholar-bibtex
+    :ensure)
 #+end_src
 
 *** Helm
@@ -936,7 +942,7 @@ files.
 
 *** Pandoc-mode
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package pandoc-mode
     :ensure
     :config
@@ -953,7 +959,8 @@ files.
     (remove-hook 'elpy-modules 'elpy-module-flymake)
     (remove-hook 'elpy-modules 'elpy-module-yasnippet)
     (elpy-enable)
-    (elpy-use-ipython))
+    ;; (elpy-use-ipython)
+    )
 #+end_src
 *** Chinese-font-setup
 
@@ -968,6 +975,7 @@ Move to the beginning/end of line or code
 
 #+begin_src emacs-lisp :tangle yes
   (use-package mwim
+    :ensure
     :bind ("C-a" . mwim-beginning-of-code-or-line))
 #+end_src
 *** Helm-descbinds
@@ -978,6 +986,7 @@ with helm.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package helm-descbinds
+    :ensure
     :bind ("C-c b" . helm-descbinds))
 #+END_SRC
 
@@ -1002,6 +1011,7 @@ shell.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package exec-path-from-shell
+    :ensure
     :if (memq window-system '(mac ns))
     :config
     (exec-path-from-shell-initialize))
@@ -1036,10 +1046,11 @@ shell.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package avy
+    :ensure
     :bind ("s-l" . avy-goto-line)
     :config
     (setq avy-background t)
-    (setq avy-style 'at-full)
+    (setq avy-style 'de-bruijn)
     (bind-key* "C-'" 'avy-goto-char-in-line))
 #+end_src
 
@@ -1047,6 +1058,7 @@ shell.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package swiper
+    :ensure
     :bind (("C-r" . swiper)
            ("C-s" . swiper)
            ("C-c C-r" . ivy-resume))
@@ -1072,9 +1084,11 @@ shell.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package counsel
+    :ensure
     :bind (("C-h f" . counsel-describe-function)
            ("C-h v" . counsel-describe-variable)
-           ("C-x C-f" . counsel-find-file))
+           ("C-x C-f" . counsel-find-file)
+           ("C-c j" . counsel-git-grep))
     :config
     (setq counsel-find-file-at-point t))
 #+end_src
@@ -1184,12 +1198,13 @@ Whitespace-mode configuration.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package helm-projectile
-    :bind ("s-g" . helm-projectile-ag))
+    :ensure
+    :defer 2)
 #+end_src
 
 *** Helm-ag
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package helm-ag)
 #+end_src
 
@@ -1200,6 +1215,7 @@ Lisp code.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package lispy
+    :ensure
     :defer 2
     :init
     (dolist (hook '(emacs-lisp-mode-hook
@@ -1224,7 +1240,7 @@ Snippets are keys.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package yasnippet
-    :defer 2
+    :ensure
     :diminish (yas-minor-mode . "")
     :config
     (add-to-list 'auto-mode-alist '("\\.yasnippet$" . snippet-mode))
@@ -1251,6 +1267,7 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package cider
+    :ensure
     :defer 3
     :config
     (setq nrepl-log-messages t)
@@ -1267,7 +1284,7 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 
 *** Merlin and utop
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package utop
     :ensure
     :config
@@ -1285,7 +1302,7 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 #+END_SRC
 *** Company-ghc
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package company-ghc
     :ensure
     :config
@@ -1293,8 +1310,9 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 #+end_src
 *** Company-ghci
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
   (use-package company-ghci
+    :ensure
     :config
     (add-to-list 'company-backends 'company-ghci)
     (add-hook 'haskell-interactive-mode-hook 'company-mode))
@@ -1320,6 +1338,7 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package company-coq
+    :ensure
     :config
     ;; Load company-coq when opening Coq files
     (setq company-coq-prettify-symbols nil)
@@ -1332,6 +1351,7 @@ Enable spell-checking in Emacs.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package flyspell
+    :ensure
     :diminish (flyspell-mode . "")
     :init
     ;; Enable spell check in only plaintext
@@ -1378,8 +1398,9 @@ A great syntax checker.
 
 *** Flycheck-haskell
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
   (use-package flycheck-haskell
+    :ensure
     :config
     (add-hook 'flycheck-mode-hook #'flycheck-haskell-setup))
 #+end_src
@@ -1456,7 +1477,7 @@ Open file in Finder
 
 [[https://github.com/ensime/ensime-src][ENSIME]] is the ENhanced Scala Interaction Mode for Emacs.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package ensime
     :defer 2
     :ensure
@@ -1497,6 +1518,7 @@ Show matching and unmatched delimiters, and auto-close them as well.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package smartparens-config
+    :ensure smartparens
     :config
     ;; highlights matching pairs
     (setq sp-base-key-bindings 'paredit)
@@ -1511,8 +1533,9 @@ Show matching and unmatched delimiters, and auto-close them as well.
 
 *** GHC
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package ghc
+    :ensure
     :config
     (autoload 'ghc-init "ghc" nil t)
     (autoload 'ghc-debug "ghc" nil t)
@@ -1574,6 +1597,7 @@ more escaped group parentheses, and other goodies!).
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package visual-regexp
+    :ensure
     :defines regexp-string replace-string
     :bind (("C-c r" . vr/replace)
            ("C-c q" . vr/query-replace))
@@ -1585,6 +1609,7 @@ more escaped group parentheses, and other goodies!).
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package worf
+    :ensure
     :defer 2
     :init
     (add-hook 'org-mode-hook 'worf-mode))
@@ -1618,6 +1643,7 @@ View Large Files in Emacs
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package vlf-setup
+    :ensure vlf
     :config
     (setq vlf-batch-size 10240)
     (setq vlf-application 'dont-ask))
@@ -1676,6 +1702,7 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
 
 #+begin_src emacs-lisp :tangle yes
   (use-package fix-word
+    :ensure
     :bind (("M-u" . fix-word-upcase)
            ("M-l" . fix-word-downcase)
            ("M-c" . fix-word-capitalize)))

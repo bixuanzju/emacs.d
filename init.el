@@ -1,6 +1,3 @@
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
 ;; (package-initialize)
 
 ;; Define vars here
@@ -47,7 +44,7 @@ Only modes that don't derive from `prog-mode' should be listed here.")
  '(max-lisp-eval-depth 2000)
  '(package-selected-packages
    (quote
-    (auctex-latexmk haskell-mode omnisharp csharp-mode company-coq buffer-utils swiper-helm ensime zop-to-char zenburn-theme worf whitespace-cleanup-mode wgrep-ag vlf visual-regexp-steroids utop use-package undo-tree tuareg sml-mode smartparens smart-mode-line-powerline-theme skeletor reveal-in-finder rainbow-mode racket-mode quickrun popwin pandoc-mode pallet ox-pandoc ov mwim multi-term move-text merlin markdown-mode magit lua-mode lispy lexbind-mode latex-extra key-chord js2-mode idris-mode ido-vertical-mode ido-ubiquitous hindent helm-projectile helm-descbinds helm-ag gscholar-bibtex goto-chg git-timemachine ggtags fullframe flycheck flx-ido expand-region exec-path-from-shell elpy ebib easy-kill dired+ dash-at-point company-ghc cider chinese-fonts-setup cdlatex browse-kill-ring anzu)))
+    (zop-to-char zenburn-theme worf whitespace-cleanup-mode wgrep-ag vlf visual-regexp-steroids utop use-package undo-tree tuareg sml-mode smartparens smart-mode-line-powerline-theme skeletor reveal-in-finder rainbow-mode racket-mode quickrun popwin pandoc-mode pallet ox-pandoc ov omnisharp mwim multi-term move-text merlin markdown-mode magit lua-mode lispy lexbind-mode key-chord js2-mode idris-mode hindent helm-projectile helm-descbinds helm-ag gscholar-bibtex goto-chg git-timemachine ggtags fullframe flycheck-haskell fix-word expand-region exec-path-from-shell ensime elpy ebib easy-kill dired+ dash-at-point counsel company-ghci company-ghc company-coq cider chinese-fonts-setup cdlatex auctex-latexmk anzu)))
  '(set-mark-command-repeat-pop t)
  '(shift-select-mode nil)
  '(split-height-threshold nil)
