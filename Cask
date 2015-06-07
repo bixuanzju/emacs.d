@@ -62,7 +62,6 @@
 (depends-on "iedit")
 (depends-on "js2-mode")
 (depends-on "key-chord")
-(depends-on "let-alist")
 (depends-on "lexbind-mode")
 (depends-on "lispy")
 (depends-on "lua-mode")

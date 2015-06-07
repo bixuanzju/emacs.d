@@ -36,7 +36,7 @@ Cask is initialized in =init.el= with the following:
 
 You can download all packages in your =Cask= file by using =M-x
 pallet-install=. However, this should not be necessary.
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (require 'pallet)
   (pallet-mode t)
 #+END_SRC
@@ -338,6 +338,7 @@ Sane setup for LaTeX writers.
     :ensure auctex
     :config
     (defun my/latex-mode-defaults ()
+      (visual-line-mode +1)
       (yas-minor-mode -1))
 
     (add-hook 'LaTeX-mode-hook 'my/latex-mode-defaults)
@@ -567,6 +568,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package haskell-mode
+    :ensure
     :config
     (defun my/haskell-mode-defaults ()
       (subword-mode +1)
@@ -715,9 +717,7 @@ Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] firs
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package magit
-    :ensure
-    :diminish (magit-auto-revert-mode . "")
-    :pin "melpa"
+    :load-path "packages/magit/"
     :commands magit-status)
 #+END_SRC
 
@@ -1392,8 +1392,7 @@ A great syntax checker.
     (add-hook 'after-init-hook #'global-flycheck-mode)
     :config
     (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
-    (setq flycheck-indication-mode 'left-fringe)
-    (setq flycheck-completion-system 'ido))
+    (setq flycheck-indication-mode nil))
 #+END_SRC
 
 *** Flycheck-haskell
@@ -1489,12 +1488,9 @@ Open file in Finder
 
 [[https://github.com/joostkremers/ebib][Ebib]] is a BibTeX database manager that runs in GNU Emacs.
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ebib
-    :ensure
-    :config
-    (setq ebib-preload-bib-files (quote ("~/research/refs.bib")))
-    (bind-key "C-c b" 'ebib-insert-bibtex-key org-mode-map))
+    :ensure)
 #+END_SRC
 
 *** Lexbind-mode
