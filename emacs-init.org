@@ -844,9 +844,9 @@ files.
 
     (defhydra hydra-error (global-map "M-g")
       "goto-error"
-      ("h" first-error "first")
-      ("j" next-error "next")
-      ("k" previous-error "prev")
+      ("h" flycheck-list-errors "first")
+      ("j" flycheck-next-error "next")
+      ("k" flycheck-previous-error "prev")
       ("v" recenter-top-bottom "recenter")
       ("q" nil "quit"))
 
