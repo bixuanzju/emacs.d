@@ -1265,7 +1265,7 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 
 *** Cider
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package cider
     :ensure
     :defer 3
