@@ -36,7 +36,7 @@ Cask is initialized in =init.el= with the following:
 
 You can download all packages in your =Cask= file by using =M-x
 pallet-install=. However, this should not be necessary.
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (require 'pallet)
   (pallet-mode t)
 #+END_SRC
@@ -99,6 +99,38 @@ Set custom theme path and load theme
     :ensure
     :config
     (load-theme 'zenburn t))
+
+  ;; (use-package solarized-theme
+  ;;   :config
+  ;;   ;; make the fringe stand out from the background
+  ;;   (setq solarized-distinct-fringe-background t)
+
+  ;;   ;; Don't change the font for some headings and titles
+  ;;   (setq solarized-use-variable-pitch nil)
+
+  ;;   ;; make the modeline high contrast
+  ;;   ;; (setq solarized-high-contrast-mode-line t)
+
+  ;;   ;; Use less bolding
+  ;;   (setq solarized-use-less-bold t)
+
+  ;;   ;; Use more italics
+  ;;   (setq solarized-use-more-italic t)
+
+  ;;   ;; Use less colors for indicators such as git:gutter, flycheck and similar
+  ;;   (setq solarized-emphasize-indicators nil)
+
+  ;;   ;; Don't change size of org-mode headlines (but keep other size-changes)
+  ;;   (setq solarized-scale-org-headlines nil)
+
+  ;;   ;; Avoid all font-size changes
+  ;;   ;; (setq solarized-height-minus-1 1)
+  ;;   ;; (setq solarized-height-plus-1 1)
+  ;;   ;; (setq solarized-height-plus-2 1)
+  ;;   ;; (setq solarized-height-plus-3 1)
+  ;;   ;; (setq solarized-height-plus-4 1)
+
+  ;;   (load-theme 'solarized-dark t))
 #+END_SRC
 
 ** Mode Line
@@ -334,6 +366,13 @@ All packages and modes are configured here.
 Sane setup for LaTeX writers.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package auctex-latexmk
+    :ensure
+    :config
+    (auctex-latexmk-setup))
+  (use-package cdlatex
+    :ensure)
+
   (use-package tex-site
     :ensure auctex
     :config
@@ -361,12 +400,7 @@ Sane setup for LaTeX writers.
       (setq TeX-view-program-list
             '(("DVI Viewer" "open %o")
               ("PDF Viewer" "open %o")
-              ("HTML Viewer" "open %o"))))
-
-    (eval-after-load "tex"
-      '(use-package auctex-latexmk
-         :config
-         (auctex-latexmk-setup))))
+              ("HTML Viewer" "open %o")))))
 #+END_SRC
 
 **** LatexMk
@@ -764,6 +798,15 @@ file buffer.
     :ensure)
 #+end_src
 
+*** eyebrowse
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package eyebrowse
+    :ensure
+    :config
+    (eyebrowse-mode t))
+#+end_src
+
 *** Helm
 
 =helm-mini= is a part of [[https://github.com/emacs-helm/helm][Helm]] that shows current buffers and a list of
@@ -942,7 +985,7 @@ files.
 
 *** Pandoc-mode
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
   (use-package pandoc-mode
     :ensure
     :config
@@ -1066,8 +1109,6 @@ shell.
     (ivy-mode 1)
     ;; (setq ivy-use-virtual-buffers t)
     (setq ivy-format-function 'eh-ivy-format-function)
-
-    (define-key ivy-minibuffer-map (kbd "C-w") 'ivy-yank-word)
 
     (defun eh-ivy-format-function (cands)
       (let ((i -1))
@@ -1598,7 +1639,8 @@ more escaped group parentheses, and other goodies!).
     :bind (("C-c r" . vr/replace)
            ("C-c q" . vr/query-replace))
     :config
-    (use-package visual-regexp-steroids))
+    (use-package visual-regexp-steroids
+      :ensure))
 #+END_SRC
 
 *** Worf Mode
