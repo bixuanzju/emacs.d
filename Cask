@@ -82,6 +82,7 @@
 (depends-on "skeletor")
 (depends-on "smart-mode-line")
 (depends-on "smartparens")
+(depends-on "smex")
 (depends-on "sml-mode")
 (depends-on "swiper")
 (depends-on "undo-tree")

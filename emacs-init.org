@@ -752,7 +752,8 @@ Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] firs
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package magit
     :load-path "packages/magit/"
-    :commands magit-status)
+    :commands magit-status
+    :bind ("C-x g" . magit-dispatch-popup))
 #+END_SRC
 
 *** hindent
@@ -1038,7 +1039,7 @@ with helm.
 [[https://github.com/tomterl/fullframe][Fullframe]] advises commands to execute fullscreen, restoring the window
 setup when exiting.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package fullframe
     :ensure
     :config
@@ -1129,7 +1130,8 @@ shell.
     :bind (("C-h f" . counsel-describe-function)
            ("C-h v" . counsel-describe-variable)
            ("C-x C-f" . counsel-find-file)
-           ("C-c j" . counsel-git-grep))
+           ("C-c j" . counsel-git-grep)
+           ("M-x" . counsel-M-x))
     :config
     (setq counsel-find-file-at-point t))
 #+end_src
