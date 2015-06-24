@@ -36,7 +36,7 @@ Cask is initialized in =init.el= with the following:
 
 You can download all packages in your =Cask= file by using =M-x
 pallet-install=. However, this should not be necessary.
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (require 'pallet)
   (pallet-mode t)
 #+END_SRC
@@ -1039,12 +1039,11 @@ with helm.
 [[https://github.com/tomterl/fullframe][Fullframe]] advises commands to execute fullscreen, restoring the window
 setup when exiting.
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package fullframe
     :ensure
     :config
     (fullframe magit-status magit-mode-quit-window)
-    (fullframe monky-status monky-quit-window)
     (fullframe ibuffer ibuffer-quit))
 #+END_SRC
 
@@ -1108,18 +1107,8 @@ shell.
            ("C-c C-r" . ivy-resume))
     :config
     (ivy-mode 1)
-    ;; (setq ivy-use-virtual-buffers t)
-    (setq ivy-format-function 'eh-ivy-format-function)
-
-    (defun eh-ivy-format-function (cands)
-      (let ((i -1))
-        (mapconcat
-         (lambda (s)
-           (concat (if (eq (cl-incf i) ivy--index)
-                       "> "
-                     "  ")
-                   s))
-         cands "\n"))))
+    (setq ivy-use-virtual-buffers t)
+    (setq ivy-format-function 'ivy-format-function-arrow))
 #+end_src
 
 *** Counsel
@@ -1133,7 +1122,8 @@ shell.
            ("C-c j" . counsel-git-grep)
            ("M-x" . counsel-M-x))
     :config
-    (setq counsel-find-file-at-point t))
+    (setq counsel-find-file-at-point t)
+    (use-package smex :ensure))
 #+end_src
 
 *** Rainbow mode
