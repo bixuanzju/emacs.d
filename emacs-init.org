@@ -751,7 +751,7 @@ Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] firs
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package magit
-    :load-path "packages/magit/"
+    :load-path "packages/magit/lisp/"
     :commands magit-status
     :bind ("C-x g" . magit-dispatch-popup))
 #+END_SRC
