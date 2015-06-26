@@ -1093,8 +1093,8 @@ shell.
     :bind ("s-l" . avy-goto-line)
     :config
     (setq avy-background t)
-    (setq avy-style 'de-bruijn)
-    (bind-key* "C-'" 'avy-goto-char-in-line))
+    (setq avy-styles-alist '((avy-goto-word-or-subword-1 . de-brujin)))
+    (bind-key* "C-'" 'avy-goto-word-or-subword-1))
 #+end_src
 
 *** Swiper
