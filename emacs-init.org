@@ -94,7 +94,7 @@ and byte-compile the =org=-document after changes asynchronously.
 ** Theme
 
 Set custom theme path and load theme
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package zenburn-theme
     :ensure
     :config
@@ -659,7 +659,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
 *** Idris Mode
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package idris-mode
     :ensure)
 #+end_src
@@ -751,7 +751,7 @@ Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] firs
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package magit
-    :load-path "packages/magit/lisp/"
+    :ensure
     :commands magit-status
     :bind ("C-x g" . magit-dispatch-popup))
 #+END_SRC
@@ -1119,7 +1119,7 @@ shell.
     :bind (("C-h f" . counsel-describe-function)
            ("C-h v" . counsel-describe-variable)
            ("C-x C-f" . counsel-find-file)
-           ("C-c j" . counsel-git-grep)
+           ;; ("C-c j" . counsel-git-grep)
            ("M-x" . counsel-M-x))
     :config
     (setq counsel-find-file-at-point t)
@@ -1232,13 +1232,18 @@ Whitespace-mode configuration.
 #+begin_src emacs-lisp :tangle yes
   (use-package helm-projectile
     :ensure
-    :defer 2)
+    :bind ("s-g" . helm-projectile-ag))
 #+end_src
 
 *** Helm-ag
 
-#+begin_src emacs-lisp :tangle no
-  (use-package helm-ag)
+#+begin_src emacs-lisp :tangle yes
+  (use-package helm-ag
+    :ensure
+    :config
+    (setq helm-ag-base-command "ag --nocolor --nogroup --ignore-case"
+          helm-ag-command-option "--all-text"
+          helm-ag-insert-at-point 'symbol))
 #+end_src
 
 *** Lispy

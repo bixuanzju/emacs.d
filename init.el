@@ -43,7 +43,7 @@ Only modes that don't derive from `prog-mode' should be listed here.")
  '(max-lisp-eval-depth 2000)
  '(package-selected-packages
    (quote
-    (fix-word idris-mode ensime multiple-cursors eyebrowse smex clojure-mode bison-mode ebib dired+ zop-to-char zenburn-theme worf whitespace-cleanup-mode wgrep-ag vlf visual-regexp-steroids use-package undo-tree tuareg sml-mode smartparens smart-mode-line-powerline-theme skeletor reveal-in-finder rainbow-mode racket-mode quickrun popwin pandoc-mode pallet ox-pandoc ov omnisharp mwim multi-term move-text markdown-mode lua-mode lispy lexbind-mode key-chord js2-mode hindent helm-projectile helm-descbinds helm-ag gscholar-bibtex goto-chg git-timemachine ggtags fullframe flycheck-haskell expand-region exec-path-from-shell elpy easy-kill dash-at-point counsel company-ghci company-coq chinese-fonts-setup cdlatex auctex-latexmk anzu)))
+    (zop-to-char zenburn-theme worf whitespace-cleanup-mode wgrep-ag vlf visual-regexp-steroids use-package undo-tree tuareg sml-mode smex smartparens smart-mode-line-powerline-theme skeletor reveal-in-finder rainbow-mode racket-mode quickrun popwin pandoc-mode pallet ox-pandoc ov omnisharp mwim multiple-cursors multi-term move-text markdown-mode magit lua-mode lispy lexbind-mode key-chord js2-mode idris-mode hindent helm-projectile helm-descbinds helm-ag gscholar-bibtex goto-chg git-timemachine ggtags fullframe flycheck-haskell fix-word eyebrowse expand-region exec-path-from-shell ensime elpy ebib easy-kill dired+ dash-at-point counsel company-ghci company-coq clojure-mode chinese-fonts-setup cdlatex bison-mode auctex-latexmk anzu)))
  '(set-mark-command-repeat-pop t)
  '(shift-select-mode nil)
  '(split-height-threshold nil)
