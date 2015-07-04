@@ -94,7 +94,7 @@ and byte-compile the =org=-document after changes asynchronously.
 ** Theme
 
 Set custom theme path and load theme
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package zenburn-theme
     :ensure
     :config
@@ -382,6 +382,7 @@ Sane setup for LaTeX writers.
 
     (add-hook 'LaTeX-mode-hook 'my/latex-mode-defaults)
     (add-hook 'LaTeX-mode-hook 'turn-on-cdlatex)
+    (add-to-list 'auto-mode-alist '("\\.l[gh]s\\'" . tex-mode))
 
     (setq TeX-auto-save t)
     (setq TeX-parse-self t)
@@ -1217,7 +1218,8 @@ Whitespace-mode configuration.
   (use-package projectile
     :ensure
     :bind (("s-p" . projectile-switch-project)
-           ("s-f" . projectile-find-file))
+           ("s-f" . projectile-find-file)
+           ("s-r" . projectile-run-async-shell-command-in-root))
     :diminish ""
     :config
     (setq projectile-cache-file
