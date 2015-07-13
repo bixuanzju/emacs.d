@@ -1124,6 +1124,10 @@ shell.
            ("M-x" . counsel-M-x))
     :config
     (setq counsel-find-file-at-point t)
+    (ivy-set-actions
+     'counsel-find-file
+     `((,(propertize "delete" 'face 'font-lock-warning-face)
+        (lambda (x) (delete-file (expand-file-name x ivy--directory))))))
     (use-package smex :ensure))
 #+end_src
 
