@@ -187,8 +187,7 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
     (key-chord-define-global "x1" 'delete-other-windows)
     ;; (key-chord-define-global "xk" 'ace-window)
     (key-chord-define-global "0o" 'delete-window)
-    ;; (key-chord-define-global "xn" 'helm-mini)
-    (key-chord-define-global "xn" 'switch-to-buffer)
+    (key-chord-define-global "xn" 'helm-mini)
     (key-chord-define-global "xb" 'ivy-recentf)
     (key-chord-define-global "jk" 'magit-status)
     (key-chord-define-global "xm" 'helm-M-x)
@@ -819,6 +818,8 @@ files.
   (use-package helm-config
     :ensure helm
     :bind ("M-y" . helm-show-kill-ring)
+    :init
+    (helm-mode +1)
     :config
     ;; (require 'helm-config)
 
@@ -837,12 +838,7 @@ files.
     (bind-key "C-c C-l" 'helm-minibuffer-history minibuffer-local-map)
 
     ;; shell history.
-    (bind-key "C-c C-l" 'helm-comint-input-ring shell-mode-map)
-
-    ;; (helm-autoresize-mode 1)
-
-    ;; (helm-mode +1)
-    )
+    (bind-key "C-c C-l" 'helm-comint-input-ring shell-mode-map))
 #+END_SRC
 *** zop-to-char
 
@@ -1107,14 +1103,14 @@ shell.
            ("C-s" . swiper)
            ("C-c C-r" . ivy-resume))
     :config
-    (ivy-mode 1)
+    ;; (ivy-mode 1)
     (setq ivy-use-virtual-buffers t)
     (setq ivy-format-function 'ivy-format-function-arrow))
 #+end_src
 
 *** Counsel
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package counsel
     :ensure
     :bind (("C-h f" . counsel-describe-function)
@@ -1228,7 +1224,7 @@ Whitespace-mode configuration.
     :config
     (setq projectile-cache-file
           (expand-file-name  "projectile.cache" savefile-dir)
-          projectile-completion-system 'ivy
+          projectile-completion-system 'helm
           projectile-sort-order 'modification-time)
     (projectile-global-mode t))
 #+END_SRC
