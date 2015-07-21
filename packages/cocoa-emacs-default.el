@@ -59,7 +59,7 @@
   (setq proof-splash-seen t)
 
   ;; Hybrid mode is by far the best.
-  (setq proof-three-window-mode-policy 'hybrid)
+  (setq proof-three-window-mode-policy 'smart)
 
   ;; I don't know who wants to evaluate comments
   ;; one-by-one, but I don't.
@@ -83,13 +83,14 @@
       (insert "Qed.")
       (proof-assert-next-command-interactive))
 
-    (add-hook 'coq-mode-hook 'abbrev-mode)
+    ;; (add-hook 'coq-mode-hook 'abbrev-mode)
 
-    (define-abbrev coq-mode-abbrev-table "re" "reflexivity.")
-    (define-abbrev coq-mode-abbrev-table "id" "induction")
-    (define-abbrev coq-mode-abbrev-table "si" "simpl.")
-    (advice-add 'proof-assert-next-command-interactive
-                :before #'expand-abbrev))
+    ;; (define-abbrev coq-mode-abbrev-table "re" "reflexivity.")
+    ;; (define-abbrev coq-mode-abbrev-table "ind" "induction")
+    ;; (define-abbrev coq-mode-abbrev-table "si" "simpl.")
+    ;; (advice-add 'proof-assert-next-command-interactive
+    ;;             :before #'expand-abbrev)
+    )
 
   (require 'ottmode))
 

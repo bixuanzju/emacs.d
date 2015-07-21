@@ -817,7 +817,9 @@ files.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package helm-config
     :ensure helm
-    :bind ("M-y" . helm-show-kill-ring)
+    :bind (("M-y" . helm-show-kill-ring)
+           ("C-x C-f" . helm-find-files)
+           ("C-c C-r" . helm-resume))
     :init
     (helm-mode +1)
     :config
@@ -853,8 +855,8 @@ files.
 [[https://github.com/abo-abo/hydra][Hydra]] make Emacs bindings that stick around.
 
 #+begin_src emacs-lisp :tangle yes
-  (use-package hydra-examples
-    :ensure hydra
+  (use-package hydra
+    :ensure
     :config
     (hydra-add-font-lock)
     (global-set-key
@@ -979,6 +981,28 @@ files.
           (if (looking-back "^")
               (hydra-org-template/body)
             (self-insert-command 1))))))
+
+  (global-set-key
+   (kbd "s-p")
+   (defhydra hydra-projectile (:color blue :columns 4)
+     "Projectile"
+     ("a" helm-projectile-ag "ag")
+     ("b" projectile-switch-to-buffer "switch to buffer")
+     ("c" projectile-invalidate-cache "cache clear")
+     ("d" projectile-find-dir "dir")
+     ("s-f" projectile-find-file "file")
+     ("ff" projectile-find-file-dwim "file dwim")
+     ("fd" projectile-find-file-in-directory "file curr dir")
+     ("g" ggtags-update-tags "update gtags")
+     ("i" projectile-ibuffer "Ibuffer")
+     ("K" projectile-kill-buffers "Kill all buffers")
+     ("o" projectile-multi-occur "multi-occur")
+     ("p" projectile-switch-project "switch")
+     ("r" projectile-run-async-shell-command-in-root "run shell command")
+     ("x" projectile-remove-known-project "remove known")
+     ("X" projectile-cleanup-known-projects "cleanup non-existing")
+     ("z" projectile-cache-current-file "cache current")
+     ("q" nil "cancel")))
 #+end_src
 
 *** Pandoc-mode
@@ -1072,7 +1096,7 @@ shell.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ace-window
     :ensure
-    :bind ("M-[" . ace-window)
+    :bind ("s-w" . ace-window)
     :config
     ;; (setq aw-leading-char-style 'path)
     (setq aw-background nil)
@@ -1091,7 +1115,7 @@ shell.
     :config
     (setq avy-background t)
     (setq avy-styles-alist '((avy-goto-word-or-subword-1 . de-brujin)))
-    (bind-key* "C-'" 'avy-goto-word-or-subword-1))
+    (bind-key* "s-." 'avy-goto-word-or-subword-1))
 #+end_src
 
 *** Swiper
@@ -1101,7 +1125,8 @@ shell.
     :ensure
     :bind (("C-r" . swiper)
            ("C-s" . swiper)
-           ("C-c C-r" . ivy-resume))
+           ;; ("C-c C-r" . ivy-resume)
+           )
     :config
     ;; (ivy-mode 1)
     (setq ivy-use-virtual-buffers t)
@@ -1217,9 +1242,6 @@ Whitespace-mode configuration.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package projectile
     :ensure
-    :bind (("s-p" . projectile-switch-project)
-           ("s-f" . projectile-find-file)
-           ("s-r" . projectile-run-async-shell-command-in-root))
     :diminish ""
     :config
     (setq projectile-cache-file
@@ -1233,8 +1255,7 @@ Whitespace-mode configuration.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package helm-projectile
-    :ensure
-    :bind ("s-g" . helm-projectile-ag))
+    :ensure)
 #+end_src
 
 *** Helm-ag
