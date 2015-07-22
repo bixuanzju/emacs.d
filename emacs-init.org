@@ -690,7 +690,8 @@ Type =clear= to clear the buffer like in other terminal emulators.
     ;;         ".*png$"))
     (setq recentf-save-file (expand-file-name "recentf" savefile-dir)
           recentf-max-saved-items 60)
-    (recentf-mode +1))
+    ;; (recentf-mode +1)
+    )
 #+end_src
 
 *** Company
@@ -815,15 +816,13 @@ recent files using =recentf=.  It is a great way to manage many open
 files.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package helm-config
-    :ensure helm
+  (use-package helm
+    :ensure
     :bind (("M-y" . helm-show-kill-ring)
            ("C-x C-f" . helm-find-files)
            ("C-c C-r" . helm-resume))
-    :init
-    (helm-mode +1)
     :config
-    ;; (require 'helm-config)
+    (require 'helm-config)
 
     (when (executable-find "curl")
       (setq helm-google-suggest-use-curl-p t))
@@ -840,7 +839,9 @@ files.
     (bind-key "C-c C-l" 'helm-minibuffer-history minibuffer-local-map)
 
     ;; shell history.
-    (bind-key "C-c C-l" 'helm-comint-input-ring shell-mode-map))
+    (bind-key "C-c C-l" 'helm-comint-input-ring shell-mode-map)
+
+    (helm-mode +1))
 #+END_SRC
 *** zop-to-char
 
