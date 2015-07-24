@@ -755,7 +755,9 @@ Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] firs
   (use-package magit
     :ensure
     :commands magit-status
-    :bind ("C-x g" . magit-dispatch-popup))
+    :bind ("C-x g" . magit-dispatch-popup)
+    :config
+    (setq magit-push-always-verify nil))
 #+END_SRC
 
 *** hindent
