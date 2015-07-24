@@ -164,6 +164,7 @@ Set custom theme path and load theme
            ("C-x \\" . align-regexp)
            ("C-S-n" . my/forward-line-by-many)
            ("C-S-p" . my/backward-line-by-many)
+           ("C-M-!" . my/iterm-shell-command)
            ([remap kill-whole-line] . prelude-kill-whole-line)
            ([(control shift return)] . prelude-smart-open-line-above))
     :bind* (("C-M-h" . backward-kill-word)))

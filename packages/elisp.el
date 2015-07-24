@@ -266,7 +266,36 @@ Unlike `comment-dwim', this always comments whole lines."
       (unless (natnump n) (setq this-command 'comment-line-backward))))
   (bind-key [?\C-\;] 'my/comment-line ctl-x-map))
 
+;; copy from http://xuchunyang.me/Opening-iTerm-From-an-Emacs-Buffer/
+(defun my/iterm-shell-command (command &optional prefix)
+  "cd to `default-directory' then run COMMAND in iTerm.
+With PREFIX, cd to project root."
+  (interactive (list (read-shell-command
+                      "iTerm Shell Command: ")
+                     current-prefix-arg))
+  (let* ((dir (if prefix (my/project-root)
+                default-directory))
+         ;; if COMMAND is empty, just change directory
+         (cmd (format "cd %s ;%s" dir command)))
+    (do-applescript
+     (format
+      "
+  tell application \"iTerm\"
+       activate
+       set _session to current session of current terminal
+       tell _session
+            set command to get the clipboard
+            write text \"%s\"
+       end tell
+  end tell
+  " cmd))))
 
+(defun my/project-root ()
+  "Return the project root for current buffer."
+  (let ((directory default-directory))
+    (or (locate-dominating-file directory ".git")
+        (locate-dominating-file directory ".svn")
+        (locate-dominating-file directory ".hg"))))
 
 ;;; copy from https://github.com/purcell/emacs.d
 (defun sanityinc/maybe-set-bundled-elisp-readonly ()
