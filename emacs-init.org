@@ -1268,7 +1268,8 @@ Whitespace-mode configuration.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package helm-projectile
-    :ensure)
+    :ensure
+    :defer t)
 #+end_src
 
 *** Helm-ag
@@ -1276,6 +1277,7 @@ Whitespace-mode configuration.
 #+begin_src emacs-lisp :tangle yes
   (use-package helm-ag
     :ensure
+    :defer t
     :config
     (setq helm-ag-base-command "ag --nocolor --nogroup --ignore-case"
           helm-ag-command-option "--all-text"
