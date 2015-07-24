@@ -31,8 +31,12 @@
 
 ;;; Code:
 
-(setq delete-by-moving-to-trash t
-      trash-directory "~/.Trash")
+(use-package osx-trash
+  :ensure
+  :config
+  (osx-trash-setup)
+  (setq delete-by-moving-to-trash t))
+
 ;; (bind-key "M-ƒ" 'toggle-frame-fullscreen)
 
 ;; (setq-default locate-command "mdfind")
