@@ -767,6 +767,14 @@ Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] firs
     (add-hook 'haskell-mode-hook #'hindent-mode))
 #+end_src
 
+*** crosshairs
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package crosshairs
+    :ensure
+    :bind ("C-+" . crosshairs))
+#+END_SRC
+
 *** quickrun
 
 #+begin_src emacs-lisp :tangle yes
@@ -1024,6 +1032,7 @@ files.
     :config
     (remove-hook 'elpy-modules 'elpy-module-flymake)
     (remove-hook 'elpy-modules 'elpy-module-yasnippet)
+    (diminish 'elpy-mode "☕")
     (elpy-enable)
     ;; (elpy-use-ipython)
     )
