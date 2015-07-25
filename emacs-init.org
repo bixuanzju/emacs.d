@@ -192,6 +192,9 @@ Some quick essential customizations.
   (unless (file-exists-p savefile-dir)
     (make-directory savefile-dir))
 
+  ;; disable startup screen
+  (setq inhibit-startup-screen t)
+
   ;; Start off with some sanity.
   (require 'better-defaults)
 
@@ -1096,7 +1099,7 @@ shell.
     :config
     (setq avy-background t)
     (setq avy-styles-alist '((avy-goto-word-or-subword-1 . de-brujin)))
-    (bind-key* "s-." 'avy-goto-word-or-subword-1))
+    (bind-key* "C-'" 'avy-goto-word-or-subword-1))
 #+end_src
 
 *** Swiper
@@ -1546,8 +1549,6 @@ variable binding forms in Emacs Lisp.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package lexbind-mode
     :ensure
-    :init
-    (setq initial-buffer-choice 'lexbind-lexscratch)
     :config
     (add-hook 'emacs-lisp-mode-hook 'lexbind-mode))
 #+END_SRC

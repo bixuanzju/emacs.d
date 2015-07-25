@@ -37,9 +37,6 @@
   (osx-trash-setup)
   (setq delete-by-moving-to-trash t))
 
-;; (bind-key "M-ƒ" 'toggle-frame-fullscreen)
-
-;; (setq-default locate-command "mdfind")
 (setq mac-right-command-modifier 'super)
 
 (setq mac-command-modifier 'meta)
