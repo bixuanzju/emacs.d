@@ -578,33 +578,22 @@ Type =clear= to clear the buffer like in other terminal emulators.
     :config
     (defun my/haskell-mode-defaults ()
       (subword-mode +1)
-      (turn-on-haskell-doc-mode)
-      (turn-on-haskell-indentation)
-      ;; (smartparens-mode -1)
-      ;; (flycheck-mode -1)
-      )
+      (flycheck-mode -1))
+
+    (setq haskell-process-suggest-hoogle-imports t
+          haskell-process-suggest-remove-import-lines t
+          haskell-interactive-types-for-show-ambiguous nil
+          haskell-process-log t
+          haskell-process-type 'stack-ghci)
 
     (add-hook 'haskell-mode-hook 'my/haskell-mode-defaults)
     (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+    (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
+    ;; (add-hook 'haskell-mode-hook 'haskell-doc-mode)
 
     (require 'haskell)
     (bind-keys :map interactive-haskell-mode-map
-               ;; ("M-." . haskell-mode-goto-loc)
-               ("M-," . pop-tag-mark)
-               ;; ("C-c C-t" . ghc-show-type)
-               ;; ("C-M-?" . ghc-display-errors)
-               )
-
-    (setq haskell-process-auto-import-loaded-modules t
-          haskell-interactive-types-for-show-ambiguous nil
-          haskell-process-log t
-          haskell-indentation-show-indentations nil)
-
-    ;; (setq haskell-process-args-cabal-repl
-    ;;       '("--ghc-option=-ferror-spans" "--with-ghc=ghci-ng"))
-
-    ;; (setq haskell-process-path-ghci "ghci-ng")
-    )
+               ("M-," . xref-pop-marker-stack)))
 #+END_SRC
 
 *** SML Mode
@@ -1357,7 +1346,7 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 #+end_src
 *** Company-ghci
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package company-ghci
     :ensure
     :config
