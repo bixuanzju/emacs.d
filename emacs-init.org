@@ -108,7 +108,7 @@ Set custom theme path and load theme
     :ensure
     :config
     (setq sml/no-confirm-load-theme t)
-    (setq sml/theme 'respectful) ;; or 'dark
+    (setq sml/theme nil)
     (add-hook 'after-init-hook #'sml/setup))
 #+END_SRC
 
@@ -962,9 +962,9 @@ files.
      ("b" projectile-switch-to-buffer "switch to buffer")
      ("c" projectile-invalidate-cache "cache clear")
      ("d" projectile-find-dir "dir")
-     ("s-f" projectile-find-file "file")
-     ("ff" projectile-find-file-dwim "file dwim")
-     ("fd" projectile-find-file-in-directory "file curr dir")
+     ("f" projectile-find-file "file")
+     ;; ("ff" projectile-find-file-dwim "file dwim")
+     ;; ("fd" projectile-find-file-in-directory "file curr dir")
      ("g" ggtags-update-tags "update gtags")
      ("i" projectile-ibuffer "Ibuffer")
      ("K" projectile-kill-buffers "Kill all buffers")
