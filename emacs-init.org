@@ -593,7 +593,9 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
     (require 'haskell)
     (bind-keys :map interactive-haskell-mode-map
-               ("M-," . xref-pop-marker-stack)))
+               ("M-," . xref-pop-marker-stack))
+    ;; hack to deactivate mark when returning
+    (setq xref-after-return-hook 'deactivate-mark))
 #+END_SRC
 
 *** SML Mode
@@ -1389,11 +1391,6 @@ Enable spell-checking in Emacs.
   (use-package flyspell
     :ensure
     :diminish (flyspell-mode . "")
-    :init
-    ;; Enable spell check in only plaintext
-    (add-hook 'text-mode-hook 'flyspell-mode)
-    ;; Enable spell check in comments
-    (add-hook 'prog-mode-hook 'flyspell-prog-mode)
     :config
     (setq flyspell-issue-welcome-flag nil)
     (setq flyspell-issue-message-flag nil)
@@ -1403,7 +1400,12 @@ Enable spell-checking in Emacs.
     (define-key flyspell-mouse-map [down-mouse-3] 'flyspell-correct-word)
     (define-key flyspell-mouse-map [mouse-3] 'undefined)
     (define-key flyspell-mode-map (kbd "C-M-i") nil)
-    (define-key flyspell-mode-map (kbd "C-;") nil))
+    (define-key flyspell-mode-map (kbd "C-;") nil)
+
+    ;; Enable spell check in only plaintext
+    (add-hook 'text-mode-hook 'flyspell-mode)
+    ;; Enable spell check in comments
+    (add-hook 'prog-mode-hook 'flyspell-prog-mode))
 
 #+END_SRC
 
