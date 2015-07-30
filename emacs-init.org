@@ -36,7 +36,7 @@ Cask is initialized in =init.el= with the following:
 
 You can download all packages in your =Cask= file by using =M-x
 pallet-install=. However, this should not be necessary.
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (require 'pallet)
   (pallet-mode t)
 #+END_SRC
