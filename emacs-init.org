@@ -581,7 +581,6 @@ Type =clear= to clear the buffer like in other terminal emulators.
       (flycheck-mode -1))
 
     (setq haskell-process-suggest-hoogle-imports t
-          haskell-process-suggest-remove-import-lines t
           haskell-interactive-types-for-show-ambiguous nil
           haskell-process-log t
           haskell-process-type 'stack-ghci)
@@ -593,9 +592,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
     (require 'haskell)
     (bind-keys :map interactive-haskell-mode-map
-               ("M-," . xref-pop-marker-stack))
-    ;; hack to deactivate mark when returning
-    (setq xref-after-return-hook 'deactivate-mark))
+               ("M-," . xref-pop-marker-stack)))
 #+END_SRC
 
 *** SML Mode
@@ -829,8 +826,8 @@ files.
 [[https://github.com/abo-abo/hydra][Hydra]] make Emacs bindings that stick around.
 
 #+begin_src emacs-lisp :tangle yes
-  (use-package hydra
-    :ensure
+  (use-package hydra-examples
+    :ensure hydra
     :config
     (hydra-add-font-lock)
     (global-set-key
@@ -1192,13 +1189,8 @@ Whitespace-mode configuration.
     ;; (setq whitespace-line-column 80)
     (setq whitespace-style '(face tabs trailing))
 
-    (defun prelude-enable-whitespace ()
-      "Enable `whitespace-mode' if `prelude-whitespace' is not nil."
-      ;; (add-hook 'before-save-hook 'whitespace-cleanup nil t)
-      (whitespace-mode +1))
-
-    (add-hook 'text-mode-hook 'prelude-enable-whitespace)
-    (add-hook 'prog-mode-hook 'prelude-enable-whitespace))
+    (add-hook 'text-mode-hook 'whitespace-mode)
+    (add-hook 'prog-mode-hook 'whitespace-mode))
 
 #+END_SRC
 
@@ -1345,15 +1337,6 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
     :ensure
     :config
     (add-to-list 'company-backends '(company-ghc :with company-dabbrev-code)))
-#+end_src
-*** Company-ghci
-
-#+begin_src emacs-lisp :tangle no
-  (use-package company-ghci
-    :ensure
-    :config
-    (add-to-list 'company-backends 'company-ghci)
-    (add-hook 'haskell-interactive-mode-hook 'company-mode))
 #+end_src
 *** Company-math
 
@@ -1573,22 +1556,6 @@ Show matching and unmatched delimiters, and auto-close them as well.
     (autoload 'ghc-debug "ghc" nil t)
     (setq ghc-ghc-options '("-fno-warn-unused-do-bind"))
     (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
-#+END_SRC
-
-*** Structured-haskell-mode
-
-[[https://github.com/chrisdone/structured-haskell-mode][Structured-haskell-mode]] is a minor mode providing structured editing
-operations based on the syntax of Haskell.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package shm
-    :config
-    (add-hook 'haskell-mode-hook 'structured-haskell-mode)
-    (define-key shm-map (kbd "M-s") nil)
-    (define-key shm-map (kbd "M-S") 'shm/splice)
-    (require 'shm-reformat)
-    (setq hindent-style "chris-done")
-    (bind-key "C-c i" 'shm-reformat-decl haskell-mode-map))
 #+END_SRC
 
 *** Ace-link
