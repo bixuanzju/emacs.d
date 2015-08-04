@@ -93,7 +93,7 @@
 (depends-on "quickrun")
 (depends-on "racket-mode")
 (depends-on "rainbow-mode")
-(depends-on "reveal-in-finder")
+(depends-on "reveal-in-osx-finder")
 (depends-on "rich-minority")
 (depends-on "s")
 (depends-on "sbt-mode")

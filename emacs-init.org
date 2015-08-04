@@ -1462,16 +1462,16 @@ Move lines or a region up or down.
            ("<C-M-down>" . move-text-down)))
 #+END_SRC
 
-*** Reveal-in-finder
+*** Reveal-in-osx-finder
 
 Open file in Finder
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package reveal-in-finder
+  (use-package reveal-in-osx-finder
     :ensure
     :if (eq system-type 'darwin)
     :bind
-    ("C-c o" . reveal-in-finder))
+    ("C-c o" . reveal-in-osx-finder))
 #+END_SRC
 
 *** Sbt-mode
