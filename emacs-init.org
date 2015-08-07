@@ -157,7 +157,7 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
     ;; (key-chord-define-global "xk" 'ace-window)
     (key-chord-define-global "0o" 'delete-window)
     (key-chord-define-global "xn" 'helm-mini)
-    (key-chord-define-global "xb" 'ivy-recentf)
+    ;; (key-chord-define-global "xb" 'ivy-recentf)
     (key-chord-define-global "jk" 'magit-status)
     (key-chord-define-global "xm" 'helm-M-x)
     ;; (key-chord-define-global "1q" "!")
@@ -415,9 +415,6 @@ If you are not using it, you need to start.
     (setq org-enforce-todo-dependencies t)
     (setq org-src-tab-acts-natively t)
 
-    ;; set up latex
-    (setq org-latex-create-formula-image-program 'imagemagick)
-
     (setq org-latex-pdf-process
           (quote ("pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
                   "bibtex $(basename %b)"
@@ -457,13 +454,7 @@ If you are not using it, you need to start.
 
     (eval-after-load 'org-src
       '(define-key org-src-mode-map
-         "\C-x\C-s" #'org-edit-src-exit))
-
-    ;; (org-require 'org-ref)
-    ;; (setq org-ref-default-bibliography '("/Users/jeremybi/research/refs.bib")
-    ;;       org-ref-pdf-directory "/Users/jeremybi/research/papers/"
-    ;;       org-ref-bibliography-notes "/Users/jeremybi/research/notes.org")
-    )
+         "\C-x\C-s" #'org-edit-src-exit)))
 #+END_SRC
 
 [[https://github.com/jkitchin/jmax/blob/master/org-ref.org][Org-ref]] is an emacs-lisp module to handle bibliographic citations, and
@@ -489,7 +480,7 @@ favorite feature is that pressing =F= will open all marked files.
     (setq dired-dwim-target t)
 
     ;; enable some really cool extensions like C-x C-j(dired-jump)
-    (require 'dired-x)
+    ;; (require 'dired-x)
 
     (setq-default dired-omit-mode t
                   dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$\\|^\\.")
@@ -737,6 +728,15 @@ Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] firs
     :bind ("C-+" . crosshairs))
 #+END_SRC
 
+
+*** ranger
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package ranger
+    :ensure
+    :bind ("C-x C-j" . ranger))
+#+end_src
+
 *** quickrun
 
 #+begin_src emacs-lisp :tangle yes
@@ -792,7 +792,7 @@ files.
            ("C-x C-f" . helm-find-files)
            ("C-c C-r" . helm-resume))
     :config
-    (require 'helm-config)
+    (use-package helm-config)
 
     (when (executable-find "curl")
       (setq helm-google-suggest-use-curl-p t))
@@ -1532,13 +1532,13 @@ variable binding forms in Emacs Lisp.
 Show matching and unmatched delimiters, and auto-close them as well.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package smartparens-config
-    :ensure smartparens
+  (use-package smartparens
+    :ensure
     :config
+    (use-package smartparens-config)
     ;; highlights matching pairs
     (setq sp-base-key-bindings 'paredit)
     (setq sp-autoskip-closing-pair 'always)
-    (setq sp-hybrid-kill-entire-symbol nil)
     (sp-use-paredit-bindings)
     (sp-pair "{" nil :post-handlers
              '(((lambda (&rest _ignored)
