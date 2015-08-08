@@ -7,9 +7,6 @@
 (defvar my-org-file (expand-file-name "emacs-init.org" user-emacs-directory)
   "All configurations tangled from this file.")
 
-(defvar org-load-path (list (concat user-emacs-directory "packages/"))
-  "List of directories to search for org files to load.")
-
 (defvar my-vendor-dir (expand-file-name "packages/" user-emacs-directory)
   "This directory houses packages that are not yet available in ELPA (or MELPA).")
 

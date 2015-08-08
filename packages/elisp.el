@@ -119,27 +119,6 @@ With a prefix ARG open line above the current line."
       (move-end-of-line nil)
       (newline-and-indent))))
 
-;; (defun org-require (orgfile)
-;;   "orgfile is a symbol to be loaded"
-;;   (let ((org-file (concat (symbol-name orgfile) ".org"))
-;;         (path))
-
-;;     ;; find the org-file
-;;     (catch 'result
-;;       (loop for dir in org-load-path do
-;;             (when (file-exists-p
-;;                    (setq path
-;;                          (concat
-;;                           (directory-file-name dir)
-;;                           "/"
-;;                           org-file)))
-;;               (throw 'result path))))
-;;     (org-babel-load-file path)))
-
-;; (defun my/record-mark ()
-;;   (deactivate-mark)
-;;   (ring-insert find-tag-marker-ring (point-marker)))
-
 (defun goto-line-with-feedback ()
   "Show line numbers temporarily, while prompting for the line
   number input."

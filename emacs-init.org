@@ -12,7 +12,7 @@ generate a =emacs-init.el= from the =emacs-lisp= source blocks.
 
 This emacs.d was heavily inspired by the following configurations.
 
-[[https://github.com/daschwa/dotfiles/tree/master/emacs.d][Adam Schwartz's emacs.d]]
+[[https://github.com/daschwa/emacs.d][Adam Schwartz's emacs.d]]
 
 [[https://github.com/bbatsov/prelude][Bozhidar Batsov's prelude]]
 
@@ -55,6 +55,15 @@ Start using =use-package=
   (require 'bind-key)
   (require 'diminish)
 #+END_SRC
+
+** Custom Packages
+
+Add custom packages directory.
+
+#+begin_src emacs-lisp :tangle yes
+  (add-to-list 'load-path my-vendor-dir)
+#+end_src
+
 * Meta
 
 We add a function to the =after-save-hook= ensuring to always tangle
@@ -117,7 +126,6 @@ Set custom theme path and load theme
 ** Improvements
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package elisp
-    :load-path "packages/"
     :bind (("M-/" . hippie-expand)
            ("C-x C-b" . ibuffer)
            ([remap goto-line] . goto-line-with-feedback)
@@ -341,6 +349,7 @@ Sane setup for LaTeX writers.
     :ensure
     :config
     (auctex-latexmk-setup))
+
   (use-package cdlatex
     :ensure)
 
@@ -396,8 +405,8 @@ If you are not using it, you need to start.
     (require 'ox-latex)
 
     (defun my/org-mode-defaults ()
-      (turn-on-org-cdlatex)
-      (diminish 'org-cdlatex-mode "")
+      ;; (turn-on-org-cdlatex)
+      ;; (diminish 'org-cdlatex-mode "")
       (turn-on-auto-fill))
 
     (add-hook 'org-mode-hook 'my/org-mode-defaults)
@@ -433,41 +442,37 @@ If you are not using it, you need to start.
     (setq org-confirm-babel-evaluate nil)
 
     ;; execute external programs.
-    (org-babel-do-load-languages
-     (quote org-babel-load-languages)
-     (quote ((emacs-lisp . t)
-             (dot . t)
-             (ditaa . t)
-             (R . t)
-             (python . t)
-             (ruby . t)
-             (gnuplot . t)
-             (clojure . t)
-             (sh . t)
-             (haskell . t)
-             (octave . t)
-             (org . t)
-             (plantuml . t)
-             (scala . t)
-             (sql . t)
-             (latex . t))))
+    ;; (org-babel-do-load-languages
+    ;;  (quote org-babel-load-languages)
+    ;;  (quote ((emacs-lisp . t)
+    ;;          (dot . t)
+    ;;          (ditaa . t)
+    ;;          (R . t)
+    ;;          (python . t)
+    ;;          (ruby . t)
+    ;;          (gnuplot . t)
+    ;;          (clojure . t)
+    ;;          (sh . t)
+    ;;          (haskell . t)
+    ;;          (octave . t)
+    ;;          (org . t)
+    ;;          (plantuml . t)
+    ;;          (scala . t)
+    ;;          (sql . t)
+    ;;          (latex . t))))
 
     (eval-after-load 'org-src
       '(define-key org-src-mode-map
          "\C-x\C-s" #'org-edit-src-exit)))
 #+END_SRC
 
-[[https://github.com/jkitchin/jmax/blob/master/org-ref.org][Org-ref]] is an emacs-lisp module to handle bibliographic citations, and
-references to figures, tables and sections in org-mode.
-
 *** Dired
 
 Dired Plus is an extension to the =dired= file manager in Emacs.  My
 favorite feature is that pressing =F= will open all marked files.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package dired
-    :commands dired-jump
     :config
     (put 'dired-find-alternate-file 'disabled nil)
 
@@ -531,8 +536,7 @@ favorite feature is that pressing =F= will open all marked files.
 *** F2j-mode
 
 #+begin_src emacs-lisp :tangle yes
-  (use-package f2j-mode
-    :load-path "packages/")
+  (use-package f2j-mode)
 #+end_src
 
 *** Eshell
@@ -653,15 +657,14 @@ Type =clear= to clear the buffer like in other terminal emulators.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package company
     :ensure
-    :diminish (company-mode . "CPY")
     :config
     (setq company-tooltip-align-annotations t)
     (setq company-idle-delay 0.3)
     (setq company-dabbrev-ignore-case nil)
     (setq company-dabbrev-downcase nil)
-    (eval-after-load 'company-dabbrev-code
-      '(dolist (mode '(coq-mode oz-mode))
-         (add-to-list 'company-dabbrev-code-modes mode)))
+    ;; (eval-after-load 'company-dabbrev-code
+    ;;   '(dolist (mode '(coq-mode oz-mode))
+    ;;      (add-to-list 'company-dabbrev-code-modes mode)))
     ;; invert the navigation direction if the the completion popup-isearch-match
     ;; is displayed on top (happens near the bottom of windows)
     (setq company-tooltip-flip-when-above t)
@@ -727,7 +730,6 @@ Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] firs
     :ensure
     :bind ("C-+" . crosshairs))
 #+END_SRC
-
 
 *** ranger
 
