@@ -6,7 +6,7 @@
 ;; Maintainer: Jeremy Bi <bixuanzju@qq.com>
 ;; Created:  13 Mar 2014
 ;; Keywords: convenience editing
-;; URL: https://github.com/bixuanzju/emacs_repo
+;; URL: https://github.com/bixuanzju/emacs.d
 
 ;; This file is not part of GNU Emacs.
 

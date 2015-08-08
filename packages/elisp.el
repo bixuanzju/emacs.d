@@ -2,11 +2,11 @@
 
 ;; Copyright (C) Jeremy Bi
 
-;; Author: Jeremy Bi <xbi@zju.edu.cn>
-;; Maintainer: Jeremy Bi <xbi@zju.edu.cn>
+;; Author: Jeremy Bi <bixuanzju@qq.com>
+;; Maintainer: Jeremy Bi <bixuanzju@qq.com>
 ;; Created:  2 Jan 2014
 ;; Keywords: convenience editing
-;; URL: https://github.com/bixuanzju/emacs_repo
+;; URL: https://github.com/bixuanzju/emacs.d
 
 ;; This file is not part of GNU Emacs.
 
