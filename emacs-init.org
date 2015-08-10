@@ -358,6 +358,7 @@ Sane setup for LaTeX writers.
   (use-package auctex-latexmk
     :ensure
     :config
+    (setq auctex-latexmk-inherit-TeX-PDF-mode t)
     (auctex-latexmk-setup))
 
   (use-package cdlatex
