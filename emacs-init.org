@@ -61,7 +61,17 @@ Start using =use-package=
 Add custom packages directory.
 
 #+begin_src emacs-lisp :tangle yes
+  (defun prelude-add-subfolders-to-load-path (parent-dir)
+    "Add all level PARENT-DIR subdirs to the `load-path'."
+    (dolist (f (directory-files parent-dir))
+      (let ((name (expand-file-name f parent-dir)))
+        (when (and (file-directory-p name)
+                   (not (string-prefix-p "." f)))
+          (add-to-list 'load-path name)
+          (prelude-add-subfolders-to-load-path name)))))
+
   (add-to-list 'load-path my-vendor-dir)
+  (prelude-add-subfolders-to-load-path my-vendor-dir)
 #+end_src
 
 * Meta
@@ -384,15 +394,6 @@ Sane setup for LaTeX writers.
               ("HTML Viewer" "open %o")))))
 #+END_SRC
 
-**** LatexMk
-
-#+begin_src emacs-lisp :tangle no
-  (use-package auctex-latexmk
-    :ensure
-    :config
-    (auctex-latexmk-setup))
-#+end_src
-
 *** Org Mode
 
 If you are not using it, you need to start.
@@ -569,25 +570,35 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package haskell-mode
+    :diminish (interactive-haskell-mode . "IHS")
     :ensure
     :config
-    (defun my/haskell-mode-defaults ()
-      (subword-mode +1)
-      (flycheck-mode -1))
+    ;; (defun my/haskell-mode-defaults ()
+    ;;   (subword-mode +1)
+    ;;   (flycheck-mode -1)
+    ;;   )
 
     (setq haskell-process-suggest-hoogle-imports t
           haskell-interactive-types-for-show-ambiguous nil
           haskell-process-log t
           haskell-process-type 'stack-ghci)
 
-    (add-hook 'haskell-mode-hook 'my/haskell-mode-defaults)
+    ;; (add-hook 'haskell-mode-hook 'my/haskell-mode-defaults)
     (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
     (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
+
+    (require 'stack-mode)
+    (add-hook 'haskell-mode-hook 'stack-mode)
+
     ;; (add-hook 'haskell-mode-hook 'haskell-doc-mode)
 
     (require 'haskell)
     (bind-keys :map interactive-haskell-mode-map
-               ("M-," . xref-pop-marker-stack)))
+               ("M-." . stack-mode-goto)
+               ("M-," . xref-pop-marker-stack)
+               ("C-c C-t" . stack-mode-type)
+               ("C-c C-i" . stack-mode-info)
+               ("C-c C-b" . stack-mode-load)))
 #+END_SRC
 
 *** SML Mode
