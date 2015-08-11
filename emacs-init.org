@@ -88,7 +88,7 @@ and byte-compile the =org=-document after changes asynchronously.
     (require 'dired-async)
     (defun my/init-hook ()
       "If the current buffer is 'emacs-init.org' the code-blocks
-  are tangled, and the tangled file is compiled."
+  are tangled."
       (when (equal (buffer-file-name) my-org-file)
         (async-start
          `(lambda ()
@@ -97,15 +97,6 @@ and byte-compile the =org=-document after changes asynchronously.
          (lambda (result)
            (message "Tangled file compiled.")))))
     (add-hook 'after-save-hook 'my/init-hook))
-
-  ;; (defun my/compile-init-file ()
-  ;;   (interactive)
-  ;;   (if (and
-  ;;        (string-equal buffer-file-name my-org-file)
-  ;;        (file-newer-than-file-p my-init-file (concat my-init-file "c")))
-  ;;       (byte-compile-file my-init-file)))
-
-  ;; (add-hook 'kill-buffer-hook 'my/compile-init-file)
 #+END_SRC
 
 * Appearance
@@ -569,24 +560,27 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
 *** Haskell Mode
 
+I use Haskell a lot in my research, so the config bellow is very
+cutting-edge (i.e., may not work out for you depending on your
+platform). I use [[https://github.com/commercialhaskell/stack][stack]] for developing Haskell projects, [[https://github.com/commercialhaskell/stack-ide][stack-ide]] for
+IDE-like features (precise jumping to definition, showing type, etc).
+
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package haskell-mode
     :diminish (interactive-haskell-mode . "IHS")
     :ensure
     :config
-    ;; (defun my/haskell-mode-defaults ()
-    ;;   (subword-mode +1)
-    ;;   (flycheck-mode -1)
-    ;;   )
+    (defun my/haskell-mode-defaults ()
+      (subword-mode +1))
 
     (setq haskell-process-suggest-hoogle-imports t
           haskell-interactive-types-for-show-ambiguous nil
           haskell-process-log t
           haskell-process-type 'stack-ghci)
 
-    ;; (add-hook 'haskell-mode-hook 'my/haskell-mode-defaults)
+    (add-hook 'haskell-mode-hook 'my/haskell-mode-defaults)
     (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-    (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
+    (add-hook 'haskell-mode-hook 'haskell-simple-indent-mode)
 
     (require 'stack-mode)
     (add-hook 'haskell-mode-hook 'stack-mode)
@@ -652,9 +646,6 @@ Type =clear= to clear the buffer like in other terminal emulators.
 #+begin_src emacs-lisp :tangle yes
   (use-package recentf
     :config
-    ;; (setq recentf-exclude
-    ;;       '("COMMIT_MSG" "COMMIT_EDITMSG" "github.*txt$"
-    ;;         ".*png$"))
     (setq recentf-save-file (expand-file-name "recentf" savefile-dir)
           recentf-max-saved-items 60)
     ;; (recentf-mode +1)
@@ -674,11 +665,6 @@ Type =clear= to clear the buffer like in other terminal emulators.
     (setq company-idle-delay 0.3)
     (setq company-dabbrev-ignore-case nil)
     (setq company-dabbrev-downcase nil)
-    ;; (eval-after-load 'company-dabbrev-code
-    ;;   '(dolist (mode '(coq-mode oz-mode))
-    ;;      (add-to-list 'company-dabbrev-code-modes mode)))
-    ;; invert the navigation direction if the the completion popup-isearch-match
-    ;; is displayed on top (happens near the bottom of windows)
     (setq company-tooltip-flip-when-above t)
     (setq company-dabbrev-code-other-buffers 'code)
     (global-company-mode))
@@ -722,16 +708,19 @@ Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] firs
     :commands magit-status
     :bind ("C-x g" . magit-dispatch-popup)
     :config
-    (setq magit-push-always-verify nil))
+    (setq magit-push-always-verify nil
+          magit-revert-buffers t))
 #+END_SRC
 
 *** hindent
+
+=stack install hindent= to install the binary.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package hindent
     :ensure
     :config
-    (setq hindent-style "gibiansky")
+    (setq hindent-style "chris-done")
     (add-hook 'haskell-mode-hook #'hindent-mode))
 #+end_src
 
@@ -748,7 +737,7 @@ Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] firs
 #+begin_src emacs-lisp :tangle yes
   (use-package ranger
     :ensure
-    :bind ("C-x C-j" . ranger))
+    :bind* ("C-x C-j" . ranger))
 #+end_src
 
 *** quickrun
@@ -1432,7 +1421,7 @@ A great syntax checker.
 
 *** Flycheck-haskell
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package flycheck-haskell
     :ensure
     :config
@@ -1576,6 +1565,7 @@ Show matching and unmatched delimiters, and auto-close them as well.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ace-link
+    :ensure
     :config
     (ace-link-setup-default))
 #+END_SRC
@@ -1824,6 +1814,7 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ov
+    :ensure
     :config
     (defun prelude-todo-ov-evaporate (_ov _after _beg _end &optional _length)
       (let ((inhibit-modification-hooks t))
