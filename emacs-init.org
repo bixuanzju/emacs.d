@@ -587,9 +587,17 @@ IDE-like features (precise jumping to definition, showing type, etc).
 
     ;; (add-hook 'haskell-mode-hook 'haskell-doc-mode)
 
+    (defun my/stack-mode-goto ()
+      "if `stack-mode-goto' cannot find the definition, delegate to
+  `haskell-mode-jump-to-def-or-tag'."
+      (interactive)
+      (condition-case nil
+          (stack-mode-goto)
+        (error (haskell-mode-jump-to-def-or-tag))))
+
     (require 'haskell)
     (bind-keys :map interactive-haskell-mode-map
-               ("M-." . stack-mode-goto)
+               ("M-." . my/stack-mode-goto)
                ("M-," . xref-pop-marker-stack)
                ("C-c C-b" . stack-mode-type)
                ("C-c C-i" . stack-mode-info)
