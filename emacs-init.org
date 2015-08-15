@@ -329,6 +329,7 @@ All packages and modes are configured here.
 
   (use-package racket-mode
     :ensure
+    :defer t
     :config
     (add-hook 'racket-mode-hook
               '(lambda ()
@@ -550,7 +551,7 @@ Type =clear= to clear the buffer like in other terminal emulators.
 
 *** Java Mode
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (use-package cc-mode
     :config
     (add-hook 'java-mode-hook (lambda ()
@@ -565,9 +566,9 @@ platform). I use [[https://github.com/commercialhaskell/stack][stack]] for devel
 IDE-like features (precise jumping to definition, showing type, etc).
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package haskell-mode
+  (use-package haskell
     :diminish (interactive-haskell-mode . "IHS")
-    :ensure
+    :ensure haskell-mode
     :config
     (defun my/haskell-mode-defaults ()
       (subword-mode +1))
@@ -579,7 +580,7 @@ IDE-like features (precise jumping to definition, showing type, etc).
 
     (add-hook 'haskell-mode-hook 'my/haskell-mode-defaults)
     (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-    (add-hook 'haskell-mode-hook 'haskell-simple-indent-mode)
+    (add-hook 'haskell-mode-hook 'haskell-indent-mode)
 
     (require 'stack-mode)
     (add-hook 'haskell-mode-hook 'stack-mode)
@@ -594,12 +595,11 @@ IDE-like features (precise jumping to definition, showing type, etc).
           (stack-mode-goto)
         (error (haskell-mode-jump-to-def-or-tag))))
 
-    (require 'haskell)
     (bind-keys :map interactive-haskell-mode-map
                ("M-." . my/stack-mode-goto)
                ("M-," . xref-pop-marker-stack)
+               ("C-c C-l" . haskell-process-load-or-reload)
                ("C-c C-b" . stack-mode-type)
-               ("C-c C-i" . stack-mode-info)
                ("C-c C-t" . stack-mode-load)))
 #+END_SRC
 
