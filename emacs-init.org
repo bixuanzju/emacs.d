@@ -435,24 +435,23 @@ If you are not using it, you need to start.
     (setq org-confirm-babel-evaluate nil)
 
     ;; execute external programs.
-    ;; (org-babel-do-load-languages
-    ;;  (quote org-babel-load-languages)
-    ;;  (quote ((emacs-lisp . t)
-    ;;          (dot . t)
-    ;;          (ditaa . t)
-    ;;          (R . t)
-    ;;          (python . t)
-    ;;          (ruby . t)
-    ;;          (gnuplot . t)
-    ;;          (clojure . t)
-    ;;          (sh . t)
-    ;;          (haskell . t)
-    ;;          (octave . t)
-    ;;          (org . t)
-    ;;          (plantuml . t)
-    ;;          (scala . t)
-    ;;          (sql . t)
-    ;;          (latex . t))))
+    (org-babel-do-load-languages
+     (quote org-babel-load-languages)
+     (quote ((emacs-lisp . t)
+             (dot . t)
+             (ditaa . t)
+             (python . t)
+             (ruby . t)
+             (gnuplot . t)
+             (clojure . t)
+             (sh . t)
+             (haskell . t)
+             (octave . t)
+             (org . t)
+             (plantuml . t)
+             (scala . t)
+             (sql . t)
+             (latex . t))))
 
     (eval-after-load 'org-src
       '(define-key org-src-mode-map
@@ -728,7 +727,7 @@ Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] firs
   (use-package hindent
     :ensure
     :config
-    (setq hindent-style "chris-done")
+    (setq hindent-style "gibiansky")
     (add-hook 'haskell-mode-hook #'hindent-mode))
 #+end_src
 
@@ -771,7 +770,7 @@ file buffer.
 #+begin_src emacs-lisp :tangle yes
   (use-package goto-chg
     :ensure
-    :bind ("C-M-." . goto-last-change))
+    :bind* ("C-M-." . goto-last-change))
 #+end_src
 
 *** gscholar bibtex
@@ -965,7 +964,7 @@ files.
             (self-insert-command 1))))))
 
   (global-set-key
-   (kbd "s-p")
+   (kbd "s-f")
    (defhydra hydra-projectile (:color blue :columns 4)
      "Projectile"
      ("a" helm-projectile-ag "ag")
@@ -1084,7 +1083,6 @@ shell.
     ;; (setq aw-leading-char-style 'path)
     (setq aw-background nil)
     (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
-    (setq aw-scope 'frame)
     ;; (ace-window-display-mode +1)
     )
 #+END_SRC
@@ -1098,7 +1096,7 @@ shell.
     :config
     (setq avy-background t)
     (setq avy-styles-alist '((avy-goto-word-or-subword-1 . de-brujin)))
-    (bind-key* "C-'" 'avy-goto-word-or-subword-1))
+    (bind-key* "C-;" 'avy-goto-word-or-subword-1))
 #+end_src
 
 *** Swiper
