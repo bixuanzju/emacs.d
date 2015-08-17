@@ -509,6 +509,14 @@ favorite feature is that pressing =F= will open all marked files.
                     ("\\.topml$" . tuareg-mode))
                   auto-mode-alist)))
 #+end_src
+
+*** Yaml mode
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package yaml-mode
+    :ensure t)
+#+end_src
+
 *** Markdown
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -587,16 +595,15 @@ IDE-like features (precise jumping to definition, showing type, etc).
 
     ;; (add-hook 'haskell-mode-hook 'haskell-doc-mode)
 
-    (defun my/stack-mode-goto ()
-      "if `stack-mode-goto' cannot find the definition, delegate to
-  `haskell-mode-jump-to-def-or-tag'."
-      (interactive)
-      (condition-case nil
-          (stack-mode-goto)
-        (error (haskell-mode-jump-to-def-or-tag))))
+    ;; (defun my/stack-mode-goto ()
+  ;;     "if `stack-mode-goto' cannot find the definition, delegate to
+  ;; `haskell-mode-jump-to-def-or-tag'."
+  ;;     (interactive)
+  ;;     (condition-case nil
+  ;;         (stack-mode-goto)
+  ;;       (error (haskell-mode-jump-to-def-or-tag))))
 
     (bind-keys :map stack-mode-map
-               ("M-." . my/stack-mode-goto)
                ("M-," . xref-pop-marker-stack)
                ("C-c C-l" . haskell-process-load-or-reload)
                ("C-c C-b" . stack-mode-type)

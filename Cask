@@ -119,6 +119,7 @@
 (depends-on "whitespace-cleanup-mode")
 (depends-on "with-editor")
 (depends-on "worf")
+(depends-on "yaml-mode")
 (depends-on "yasnippet")
 (depends-on "zenburn-theme")
 (depends-on "zop-to-char")
