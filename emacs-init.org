@@ -580,7 +580,7 @@ IDE-like features (precise jumping to definition, showing type, etc).
 
     (add-hook 'haskell-mode-hook 'my/haskell-mode-defaults)
     (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-    (add-hook 'haskell-mode-hook 'haskell-indent-mode)
+    (add-hook 'haskell-mode-hook 'haskell-simple-indent-mode)
 
     (require 'stack-mode)
     (add-hook 'haskell-mode-hook 'stack-mode)
@@ -595,7 +595,7 @@ IDE-like features (precise jumping to definition, showing type, etc).
           (stack-mode-goto)
         (error (haskell-mode-jump-to-def-or-tag))))
 
-    (bind-keys :map interactive-haskell-mode-map
+    (bind-keys :map stack-mode-map
                ("M-." . my/stack-mode-goto)
                ("M-," . xref-pop-marker-stack)
                ("C-c C-l" . haskell-process-load-or-reload)
@@ -802,7 +802,7 @@ files.
            ("C-x C-f" . helm-find-files)
            ("C-c C-r" . helm-resume))
     :config
-    (use-package helm-config)
+    (require 'helm-config)
 
     (when (executable-find "curl")
       (setq helm-google-suggest-use-curl-p t))
