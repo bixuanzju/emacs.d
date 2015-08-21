@@ -591,17 +591,18 @@ IDE-like features (precise jumping to definition, showing type, etc).
     (add-hook 'haskell-mode-hook 'haskell-simple-indent-mode)
 
     (require 'stack-mode)
+    (setq stack-mode-show-popup t)
     (add-hook 'haskell-mode-hook 'stack-mode)
 
     ;; (add-hook 'haskell-mode-hook 'haskell-doc-mode)
 
     ;; (defun my/stack-mode-goto ()
-  ;;     "if `stack-mode-goto' cannot find the definition, delegate to
-  ;; `haskell-mode-jump-to-def-or-tag'."
-  ;;     (interactive)
-  ;;     (condition-case nil
-  ;;         (stack-mode-goto)
-  ;;       (error (haskell-mode-jump-to-def-or-tag))))
+    ;;     "if `stack-mode-goto' cannot find the definition, delegate to
+    ;; `haskell-mode-jump-to-def-or-tag'."
+    ;;     (interactive)
+    ;;     (condition-case nil
+    ;;         (stack-mode-goto)
+    ;;       (error (haskell-mode-jump-to-def-or-tag))))
 
     (bind-keys :map stack-mode-map
                ("M-," . xref-pop-marker-stack)
@@ -991,6 +992,14 @@ files.
      ("X" projectile-cleanup-known-projects "cleanup non-existing")
      ("z" projectile-cache-current-file "cache current")
      ("q" nil "cancel")))
+#+end_src
+
+*** flycheck-tip
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package flycheck-pos-tip
+    :config
+    (setq flycheck-display-errors-function #'flycheck-pos-tip-error-messages))
 #+end_src
 
 *** Pandoc-mode

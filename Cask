@@ -42,6 +42,7 @@
 (depends-on "fix-word")
 (depends-on "flycheck")
 (depends-on "flycheck-haskell")
+(depends-on "flycheck-pos-tip")
 (depends-on "fullframe")
 (depends-on "ggtags")
 (depends-on "git-commit")
