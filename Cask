@@ -15,7 +15,6 @@
 (depends-on "caml")
 (depends-on "cask")
 (depends-on "cdlatex")
-(depends-on "chinese-fonts-setup")
 (depends-on "clojure-mode")
 (depends-on "col-highlight")
 (depends-on "company")

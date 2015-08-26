@@ -51,6 +51,9 @@
   (let ((gls (executable-find "gls")))
     (when gls (setq insert-directory-program gls)))
 
+
+  (mac-auto-operator-composition-mode 1)
+
   ;; copy from http://endlessparentheses.com/proof-general-configuration-for-the-coq-software-foundations-tutorial.html
   ;; ProofGeneral
   (load-file "/Users/jeremybi/Projects/ProofGeneral/generic/proof-site.el")

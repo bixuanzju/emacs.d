@@ -29,10 +29,6 @@ Only modes that don't derive from `prog-mode' should be listed here.")
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(cfs--current-profile-name "profile1" t)
- '(cfs--fontsize-steps (quote (7 4 4)) t)
- '(cfs--profiles-english-fontsizes (quote (18 12.5 12.5)) t)
- '(cfs--profiles-fontsizes (quote (18 12.5 12.5)) t)
  '(column-number-mode t)
  '(coq-prog-args (quote ("-I" "/Users/jeremybi/Dropbox/cpdt/src")))
  '(history-length 1000)
@@ -42,6 +38,7 @@ Only modes that don't derive from `prog-mode' should be listed here.")
  '(package-selected-packages
    (quote
     (helm-projectile projectile osx-trash crosshairs magit zop-to-char zenburn-theme worf whitespace-cleanup-mode wgrep-ag vlf visual-regexp-steroids use-package undo-tree tuareg sml-mode smex smartparens smart-mode-line-powerline-theme skeletor reveal-in-finder rainbow-mode racket-mode quickrun popwin pandoc-mode pallet ox-pandoc ov omnisharp mwim multiple-cursors multi-term move-text markdown-mode lua-mode lispy lexbind-mode key-chord js2-mode idris-mode hindent helm-descbinds helm-ag gscholar-bibtex goto-chg git-timemachine ggtags fullframe flycheck-haskell fix-word eyebrowse expand-region exec-path-from-shell ensime elpy ebib easy-kill dired+ dash-at-point company-ghci company-coq clojure-mode chinese-fonts-setup cdlatex bison-mode auctex-latexmk anzu)))
+ '(safe-local-variable-values (quote ((coq-prog-args "-emacs-U" "-impredicative-set"))))
  '(set-mark-command-repeat-pop t)
  '(shift-select-mode nil)
  '(split-height-threshold nil)
@@ -52,6 +49,7 @@ Only modes that don't derive from `prog-mode' should be listed here.")
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(default ((t (:family "Monoid" :foundry "nil" :slant normal :weight normal :height 161 :width semi-condensed))))
  '(agda2-highlight-datatype-face ((t (:foreground "azure4"))))
  '(agda2-highlight-function-face ((t (:foreground "aquamarine3"))))
  '(agda2-highlight-module-face ((t (:foreground "DarkOliveGreen2"))))
