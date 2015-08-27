@@ -597,7 +597,7 @@ IDE-like features (precise jumping to definition, showing type, etc).
     ;; (setq stack-mode-show-popup t)
     (add-hook 'haskell-mode-hook 'stack-mode)
 
-    (add-hook 'haskell-mode-hook 'haskell-doc-mode)
+    ;; (add-hook 'haskell-mode-hook 'haskell-doc-mode)
 
     (bind-keys :map stack-mode-map
                ("M-," . xref-pop-marker-stack)
@@ -1572,7 +1572,7 @@ Show matching and unmatched delimiters, and auto-close them as well.
 
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package ghc
-    :ensure
+    :load-path "/Users/jeremybi/Projects/ghc-mod/elisp"
     :config
     (autoload 'ghc-init "ghc" nil t)
     (autoload 'ghc-debug "ghc" nil t)
@@ -1632,8 +1632,8 @@ more escaped group parentheses, and other goodies!).
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package worf
+    :defer t
     :ensure
-    :defer 2
     :init
     (add-hook 'org-mode-hook 'worf-mode))
 #+END_SRC
@@ -1863,4 +1863,3 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
   (rename-modeline "lisp-mode" emacs-lisp-mode "EL")
   (rename-modeline "lisp-mode" lisp-interaction-mode "EI")
 #+END_SRC
-

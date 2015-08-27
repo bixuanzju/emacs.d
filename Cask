@@ -45,7 +45,6 @@
 (depends-on "flycheck-pos-tip")
 (depends-on "fullframe")
 (depends-on "ggtags")
-(depends-on "ghc")
 (depends-on "git-commit")
 (depends-on "git-timemachine")
 (depends-on "goto-chg")
