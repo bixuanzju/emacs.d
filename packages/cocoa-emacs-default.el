@@ -31,12 +31,6 @@
 
 ;;; Code:
 
-(use-package osx-trash
-  :ensure
-  :config
-  (osx-trash-setup)
-  (setq delete-by-moving-to-trash t))
-
 (setq mac-right-command-modifier 'super)
 
 (setq mac-command-modifier 'meta)

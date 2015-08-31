@@ -31,11 +31,6 @@
 
 ;;; Code:
 
-(use-package dash
-  :ensure
-  :config
-  (dash-enable-font-lock))
-
 (defmacro my-delq-multi (list &rest elems)
   "Delete ELEMS from LIST."
   (let ((result (mapcar (lambda (elem)

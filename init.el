@@ -30,14 +30,10 @@ Only modes that don't derive from `prog-mode' should be listed here.")
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
- '(coq-prog-args (quote ("-I" "/Users/jeremybi/Dropbox/cpdt/src")))
  '(history-length 1000)
  '(indicate-empty-lines t)
  '(load-prefer-newer t)
  '(max-lisp-eval-depth 2000)
- '(package-selected-packages
-   (quote
-    (helm-projectile projectile osx-trash crosshairs magit zop-to-char zenburn-theme worf whitespace-cleanup-mode wgrep-ag vlf visual-regexp-steroids use-package undo-tree tuareg sml-mode smex smartparens smart-mode-line-powerline-theme skeletor reveal-in-finder rainbow-mode racket-mode quickrun popwin pandoc-mode pallet ox-pandoc ov omnisharp mwim multiple-cursors multi-term move-text markdown-mode lua-mode lispy lexbind-mode key-chord js2-mode idris-mode hindent helm-descbinds helm-ag gscholar-bibtex goto-chg git-timemachine ggtags fullframe flycheck-haskell fix-word eyebrowse expand-region exec-path-from-shell ensime elpy ebib easy-kill dired+ dash-at-point company-ghci company-coq clojure-mode chinese-fonts-setup cdlatex bison-mode auctex-latexmk anzu)))
  '(safe-local-variable-values (quote ((coq-prog-args "-emacs-U" "-impredicative-set"))))
  '(set-mark-command-repeat-pop t)
  '(shift-select-mode nil)
@@ -64,8 +60,6 @@ Only modes that don't derive from `prog-mode' should be listed here.")
  '(persp-selected-face ((t (:inherit nil :foreground "yellow"))))
  '(shm-current-face ((t (:background "#2B2B2B"))))
  '(sr-active-path-face ((t (:weight bold :height 180)))))
-
-;; (add-to-list 'load-path my-vendor-dir)
 
 (if (file-exists-p my-init-file)
     (load-file my-init-file)
