@@ -710,7 +710,7 @@ Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] firs
   (req-package hindent
     :require haskell-mode
     :config
-    (setq hindent-style "gibiansky")
+    (setq hindent-style "johan-tibell")
     (add-hook 'haskell-mode-hook #'hindent-mode))
 #+end_src
 
@@ -1215,7 +1215,7 @@ Whitespace-mode configuration.
 
 #+begin_src emacs-lisp :tangle yes
   (req-package helm-projectile
-    :require projectile
+    :require (projectile helm)
     :defer t)
 #+end_src
 
