@@ -710,7 +710,7 @@ Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] firs
   (req-package hindent
     :require haskell-mode
     :config
-    (setq hindent-style "johan-tibell")
+    (setq hindent-style "chris-done")
     (add-hook 'haskell-mode-hook #'hindent-mode))
 #+end_src
 
