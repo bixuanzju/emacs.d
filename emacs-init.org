@@ -572,12 +572,11 @@ IDE-like features (precise jumping to definition, showing type, etc).
 
     (setq haskell-process-suggest-hoogle-imports t
           haskell-interactive-types-for-show-ambiguous nil
-          haskell-process-log t
-          haskell-process-type 'stack-ghci)
+          haskell-process-log t)
 
     (add-hook 'haskell-mode-hook 'my/haskell-mode-defaults)
     (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-    (add-hook 'haskell-mode-hook 'haskell-simple-indent-mode)
+    (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
 
     (require 'stack-mode)
     ;; (setq stack-mode-show-popup t)
@@ -710,7 +709,7 @@ Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] firs
   (req-package hindent
     :require haskell-mode
     :config
-    (setq hindent-style "chris-done")
+    (setq hindent-style "gibiansky")
     (add-hook 'haskell-mode-hook #'hindent-mode))
 #+end_src
 
@@ -1128,6 +1127,7 @@ shell.
     :config
     ;; (ivy-mode 1)
     (setq ivy-use-virtual-buffers t)
+    (setq ivy-display-style 'fancy)
     (setq ivy-format-function 'ivy-format-function-arrow))
 #+end_src
 
