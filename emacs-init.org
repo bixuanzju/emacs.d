@@ -717,6 +717,12 @@ Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] firs
     (add-hook 'haskell-mode-hook #'hindent-mode))
 #+end_src
 
+*** iedit
+
+#+begin_src emacs-lisp :tangle yes
+  (req-package iedit)
+#+end_src
+
 *** osx-trash
 
 #+begin_src emacs-lisp :tangle yes
@@ -1116,7 +1122,7 @@ shell.
     :config
     (setq avy-background t)
     (setq avy-styles-alist '((avy-goto-word-or-subword-1 . de-brujin)))
-    (bind-key* "C-;" 'avy-goto-word-or-subword-1))
+    (bind-key "s-." 'avy-goto-word-or-subword-1))
 #+end_src
 
 *** Swiper
