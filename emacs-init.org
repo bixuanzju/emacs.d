@@ -563,7 +563,6 @@ IDE-like features (precise jumping to definition, showing type, etc).
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package haskell
-    :defer 1
     :diminish (interactive-haskell-mode . "IHS")
     :require haskell-mode
     :config
@@ -576,19 +575,7 @@ IDE-like features (precise jumping to definition, showing type, etc).
 
     (add-hook 'haskell-mode-hook 'my/haskell-mode-defaults)
     (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-    (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
-
-    (require 'stack-mode)
-    ;; (setq stack-mode-show-popup t)
-    (add-hook 'haskell-mode-hook 'stack-mode)
-
-    ;; (add-hook 'haskell-mode-hook 'haskell-doc-mode)
-
-    (bind-keys :map stack-mode-map
-               ("M-," . xref-pop-marker-stack)
-               ("C-c C-l" . haskell-process-load-or-reload)
-               ("C-c C-b" . stack-mode-type)
-               ("C-c C-t" . stack-mode-load)))
+    (add-hook 'haskell-mode-hook 'haskell-indentation-mode))
 #+END_SRC
 
 *** SML Mode
@@ -700,6 +687,23 @@ Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] firs
     (setq magit-push-always-verify nil
           magit-revert-buffers t))
 #+END_SRC
+*** stack-mode
+
+#+begin_src emacs-lisp :tangle yes
+  (req-package stack-mode
+    :require (haskell-mode flycheck)
+    :config
+    ;; (setq stack-mode-show-popup t)
+    (add-hook 'haskell-mode-hook 'stack-mode)
+
+    ;; (add-hook 'haskell-mode-hook 'haskell-doc-mode)
+
+    (bind-keys :map stack-mode-map
+               ("M-," . xref-pop-marker-stack)
+               ("C-c C-l" . haskell-process-load-or-reload)
+               ("C-c C-b" . stack-mode-type)
+               ("C-c C-t" . stack-mode-load)))
+#+end_src
 
 *** hindent
 
