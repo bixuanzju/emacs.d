@@ -567,7 +567,8 @@ IDE-like features (precise jumping to definition, showing type, etc).
     :require haskell-mode
     :config
     (defun my/haskell-mode-defaults ()
-      (subword-mode +1))
+      (subword-mode +1)
+      (flycheck-mode -1))
 
     (setq haskell-process-suggest-hoogle-imports t
           haskell-interactive-types-for-show-ambiguous nil
@@ -689,7 +690,7 @@ Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] firs
 #+END_SRC
 *** stack-mode
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (req-package stack-mode
     :require (haskell-mode flycheck)
     :config
@@ -1225,7 +1226,7 @@ Whitespace-mode configuration.
 
 #+begin_src emacs-lisp :tangle yes
   (req-package helm-projectile
-    :require (projectile helm)
+    :require projectile helm
     :defer t)
 #+end_src
 
@@ -1332,7 +1333,7 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 #+END_SRC
 *** Company-ghc
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
   (use-package company-ghc
     :ensure
     :config
@@ -1539,13 +1540,20 @@ Show matching and unmatched delimiters, and auto-close them as well.
 
 *** GHC
 
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package ghc
-    :load-path "/Users/jeremybi/Projects/ghc-mod/elisp"
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (req-package ghc
+    :require haskell-mode
     :config
     (autoload 'ghc-init "ghc" nil t)
     (autoload 'ghc-debug "ghc" nil t)
     (setq ghc-ghc-options '("-fno-warn-unused-do-bind"))
+    (bind-keys :map interactive-haskell-mode-map
+               ("M-," . xref-pop-marker-stack)
+               ("M-p" . ghc-goto-prev-error)
+               ("M-n" . ghc-goto-next-error)
+               ("C-c C-b" . ghc-show-type)
+               ("C-M-?" . ghc-display-errors)
+               ("C-c C-i" . ghc-show-info))
     (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
 #+END_SRC
 
