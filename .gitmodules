@@ -1,6 +1,3 @@
 [submodule "snippets"]
 	path = snippets
 	url = git@github.com:bixuanzju/yasnippet-snippets.git
-[submodule "packages/stack-ide"]
-	path = packages/stack-ide
-	url = git@github.com:bixuanzju/stack-ide.git
