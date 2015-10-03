@@ -164,10 +164,10 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
     (key-chord-define-global "x1" 'delete-other-windows)
     ;; (key-chord-define-global "xk" 'ace-window)
     (key-chord-define-global "0o" 'delete-window)
-    (key-chord-define-global "xn" 'helm-mini)
+    ;; (key-chord-define-global "xn" 'helm-mini)
     ;; (key-chord-define-global "xb" 'ivy-recentf)
-    (key-chord-define-global "jk" 'magit-status)
-    (key-chord-define-global "xm" 'helm-M-x)
+    ;; (key-chord-define-global "jk" 'magit-status)
+    ;; (key-chord-define-global "xm" 'helm-M-x)
     ;; (key-chord-define-global "1q" "!")
     ;; (key-chord-define-global "2w" "@")
     ;; (key-chord-define-global "3e" "#")
@@ -178,7 +178,11 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
     ;; (key-chord-define-global "8u" "*")
     ;; (key-chord-define-global "9i" "(")
     ;; (key-chord-define-global "-p" "_")
-    (key-chord-mode +1))
+    )
+
+  (req-package use-package-chords
+    :require key-chord
+    :config (key-chord-mode 1))
 #+END_SRC
 
 ** Unbind keys
@@ -682,8 +686,9 @@ Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] firs
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package magit
-    :commands magit-status
-    :bind ("C-x g" . magit-dispatch-popup)
+    :require use-package-chords
+    :chords ("jk" . magit-status)
+    ;; :bind ("C-x g" . magit-dispatch-popup)
     :config
     (setq magit-push-always-verify nil
           magit-revert-buffers t))
@@ -793,10 +798,12 @@ files.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package helm
-    :defer t
+    :require use-package-chords
     :bind (("M-y" . helm-show-kill-ring)
            ("C-x C-f" . helm-find-files)
            ("C-c C-r" . helm-resume))
+    :chords (("xn" . helm-mini)
+             ("xm" . helm-M-x))
     :config
     (require 'helm-config)
 
@@ -1138,7 +1145,7 @@ shell.
     :config
     ;; (ivy-mode 1)
     (setq ivy-use-virtual-buffers t)
-    (setq ivy-display-style 'fancy)
+    ;; (setq ivy-display-style 'fancy)
     (setq ivy-format-function 'ivy-format-function-arrow))
 #+end_src
 
