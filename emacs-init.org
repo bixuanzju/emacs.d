@@ -567,6 +567,7 @@ IDE-like features (precise jumping to definition, showing type, etc).
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package haskell
+    :mode ("\\.lhs\\'" . TeX-mode)
     :diminish (interactive-haskell-mode . "IHS")
     :require haskell-mode
     :config
@@ -1554,13 +1555,15 @@ Show matching and unmatched delimiters, and auto-close them as well.
     (autoload 'ghc-init "ghc" nil t)
     (autoload 'ghc-debug "ghc" nil t)
     (setq ghc-ghc-options '("-fno-warn-unused-do-bind"))
+    (setq ghc-report-errors nil)
     (bind-keys :map interactive-haskell-mode-map
                ("M-," . xref-pop-marker-stack)
                ("M-p" . ghc-goto-prev-error)
                ("M-n" . ghc-goto-next-error)
                ("C-c C-b" . ghc-show-type)
                ("C-M-?" . ghc-display-errors)
-               ("C-c C-i" . ghc-show-info))
+               ("C-c C-i" . ghc-show-info)
+               ("C-c C-c" . ghc-toggle-check-command))
     (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
 #+END_SRC
 

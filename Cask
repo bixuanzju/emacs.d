@@ -114,6 +114,7 @@
 (depends-on "undo-tree")
 (depends-on "use-package")
 (depends-on "use-package-chords")
+(depends-on "vimish-fold")
 (depends-on "visual-regexp")
 (depends-on "visual-regexp-steroids")
 (depends-on "vlf")
