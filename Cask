@@ -21,6 +21,7 @@
 (depends-on "company-coq")
 (depends-on "company-ghc")
 (depends-on "company-math")
+(depends-on "corral")
 (depends-on "crosshairs")
 (depends-on "csharp-mode")
 (depends-on "dash")

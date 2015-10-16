@@ -1023,6 +1023,24 @@ files.
      ("q" nil "cancel")))
 #+end_src
 
+*** Corral
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package corral
+    :config
+    (setq corral-preserve-point t)
+    (defhydra hydra-corral (:columns 4)
+      "Corral"
+      ("(" corral-parentheses-backward "Back")
+      (")" corral-parentheses-forward "Forward")
+      ("[" corral-brackets-backward "Back")
+      ("]" corral-brackets-forward "Forward")
+      ("{" corral-braces-backward "Back")
+      ("}" corral-braces-forward "Forward")
+      ("." hydra-repeat "Repeat"))
+    (global-set-key (kbd "C-c c") #'hydra-corral/body))
+#+end_src
+
 *** flycheck-tip
 
 #+begin_src emacs-lisp :tangle yes
