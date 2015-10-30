@@ -580,8 +580,7 @@ IDE-like features (precise jumping to definition, showing type, etc).
           haskell-process-log t)
 
     (add-hook 'haskell-mode-hook 'my/haskell-mode-defaults)
-    (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-    (add-hook 'haskell-mode-hook 'haskell-indentation-mode))
+    (add-hook 'haskell-mode-hook 'interactive-haskell-mode))
 #+END_SRC
 
 *** SML Mode
@@ -652,6 +651,16 @@ IDE-like features (precise jumping to definition, showing type, etc).
     (setq company-dabbrev-code-other-buffers 'code)
     (global-company-mode))
 #+END_SRC
+
+*** Company-flx
+
+#+begin_src emacs-lisp :tangle yes
+  (req-package company-flx
+    :require company flx
+    :config
+    (company-flx-mode +1))
+#+end_src
+
 *** Omnisharp-Emacs
 
 Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] first.
@@ -738,13 +747,6 @@ Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] firs
     (osx-trash-setup))
 #+end_src
 
-*** crosshairs
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (req-package crosshairs
-    :bind ("C-+" . crosshairs))
-#+END_SRC
-
 *** ranger
 
 #+begin_src emacs-lisp :tangle yes
@@ -805,14 +807,18 @@ files.
            ("C-c C-r" . helm-resume))
     :chords (("xn" . helm-mini)
              ("xm" . helm-M-x))
-    :config
+    :init
     (require 'helm-config)
-
+    (helm-mode +1)
+    :config
     (when (executable-find "curl")
       (setq helm-google-suggest-use-curl-p t))
 
     (setq helm-quick-update                     t
           helm-split-window-in-side-p           t
+          helm-M-x-fuzzy-match                  t
+          helm-mode-fuzzy-match                 t
+          helm-apropos-fuzzy-match              t
           helm-buffers-fuzzy-matching           t
           helm-recentf-fuzzy-match              t
           helm-move-to-line-cycle-in-source     t
@@ -823,10 +829,18 @@ files.
     (bind-key "C-c C-l" 'helm-minibuffer-history minibuffer-local-map)
 
     ;; shell history.
-    (bind-key "C-c C-l" 'helm-comint-input-ring shell-mode-map)
-
-    (helm-mode +1))
+    (bind-key "C-c C-l" 'helm-comint-input-ring shell-mode-map))
 #+END_SRC
+
+*** Helm-flx
+
+#+begin_src emacs-lisp :tangle yes
+  (req-package helm-flx
+    :require helm flx
+    :config
+    (helm-flx-mode +1))
+#+end_src
+
 *** zop-to-char
 
 #+begin_src emacs-lisp :tangle yes
@@ -840,6 +854,7 @@ files.
 
 #+begin_src emacs-lisp :tangle yes
   (req-package hydra
+    :require helm
     :config
     (hydra-add-font-lock)
 
@@ -1005,17 +1020,17 @@ files.
    (defhydra hydra-projectile (:color blue :columns 4)
      "Projectile"
      ("a" helm-projectile-ag "ag")
-     ("b" projectile-switch-to-buffer "switch to buffer")
+     ("b" helm-projectile-switch-to-buffer "switch to buffer")
      ("c" projectile-invalidate-cache "cache clear")
-     ("d" projectile-find-dir "dir")
-     ("f" projectile-find-file "file")
+     ("d" helm-projectile-find-dir "dir")
+     ("f" helm-projectile-find-file "file")
      ;; ("ff" projectile-find-file-dwim "file dwim")
      ;; ("fd" projectile-find-file-in-directory "file curr dir")
      ("g" ggtags-update-tags "update gtags")
      ("i" projectile-ibuffer "Ibuffer")
      ("K" projectile-kill-buffers "Kill all buffers")
      ("o" projectile-multi-occur "multi-occur")
-     ("p" projectile-switch-project "switch")
+     ("p" helm-projectile-switch-project "switch")
      ("r" projectile-run-async-shell-command-in-root "run shell command")
      ("x" projectile-remove-known-project "remove known")
      ("X" projectile-cleanup-known-projects "cleanup non-existing")
@@ -1064,7 +1079,6 @@ files.
 
 #+begin_src emacs-lisp :tangle yes
   (req-package elpy
-    :defer t
     :config
     (remove-hook 'elpy-modules 'elpy-module-flymake)
     (remove-hook 'elpy-modules 'elpy-module-yasnippet)
@@ -1073,6 +1087,14 @@ files.
     ;; (elpy-use-ipython)
     )
 #+end_src
+*** Beacon
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package beacon
+    :config
+    (beacon-mode 1))
+#+end_src
+
 *** mwim
 
 Move to the beginning/end of line or code
@@ -1252,8 +1274,7 @@ Whitespace-mode configuration.
 
 #+begin_src emacs-lisp :tangle yes
   (req-package helm-projectile
-    :require projectile helm
-    :defer t)
+    :require projectile helm)
 #+end_src
 
 *** Helm-ag
