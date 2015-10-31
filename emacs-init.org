@@ -841,6 +841,15 @@ files.
     (helm-flx-mode +1))
 #+end_src
 
+*** Helm-fuzzier
+
+#+begin_src emacs-lisp :tangle yes
+  (req-package helm-fuzzier
+    :require helm
+    :config
+    (helm-fuzzier-mode 1))
+#+end_src
+
 *** zop-to-char
 
 #+begin_src emacs-lisp :tangle yes
