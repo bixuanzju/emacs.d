@@ -326,7 +326,7 @@ All packages and modes are configured here.
 
 *** Geiser/Scheme
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   ;; (use-package geiser
   ;;   :config
   ;;   (setq geiser-active-implementations '(racket)))
@@ -502,19 +502,23 @@ favorite feature is that pressing =F= will open all marked files.
 
 *** OCaml
 
-#+begin_src emacs-lisp :tangle no
-  (use-package tuareg
-    :config
-    (setq auto-mode-alist
-          (append '(("\\.ml[ily]?$" . tuareg-mode)
-                    ("\\.topml$" . tuareg-mode))
-                  auto-mode-alist)))
+#+begin_src emacs-lisp :tangle yes
+  (req-package tuareg
+    :mode ("\\.ml[ily]?$" . tuareg-mode))
 #+end_src
 
 *** Yaml mode
 
 #+begin_src emacs-lisp :tangle yes
   (req-package yaml-mode)
+#+end_src
+
+*** Agda
+
+#+begin_src emacs-lisp :tangle yes
+  (if (executable-find "agda-mode")
+      (load-file (let ((coding-system-for-read 'utf-8))
+                   (shell-command-to-string "agda-mode locate"))))
 #+end_src
 
 *** Markdown
@@ -703,24 +707,6 @@ Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] firs
     (setq magit-push-always-verify nil
           magit-revert-buffers t))
 #+END_SRC
-*** stack-mode
-
-#+begin_src emacs-lisp :tangle no
-  (req-package stack-mode
-    :require (haskell-mode flycheck)
-    :config
-    ;; (setq stack-mode-show-popup t)
-    (add-hook 'haskell-mode-hook 'stack-mode)
-
-    ;; (add-hook 'haskell-mode-hook 'haskell-doc-mode)
-
-    (bind-keys :map stack-mode-map
-               ("M-," . xref-pop-marker-stack)
-               ("C-c C-l" . haskell-process-load-or-reload)
-               ("C-c C-b" . stack-mode-type)
-               ("C-c C-t" . stack-mode-load)))
-#+end_src
-
 *** hindent
 
 =stack install hindent= to install the binary.
@@ -1086,7 +1072,7 @@ files.
 #+end_src
 *** Elpy
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (req-package elpy
     :config
     (remove-hook 'elpy-modules 'elpy-module-flymake)
@@ -1148,28 +1134,16 @@ shell.
     (exec-path-from-shell-initialize))
 #+end_src
 
-*** Agda
-
-#+begin_src emacs-lisp :tangle yes
-  (if (executable-find "agda-mode")
-      (load-file (let ((coding-system-for-read 'utf-8))
-                   (shell-command-to-string "agda-mode locate"))))
-#+end_src
-
 *** Ace-window
 
 [[https://github.com/abo-abo/ace-window][Ace-window]] provides window switching, the visual way.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package ace-window
-    :require avy
     :bind ("s-w" . ace-window)
     :config
-    ;; (setq aw-leading-char-style 'path)
     (setq aw-background nil)
-    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
-    ;; (ace-window-display-mode +1)
-    )
+    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 #+END_SRC
 
 *** avy
@@ -1196,7 +1170,8 @@ shell.
     ;; (ivy-mode 1)
     (setq ivy-use-virtual-buffers t)
     ;; (setq ivy-display-style 'fancy)
-    (setq ivy-format-function 'ivy-format-function-arrow))
+    ;; (setq ivy-format-function 'ivy-format-function-arrow)
+    )
 #+end_src
 
 *** Counsel
@@ -1371,22 +1346,31 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 
 *** Merlin and utop
 
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package utop
-    :ensure
-    :config
-    ;; Automatically load utop.el
-    (autoload 'utop-minor-mode "utop" "Minor mode for utop" t)
-    (add-hook 'tuareg-mode-hook 'utop-minor-mode))
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; Setup environment variables using opam
+  (dolist (var (car (read-from-string (shell-command-to-string "opam config env --sexp"))))
+    (setenv (car var) (cadr var)))
 
-  (use-package merlin
-    :ensure
+  (req-package merlin
+    :require company
     :config
-    (add-hook 'tuareg-mode-hook 'merlin-mode)
-    (setq merlin-error-after-save nil)
-    ; Make company aware of merlin
-    (add-to-list 'company-backends 'merlin-company-backend))
+    ;; Start merlin on ocaml files
+    (add-hook 'tuareg-mode-hook 'merlin-mode t)
+    (add-hook 'caml-mode-hook 'merlin-mode t)
+    ;; Use opam switch to lookup ocamlmerlin binary
+    (setq merlin-command 'opam))
+
+  (req-package utop
+    :config
+    (add-hook 'tuareg-mode-hook 'utop-minor-mode))
 #+END_SRC
+
+*** ocp-indent
+
+#+begin_src emacs-lisp :tangle yes
+  (req-package ocp-indent)
+#+end_src
+
 *** Company-ghc
 
 #+begin_src emacs-lisp :tangle yes
