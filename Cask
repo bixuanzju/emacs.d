@@ -73,6 +73,7 @@
 (depends-on "lexbind-mode")
 (depends-on "lispy")
 (depends-on "lua-mode")
+(depends-on "macrostep")
 (depends-on "magit")
 (depends-on "magit-popup")
 (depends-on "markdown-mode")

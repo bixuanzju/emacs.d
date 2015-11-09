@@ -87,8 +87,7 @@ and byte-compile the =org=-document after changes asynchronously.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package async
-    :config
-    (require 'dired-async)
+    :preface
     (defun my/init-hook ()
       "If the current buffer is 'emacs-init.org' the code-blocks
   are tangled."
@@ -99,7 +98,11 @@ and byte-compile the =org=-document after changes asynchronously.
             (org-babel-tangle-file ,my-org-file))
          (lambda (result)
            (message "Tangled file compiled.")))))
+    :config
     (add-hook 'after-save-hook 'my/init-hook))
+
+  (req-package dired-async
+    :require async)
 #+END_SRC
 
 * Appearance
@@ -247,7 +250,7 @@ Some quick essential customizations.
   (setq large-file-warning-threshold 100000000)
 
   ;; autopair
-  (electric-pair-mode)
+  ;; (electric-pair-mode)
 
   ;; enable narrowing commands
   (put 'narrow-to-region 'disabled nil)
@@ -261,7 +264,7 @@ Some quick essential customizations.
   ;; enable erase-buffer command
   (put 'erase-buffer 'disabled nil)
 
-  (show-paren-mode 1)
+  ;; (show-paren-mode 1)
 #+END_SRC
 
 * Setups
@@ -287,41 +290,49 @@ All packages and modes are configured here.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package lisp-mode
-    :config
+    :preface
     (defun my/recompile-elc-on-save ()
-    "Recompile your elc when saving an elisp file."
-    (add-hook 'after-save-hook
-              (lambda ()
-                (when (file-exists-p (byte-compile-dest-file buffer-file-name))
-                  (emacs-lisp-byte-compile)))
-              nil
-              t))
+      "Recompile your elc when saving an elisp file."
+      (add-hook 'after-save-hook
+                (lambda ()
+                  (when (file-exists-p (byte-compile-dest-file buffer-file-name))
+                    (emacs-lisp-byte-compile)))
+                nil
+                t))
 
-  (defun my/conditional-emacs-lisp-checker ()
-    "Don't check doc style in Emacs Lisp test files."
-    (let ((file-name (buffer-file-name)))
-      (when (and file-name (string-match-p ".*-tests?\\.el\\'" file-name))
-        (setq-local flycheck-checkers '(emacs-lisp)))))
+    (defun my/conditional-emacs-lisp-checker ()
+      "Don't check doc style in Emacs Lisp test files."
+      (let ((file-name (buffer-file-name)))
+        (when (and file-name (string-match-p ".*-tests?\\.el\\'" file-name))
+          (setq-local flycheck-checkers '(emacs-lisp)))))
 
-  (defun my/emacs-lisp-mode-defaults ()
-    "Sensible defaults for `emacs-lisp-mode'."
-    (my/recompile-elc-on-save)
-    (smartparens-mode -1)
-    (my/conditional-emacs-lisp-checker))
+    (defun my/emacs-lisp-mode-defaults ()
+      "Sensible defaults for `emacs-lisp-mode'."
+      (my/recompile-elc-on-save)
+      (smartparens-mode -1)
+      (my/conditional-emacs-lisp-checker))
 
-  (add-hook 'emacs-lisp-mode-hook 'my/emacs-lisp-mode-defaults)
+    ;; ielm is an interactive Emacs Lisp shell
+    (defun my/ielm-mode-defaults ()
+      "Sensible defaults for `ielm'."
+      (whitespace-mode -1))
 
-  ;; ielm is an interactive Emacs Lisp shell
-  (defun my/ielm-mode-defaults ()
-    "Sensible defaults for `ielm'."
-    (whitespace-mode -1))
+    :config
+    (add-hook 'emacs-lisp-mode-hook 'my/emacs-lisp-mode-defaults)
 
-  (add-hook 'ielm-mode-hook 'my/ielm-mode-defaults)
+    (add-hook 'ielm-mode-hook 'my/ielm-mode-defaults)
 
-  (add-to-list 'auto-mode-alist '("Cask\\'" . emacs-lisp-mode))
+    ;; (add-to-list 'auto-mode-alist '("Cask\\'" . emacs-lisp-mode))
 
-  (define-key emacs-lisp-mode-map (kbd "C-c C-c") 'eval-defun)
-  (define-key emacs-lisp-mode-map (kbd "C-c C-b") 'eval-buffer))
+    :mode ("Cask\\'" . emacs-lisp-mode)
+
+    :bind (:map
+           emacs-lisp-mode-map
+           ("C-c C-c" . eval-defun)
+           ("C-c C-b" . eval-buffer))
+    ;; (define-key emacs-lisp-mode-map (kbd "C-c C-c") 'eval-defun)
+    ;; (define-key emacs-lisp-mode-map (kbd "C-c C-b") 'eval-buffer)
+    )
 #+END_SRC
 
 *** Geiser/Scheme
@@ -359,6 +370,7 @@ Sane setup for LaTeX writers.
   (req-package cdlatex)
 
   (req-package tex-site
+    :defer t
     :require auctex
     :config
     (defun my/latex-mode-defaults ()
@@ -528,15 +540,6 @@ favorite feature is that pressing =F= will open all marked files.
     :mode "\\.md\\'")
 #+END_SRC
 
-*** C# mode
-
-#+begin_src emacs-lisp :tangle no
-  (use-package csharp-mode
-    :config
-    (bind-key "C-c C-r" 'quickrun csharp-mode-map)
-    (quickrun-set-default "c#" "c#/mono"))
-#+end_src
-
 *** F2j-mode
 
 #+begin_src emacs-lisp :tangle yes
@@ -573,7 +576,6 @@ IDE-like features (precise jumping to definition, showing type, etc).
   (req-package haskell
     :mode ("\\.lhs\\'" . TeX-mode)
     :diminish (interactive-haskell-mode . "IHS")
-    :require haskell-mode
     :config
     (defun my/haskell-mode-defaults ()
       (subword-mode +1)
@@ -665,18 +667,6 @@ IDE-like features (precise jumping to definition, showing type, etc).
     (company-flx-mode +1))
 #+end_src
 
-*** Omnisharp-Emacs
-
-Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] first.
-
-#+begin_src emacs-lisp :tangle no
-  (use-package omnisharp
-    :config
-    (add-to-list 'company-backends 'company-omnisharp)
-    (add-hook 'csharp-mode-hook 'omnisharp-mode)
-    (setq omnisharp-server-executable-path "/Users/jeremybi/Projects/OmniSharpServer/OmniSharp/bin/Debug/OmniSharp.exe"))
-#+end_src
-
 *** Ido-related
 
 #+BEGIN_SRC emacs-lisp :tangle no
@@ -694,6 +684,16 @@ Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] firs
   ;; disable ido faces to see flx highlights
   (setq ido-use-faces nil)
 #+END_SRC
+
+*** Macrostep
+
+#+begin_src emacs-lisp :tangle yes
+  (req-package macrostep
+    :bind (:map
+           emacs-lisp-mode-map
+           ("C-c e" . macrostep-expand)))
+#+end_src
+
 *** Magit
 
 [[https://github.com/magit/magit][Magit]] is the ultimate =git= interface for Emacs.
@@ -702,7 +702,6 @@ Install [[https://github.com/OmniSharp/omnisharp-server][omnisharp-server]] firs
   (req-package magit
     :require use-package-chords
     :chords ("jk" . magit-status)
-    ;; :bind ("C-x g" . magit-dispatch-popup)
     :config
     (setq magit-push-always-verify nil
           magit-revert-buffers t))
@@ -753,8 +752,7 @@ file buffer.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package wgrep-ag
-    :init
-    (autoload 'wgrep-ag-setup "wgrep-ag")
+    :config
     (add-hook 'ag-mode-hook 'wgrep-ag-setup))
 #+END_SRC
 
@@ -1563,19 +1561,22 @@ variable binding forms in Emacs Lisp.
 
 Show matching and unmatched delimiters, and auto-close them as well.
 
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package smartparens
-    :ensure
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (req-package smartparens-config
+    :require smartparens
     :config
-    (use-package smartparens-config)
-    ;; highlights matching pairs
-    (setq sp-base-key-bindings 'paredit)
-    (setq sp-autoskip-closing-pair 'always)
-    (sp-use-paredit-bindings)
-    (sp-pair "{" nil :post-handlers
-             '(((lambda (&rest _ignored)
-                  (prelude-smart-open-line-above)) "RET")))
-    (smartparens-global-mode +1))
+    ;; (use-package smartparens-config)
+    ;; ;; highlights matching pairs
+    ;; (setq sp-base-key-bindings 'paredit)
+    ;; (setq sp-autoskip-closing-pair 'always)
+    ;; (sp-use-paredit-bindings)
+    ;; (sp-pair "{" nil :post-handlers
+    ;;          '(((lambda (&rest _ignored)
+    ;;               (prelude-smart-open-line-above)) "RET")))
+    (show-smartparens-global-mode t)
+
+    (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
+    (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode))
 #+END_SRC
 
 *** GHC
