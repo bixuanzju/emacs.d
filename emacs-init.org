@@ -167,25 +167,14 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
     (key-chord-define-global "x1" 'delete-other-windows)
     ;; (key-chord-define-global "xk" 'ace-window)
     (key-chord-define-global "0o" 'delete-window)
-    ;; (key-chord-define-global "xn" 'helm-mini)
-    ;; (key-chord-define-global "xb" 'ivy-recentf)
-    ;; (key-chord-define-global "jk" 'magit-status)
-    ;; (key-chord-define-global "xm" 'helm-M-x)
-    ;; (key-chord-define-global "1q" "!")
-    ;; (key-chord-define-global "2w" "@")
-    ;; (key-chord-define-global "3e" "#")
-    ;; (key-chord-define-global "4r" "$")
-    ;; (key-chord-define-global "5t" "%")
-    ;; (key-chord-define-global "6y" "^")
-    ;; (key-chord-define-global "7y" "&")
-    ;; (key-chord-define-global "8u" "*")
-    ;; (key-chord-define-global "9i" "(")
-    ;; (key-chord-define-global "-p" "_")
-    )
+    (key-chord-define-global "jk" 'magit-status)
+    (key-chord-define-global "xn" 'helm-mini)
+    (key-chord-define-global "xm" 'helm-M-x)
+    (key-chord-mode 1))
 
-  (req-package use-package-chords
-    :require key-chord
-    :config (key-chord-mode 1))
+  ;; (req-package use-package-chords
+  ;;   :require key-chord
+  ;;   :config (key-chord-mode 1))
 #+END_SRC
 
 ** Unbind keys
@@ -550,7 +539,7 @@ favorite feature is that pressing =F= will open all marked files.
 
 Type =clear= to clear the buffer like in other terminal emulators.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (req-package eshell
     :config
     (setq eshell-directory-name
@@ -583,7 +572,8 @@ IDE-like features (precise jumping to definition, showing type, etc).
 
     (setq haskell-process-suggest-hoogle-imports t
           haskell-interactive-types-for-show-ambiguous nil
-          haskell-process-log t)
+          haskell-process-log t
+          haskell-compile-cabal-build-command "stack build")
 
     (add-hook 'haskell-mode-hook 'my/haskell-mode-defaults)
     (add-hook 'haskell-mode-hook 'interactive-haskell-mode))
@@ -612,9 +602,8 @@ IDE-like features (precise jumping to definition, showing type, etc).
 
 *** Idris Mode
 
-#+begin_src emacs-lisp :tangle no
-  (use-package idris-mode
-    :ensure)
+#+begin_src emacs-lisp :tangle yes
+  (req-package idris-mode)
 #+end_src
 
 *** Lua Mode
@@ -700,8 +689,7 @@ IDE-like features (precise jumping to definition, showing type, etc).
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package magit
-    :require use-package-chords
-    :chords ("jk" . magit-status)
+    :commands magit-status
     :config
     (setq magit-push-always-verify nil
           magit-revert-buffers t))
@@ -734,7 +722,7 @@ IDE-like features (precise jumping to definition, showing type, etc).
 
 *** ranger
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (req-package ranger
     :require dired
     :bind* ("C-x C-j" . ranger))
@@ -785,16 +773,13 @@ files.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package helm
-    :require use-package-chords
     :bind (("M-y" . helm-show-kill-ring)
            ("C-x C-f" . helm-find-files)
            ("C-c C-r" . helm-resume))
-    :chords (("xn" . helm-mini)
-             ("xm" . helm-M-x))
-    :init
-    (require 'helm-config)
-    (helm-mode +1)
+    :commands (helm-mini helm-M-x)
     :config
+    (require 'helm-config)
+
     (when (executable-find "curl")
       (setq helm-google-suggest-use-curl-p t))
 
@@ -813,7 +798,9 @@ files.
     (bind-key "C-c C-l" 'helm-minibuffer-history minibuffer-local-map)
 
     ;; shell history.
-    (bind-key "C-c C-l" 'helm-comint-input-ring shell-mode-map))
+    (bind-key "C-c C-l" 'helm-comint-input-ring shell-mode-map)
+    (helm-mode +1))
+
 #+END_SRC
 
 *** Helm-flx
@@ -1575,8 +1562,8 @@ Show matching and unmatched delimiters, and auto-close them as well.
     ;;               (prelude-smart-open-line-above)) "RET")))
     (show-smartparens-global-mode t)
 
-    (add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
-    (add-hook 'markdown-mode-hook 'turn-on-smartparens-strict-mode))
+    (add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
+    (add-hook 'markdown-mode-hook 'turn-on-smartparens-mode))
 #+END_SRC
 
 *** GHC
@@ -1589,12 +1576,12 @@ Show matching and unmatched delimiters, and auto-close them as well.
     (autoload 'ghc-debug "ghc" nil t)
     (setq ghc-ghc-options '("-fno-warn-unused-do-bind"))
     (setq ghc-report-errors nil)
+    (setq ghc-display-error 'minibuffer)
     (bind-keys :map interactive-haskell-mode-map
                ("M-," . xref-pop-marker-stack)
                ("M-p" . ghc-goto-prev-error)
                ("M-n" . ghc-goto-next-error)
                ("C-c C-b" . ghc-show-type)
-               ("C-M-?" . ghc-display-errors)
                ("C-c C-i" . ghc-show-info)
                ("C-c C-c" . ghc-toggle-check-command))
     (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
@@ -1862,6 +1849,7 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
   (rename-modeline "scala-mode2" scala-mode "SCA")
   (rename-modeline "lisp-mode" emacs-lisp-mode "EL")
   (rename-modeline "lisp-mode" lisp-interaction-mode "EI")
+  (rename-modeline "markdown-mode" markdown-mode "MD")
 #+END_SRC
 
 * Rock it!
