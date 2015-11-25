@@ -104,6 +104,7 @@
 (depends-on "racket-mode")
 (depends-on "rainbow-mode")
 (depends-on "ranger")
+(depends-on "repl-toggle")
 (depends-on "req-package")
 (depends-on "reveal-in-osx-finder")
 (depends-on "rich-minority")

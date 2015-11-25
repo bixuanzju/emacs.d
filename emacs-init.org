@@ -396,10 +396,39 @@ If you are not using it, you need to start.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package org
-    :defer t
+    :bind (("C-c a" . org-agenda)
+           ("C-c c" . org-capture)
+           ("C-c l" . org-store-link))
     :config
     ;; (require 'ox-md)
     (require 'ox-latex)
+
+    (unbind-key "C-c ;" org-mode-map)
+
+    ;;file to save todo items
+    (setq org-agenda-files (quote ("/Users/jeremybi/Dropbox/Research/todo.org")))
+
+
+    ;;set priority range from A to C with default A
+    (setq org-highest-priority ?A)
+    (setq org-lowest-priority ?C)
+    (setq org-default-priority ?A)
+
+
+    ;;set colours for priorities
+    (setq org-priority-faces '((?A . (:foreground "#F0DFAF" :weight bold))
+                               (?B . (:foreground "LightSteelBlue"))
+                               (?C . (:foreground "OliveDrab"))))
+
+
+    ;;open agenda in current window
+    (setq org-agenda-window-setup (quote current-window))
+
+    (setq org-capture-templates
+          '(("t" "taday" entry (file+headline "/Users/jeremybi/Dropbox/Research/todo.org" "Tasks")
+             "* TODO [#A] %? %t")
+            ("b" "todo" entry (file+headline "/Users/jeremybi/Dropbox/Research/todo.org" "Tasks")
+             "* TODO [#A] %?")))
 
     (defun my/org-mode-defaults ()
       ;; (turn-on-org-cdlatex)
@@ -743,6 +772,15 @@ file buffer.
     :config
     (add-hook 'ag-mode-hook 'wgrep-ag-setup))
 #+END_SRC
+*** repl-toggle
+
+#+begin_src emacs-lisp :tangle no
+  (req-package repl-toggle
+    :config
+    (setq rtog/fullscreen t)
+    (setq rtog/goto-buffer-fun 'pop-to-buffer)
+    (setq rtog/mode-repl-alist '((tuareg-mode . utop))))
+#+end_src
 
 *** goto-chg
 
@@ -1243,7 +1281,8 @@ Whitespace-mode configuration.
 
 #+begin_src emacs-lisp :tangle yes
   (req-package helm-projectile
-    :require projectile helm)
+    :require projectile helm
+    :commands helm-projectile-switch-project)
 #+end_src
 
 *** Helm-ag
