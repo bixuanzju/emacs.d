@@ -814,7 +814,7 @@ files.
     :bind (("M-y" . helm-show-kill-ring)
            ("C-x C-f" . helm-find-files)
            ("C-c C-r" . helm-resume))
-    :commands (helm-mini helm-M-x)
+    :commands (helm-mini helm-M-x helm-projectile-switch-project)
     :config
     (require 'helm-config)
 
@@ -1154,6 +1154,7 @@ shell.
   (req-package exec-path-from-shell
     :if (memq window-system '(mac ns))
     :config
+    (setq exec-path-from-shell-check-startup-files nil)
     (exec-path-from-shell-initialize))
 #+end_src
 
@@ -1281,8 +1282,7 @@ Whitespace-mode configuration.
 
 #+begin_src emacs-lisp :tangle yes
   (req-package helm-projectile
-    :require projectile helm
-    :commands helm-projectile-switch-project)
+    :require projectile helm)
 #+end_src
 
 *** Helm-ag
