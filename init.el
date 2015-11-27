@@ -46,10 +46,7 @@ Only modes that don't derive from `prog-mode' should be listed here.")
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "Monoid" :foundry "nil" :slant normal :weight normal :height 161 :width semi-condensed))))
- '(agda2-highlight-datatype-face ((t (:foreground "azure4"))))
- '(agda2-highlight-function-face ((t (:foreground "aquamarine3"))))
- '(agda2-highlight-module-face ((t (:foreground "DarkOliveGreen2"))))
- '(agda2-highlight-primitive-type-face ((t (:foreground "SkyBlue3"))))
+ '(caml-types-expr-face ((t (:background "#8C5353"))) t)
  '(company-tooltip-annotation ((t (:inherit company-tooltip :foreground "orange1"))))
  '(flyspell-incorrect ((t (:inherit nil :underline (:color "yellow" :style wave)))))
  '(idris-loaded-region-face ((t (:background "#073642"))) t)

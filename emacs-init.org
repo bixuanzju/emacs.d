@@ -1378,6 +1378,9 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
   (req-package merlin
     :require company
     :config
+    (bind-keys :map merlin-mode-map
+               ("M-." . merlin-locate)
+               ("M-," . merlin-pop-stack))
     ;; Start merlin on ocaml files
     (add-hook 'tuareg-mode-hook 'merlin-mode t)
     (add-hook 'caml-mode-hook 'merlin-mode t)
