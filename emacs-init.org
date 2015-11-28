@@ -232,6 +232,11 @@ Some quick essential customizations.
         savehist-file (expand-file-name "savehist" savefile-dir))
   (savehist-mode +1)
 
+  ;; bookmarks
+  (require 'bookmark)
+  (setq bookmark-default-file (expand-file-name "bookmarks" savefile-dir)
+        bookmark-save-flag 1)
+
   ;; reduce the frequency of garbage collection by making it happen on
   (setq gc-cons-threshold (* 1024 1024 20))
 
@@ -592,7 +597,6 @@ IDE-like features (precise jumping to definition, showing type, etc).
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package haskell
-    :mode ("\\.lhs\\'" . TeX-mode)
     :diminish (interactive-haskell-mode . "IHS")
     :config
     (defun my/haskell-mode-defaults ()
@@ -602,6 +606,7 @@ IDE-like features (precise jumping to definition, showing type, etc).
     (setq haskell-process-suggest-hoogle-imports t
           haskell-interactive-types-for-show-ambiguous nil
           haskell-process-log t
+          haskell-process-type 'stack-ghci
           haskell-compile-cabal-build-command "stack build")
 
     (add-hook 'haskell-mode-hook 'my/haskell-mode-defaults)
