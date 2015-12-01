@@ -445,6 +445,13 @@ If you are not using it, you need to start.
     ;; Fontify org-mode code blocks
     (setq org-src-fontify-natively t)
 
+    (setq org-todo-keywords
+          (quote ((sequence "TODO(t)" "|" "CANCELLED(c@/!)" "DONE(d)"))))
+
+    (setq org-use-fast-todo-selection t)
+    (setq org-treat-S-cursor-todo-selection-as-state-change nil)
+    (setq org-agenda-span 'day)
+
     (setq org-todo-keyword-faces
           '(("TODO" . (:foreground "green" :weight bold))
             ("NEXT" :foreground "blue" :weight bold)
@@ -671,6 +678,7 @@ IDE-like features (precise jumping to definition, showing type, etc).
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package company
+    :diminish (company-mode . "CPY")
     :config
     (setq company-tooltip-align-annotations t)
     (setq company-idle-delay 0.3)
@@ -1063,8 +1071,8 @@ files.
 
 *** Corral
 
-#+begin_src emacs-lisp :tangle yes
-  (use-package corral
+#+begin_src emacs-lisp :tangle no
+  (req-package corral
     :config
     (setq corral-preserve-point t)
     (defhydra hydra-corral (:columns 4)
@@ -1100,7 +1108,7 @@ files.
 #+end_src
 *** Elpy
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
   (req-package elpy
     :config
     (remove-hook 'elpy-modules 'elpy-module-flymake)
@@ -1110,10 +1118,20 @@ files.
     ;; (elpy-use-ipython)
     )
 #+end_src
+*** Py-autopep8
+
+#+begin_src emacs-lisp :tangle yes
+  (req-package py-autopep8
+    :require elpy
+    :config
+    (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save))
+#+end_src
+
 *** Beacon
 
 #+begin_src emacs-lisp :tangle yes
-  (use-package beacon
+  (req-package beacon
+    :diminish (beacon-mode . "")
     :config
     (beacon-mode 1))
 #+end_src
@@ -1406,8 +1424,8 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 *** Company-ghc
 
 #+begin_src emacs-lisp :tangle yes
-  (use-package company-ghc
-    :ensure
+  (req-package company-ghc
+    :require company
     :config
     (add-to-list 'company-backends '(company-ghc :with company-dabbrev-code)))
 #+end_src
