@@ -133,6 +133,7 @@
 (depends-on "vline")
 (depends-on "wgrep")
 (depends-on "wgrep-ag")
+(depends-on "which-key")
 (depends-on "whitespace-cleanup-mode")
 (depends-on "with-editor")
 (depends-on "worf")

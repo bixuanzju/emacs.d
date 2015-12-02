@@ -438,7 +438,13 @@ If you are not using it, you need to start.
     (defun my/org-mode-defaults ()
       ;; (turn-on-org-cdlatex)
       ;; (diminish 'org-cdlatex-mode "")
-      (turn-on-auto-fill))
+      (turn-on-auto-fill)
+
+      ;; make `company-backends' local is critcal
+      ;; or else, you will have completion in every major mode, that's very annoying!
+      (make-local-variable 'company-backends)
+      ;; company-ispell is the plugin to complete words
+      (add-to-list 'company-backends 'company-ispell))
 
     (add-hook 'org-mode-hook 'my/org-mode-defaults)
 
@@ -723,6 +729,15 @@ IDE-like features (precise jumping to definition, showing type, etc).
     :bind (:map
            emacs-lisp-mode-map
            ("C-c e" . macrostep-expand)))
+#+end_src
+
+*** Which-key
+
+#+begin_src emacs-lisp :tangle yes
+  (req-package which-key
+    :config
+    (which-key-setup-side-window-right-bottom)
+    (which-key-mode))
 #+end_src
 
 *** Magit
@@ -1110,6 +1125,7 @@ files.
 
 #+begin_src emacs-lisp :tangle yes
   (req-package elpy
+    :defer 2
     :config
     (remove-hook 'elpy-modules 'elpy-module-flymake)
     (remove-hook 'elpy-modules 'elpy-module-yasnippet)
@@ -1328,13 +1344,12 @@ Lisp code.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package lispy
     :defer 2
-    :init
+    :config
     (dolist (hook '(emacs-lisp-mode-hook
                     lisp-mode-hook
                     scheme-mode-hook
                     clojure-mode-hook))
       (add-hook hook (lambda () (lispy-mode +1))))
-    :config
     (bind-keys :map lispy-mode-map
                ("C-e" . nil)
                ("/" . nil)
