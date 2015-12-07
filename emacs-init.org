@@ -762,8 +762,7 @@ IDE-like features (precise jumping to definition, showing type, etc).
   (req-package magit
     :commands magit-status
     :config
-    (setq magit-push-always-verify nil
-          magit-revert-buffers t))
+    (setq magit-revert-buffers t))
 #+END_SRC
 *** hindent
 
