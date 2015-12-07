@@ -119,11 +119,21 @@ Set custom theme path and load theme
 ** Mode Line
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (req-package smart-mode-line
+  ;; (req-package smart-mode-line
+  ;;   :config
+  ;;   (setq sml/no-confirm-load-theme t)
+  ;;   (setq sml/theme nil)
+  ;;   (add-hook 'after-init-hook #'sml/setup))
+
+  (req-package spaceline-config
+    :require spaceline
     :config
-    (setq sml/no-confirm-load-theme t)
-    (setq sml/theme nil)
-    (add-hook 'after-init-hook #'sml/setup))
+    (setq powerline-default-separator 'wave
+          spaceline-workspace-numbers-unicode t
+          paceline-window-numbers-unicode t)
+    (spaceline-spacemacs-theme)
+    (spaceline-helm-mode)
+    (spaceline-info-mode))
 #+END_SRC
 
 * Keybindings
@@ -619,11 +629,15 @@ IDE-like features (precise jumping to definition, showing type, etc).
     (setq haskell-process-suggest-hoogle-imports t
           haskell-interactive-types-for-show-ambiguous nil
           haskell-process-log t
+          haskell-process-suggest-remove-import-lines t
+          haskell-process-auto-import-loaded-modules t
           haskell-process-type 'stack-ghci
           haskell-compile-cabal-build-command "stack build")
 
     (add-hook 'haskell-mode-hook 'my/haskell-mode-defaults)
+    (add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template)
     (add-hook 'haskell-mode-hook 'interactive-haskell-mode))
+
 #+END_SRC
 
 *** SML Mode
@@ -838,16 +852,14 @@ recent files using =recentf=.  It is a great way to manage many open
 files.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (req-package helm
+  (req-package helm-config
+    :require helm
     :bind (("M-y" . helm-show-kill-ring)
            ("C-x C-f" . helm-find-files)
            ("C-c C-r" . helm-resume))
     :commands (helm-mini helm-M-x helm-projectile-switch-project)
     :config
-    (require 'helm-config)
-
-    (when (executable-find "curl")
-      (setq helm-google-suggest-use-curl-p t))
+    ;; (require 'helm-config)
 
     (setq helm-quick-update                     t
           helm-split-window-in-side-p           t
@@ -900,7 +912,9 @@ files.
 
 #+begin_src emacs-lisp :tangle yes
   (req-package hydra
-    :require helm
+    :bind (("s-f" . hydra-projectile/body)
+           ("C-x t" . hydra-toggle/body)
+           ("C-M-o" . hydra-window/body))
     :config
     (hydra-add-font-lock)
 
@@ -938,21 +952,19 @@ files.
           (shrink-window arg)
         (enlarge-window arg)))
 
-    (global-set-key
-     (kbd "C-x t")
-     (defhydra hydra-toggle (:color teal)
-       "
+    (defhydra hydra-toggle (:color teal)
+      "
   _a_ abbrev-mode:      %`abbrev-mode
   _d_ debug-on-error    %`debug-on-error
   _f_ auto-fill-mode    %`auto-fill-function
   _t_ truncate-lines    %`truncate-lines
 
   "
-       ("a" abbrev-mode nil)
-       ("d" toggle-debug-on-error nil)
-       ("f" auto-fill-mode nil)
-       ("t" toggle-truncate-lines nil)
-       ("q" nil "cancel")))
+      ("a" abbrev-mode nil)
+      ("d" toggle-debug-on-error nil)
+      ("f" auto-fill-mode nil)
+      ("t" toggle-truncate-lines nil)
+      ("q" nil "cancel"))
 
     (key-chord-define-global
      "ds"
@@ -972,10 +984,8 @@ files.
       ("v" recenter-top-bottom "recenter")
       ("q" nil "quit"))
 
-    (global-set-key
-     (kbd "C-M-o")
-     (defhydra hydra-window (:color amaranth)
-       "
+    (defhydra hydra-window (:color amaranth)
+      "
   Move Point^^^^   Move Splitter   ^Ace^                       ^Split^
   --------------------------------------------------------------------------------
   _w_, _<up>_      Shift + Move    _C-a_: ace-window           _2_: split-window-below
@@ -984,29 +994,29 @@ files.
   _d_, _<right>_                   ^   ^                       ^ ^
   You can use arrow-keys or WASD.
   "
-       ("2" split-window-below nil)
-       ("3" split-window-right nil)
-       ("a" windmove-left nil)
-       ("s" windmove-down nil)
-       ("w" windmove-up nil)
-       ("d" windmove-right nil)
-       ("A" hydra-move-splitter-left nil)
-       ("S" hydra-move-splitter-down nil)
-       ("W" hydra-move-splitter-up nil)
-       ("D" hydra-move-splitter-right nil)
-       ("<left>" windmove-left nil)
-       ("<down>" windmove-down nil)
-       ("<up>" windmove-up nil)
-       ("<right>" windmove-right nil)
-       ("<S-left>" hydra-move-splitter-left nil)
-       ("<S-down>" hydra-move-splitter-down nil)
-       ("<S-up>" hydra-move-splitter-up nil)
-       ("<S-right>" hydra-move-splitter-right nil)
-       ("C-a" ace-window nil)
-       ("u" hydra--universal-argument nil)
-       ("C-s" (lambda () (interactive) (ace-window 4)) nil)
-       ("C-d" (lambda () (interactive) (ace-window 16)) nil)
-       ("q" nil "quit")))
+      ("2" split-window-below nil)
+      ("3" split-window-right nil)
+      ("a" windmove-left nil)
+      ("s" windmove-down nil)
+      ("w" windmove-up nil)
+      ("d" windmove-right nil)
+      ("A" hydra-move-splitter-left nil)
+      ("S" hydra-move-splitter-down nil)
+      ("W" hydra-move-splitter-up nil)
+      ("D" hydra-move-splitter-right nil)
+      ("<left>" windmove-left nil)
+      ("<down>" windmove-down nil)
+      ("<up>" windmove-up nil)
+      ("<right>" windmove-right nil)
+      ("<S-left>" hydra-move-splitter-left nil)
+      ("<S-down>" hydra-move-splitter-down nil)
+      ("<S-up>" hydra-move-splitter-up nil)
+      ("<S-right>" hydra-move-splitter-right nil)
+      ("C-a" ace-window nil)
+      ("u" hydra--universal-argument nil)
+      ("C-s" (lambda () (interactive) (ace-window 4)) nil)
+      ("C-d" (lambda () (interactive) (ace-window 16)) nil)
+      ("q" nil "quit"))
 
     (defhydra hydra-org-template (:color blue :hint nil)
       "
@@ -1061,27 +1071,25 @@ files.
               (hydra-org-template/body)
             (self-insert-command 1))))))
 
-  (global-set-key
-   (kbd "s-f")
-   (defhydra hydra-projectile (:color blue :columns 4)
-     "Projectile"
-     ("a" helm-projectile-ag "ag")
-     ("b" helm-projectile-switch-to-buffer "switch to buffer")
-     ("c" projectile-invalidate-cache "cache clear")
-     ("d" helm-projectile-find-dir "dir")
-     ("f" helm-projectile-find-file "file")
-     ;; ("ff" projectile-find-file-dwim "file dwim")
-     ;; ("fd" projectile-find-file-in-directory "file curr dir")
-     ("g" ggtags-update-tags "update gtags")
-     ("i" projectile-ibuffer "Ibuffer")
-     ("K" projectile-kill-buffers "Kill all buffers")
-     ("o" projectile-multi-occur "multi-occur")
-     ("p" helm-projectile-switch-project "switch")
-     ("r" projectile-run-async-shell-command-in-root "run shell command")
-     ("x" projectile-remove-known-project "remove known")
-     ("X" projectile-cleanup-known-projects "cleanup non-existing")
-     ("z" projectile-cache-current-file "cache current")
-     ("q" nil "cancel")))
+  (defhydra hydra-projectile (:color blue :columns 4)
+    "Projectile"
+    ("a" helm-projectile-ag "ag")
+    ("b" helm-projectile-switch-to-buffer "switch to buffer")
+    ("c" projectile-compile-project "compile project")
+    ("d" helm-projectile-find-dir "dir")
+    ("f" helm-projectile-find-file "file")
+    ;; ("ff" projectile-find-file-dwim "file dwim")
+    ;; ("fd" projectile-find-file-in-directory "file curr dir")
+    ("g" ggtags-update-tags "update gtags")
+    ("i" projectile-ibuffer "Ibuffer")
+    ("K" projectile-kill-buffers "Kill all buffers")
+    ("o" projectile-multi-occur "multi-occur")
+    ("p" helm-projectile-switch-project "switch")
+    ("r" projectile-run-async-shell-command-in-root "run shell command")
+    ("x" projectile-remove-known-project "remove known")
+    ("X" projectile-cleanup-known-projects "cleanup non-existing")
+    ("z" projectile-cache-current-file "cache current")
+    ("q" nil "cancel"))
 #+end_src
 
 *** Corral
