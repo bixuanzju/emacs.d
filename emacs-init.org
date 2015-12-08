@@ -1342,21 +1342,21 @@ Lisp code.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package lispy
-    :defer 2
+    ;; :bind (:map lispy-mode-map
+    ;;             ("C-e" . nil)
+    ;;             ("/" . nil)
+    ;;             ("M-i" . nil)
+    ;;             ("M-e" . lispy-iedit)
+    ;;             ("S" . special-lispy-splice)
+    ;;             ("g" . special-lispy-goto-local)
+    ;;             ("G" . special-lispy-goto))
     :config
     (dolist (hook '(emacs-lisp-mode-hook
+                    lisp-interaction-mode-hook
                     lisp-mode-hook
                     scheme-mode-hook
                     clojure-mode-hook))
-      (add-hook hook (lambda () (lispy-mode +1))))
-    (bind-keys :map lispy-mode-map
-               ("C-e" . nil)
-               ("/" . nil)
-               ("M-i" . nil)
-               ("M-e" . lispy-iedit)
-               ("S" . special-lispy-splice)
-               ("g" . special-lispy-goto-local)
-               ("G" . special-lispy-goto)))
+      (add-hook hook (lambda () (lispy-mode 1)))))
 #+END_SRC
 
 *** Yasnippets
@@ -1651,19 +1651,16 @@ Show matching and unmatched delimiters, and auto-close them as well.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package ghc
     :require haskell-mode
+    :bind (:map interactive-haskell-mode-map
+                ("M-," . xref-pop-marker-stack)
+                ("M-p" . ghc-goto-prev-error)
+                ("M-n" . ghc-goto-next-error)
+                ("C-c C-b" . ghc-show-type)
+                ("C-c C-i" . ghc-show-info)
+                ("C-c C-c" . ghc-toggle-check-command))
     :config
-    (autoload 'ghc-init "ghc" nil t)
-    (autoload 'ghc-debug "ghc" nil t)
-    (setq ghc-ghc-options '("-fno-warn-unused-do-bind"))
     (setq ghc-report-errors nil)
     (setq ghc-display-error 'minibuffer)
-    (bind-keys :map interactive-haskell-mode-map
-               ("M-," . xref-pop-marker-stack)
-               ("M-p" . ghc-goto-prev-error)
-               ("M-n" . ghc-goto-next-error)
-               ("C-c C-b" . ghc-show-type)
-               ("C-c C-i" . ghc-show-info)
-               ("C-c C-c" . ghc-toggle-check-command))
     (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
 #+END_SRC
 
