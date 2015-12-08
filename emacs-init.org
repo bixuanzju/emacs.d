@@ -130,7 +130,7 @@ Set custom theme path and load theme
     :config
     (setq powerline-default-separator 'wave
           spaceline-workspace-numbers-unicode t
-          paceline-window-numbers-unicode t)
+          spaceline-window-numbers-unicode t)
     (spaceline-spacemacs-theme)
     (spaceline-helm-mode)
     (spaceline-info-mode))
@@ -1642,6 +1642,7 @@ Show matching and unmatched delimiters, and auto-close them as well.
     (show-smartparens-global-mode t)
 
     (add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
+    (add-hook 'LaTeX-mode-hook 'turn-on-smartparens-mode)
     (add-hook 'markdown-mode-hook 'turn-on-smartparens-mode))
 #+END_SRC
 
