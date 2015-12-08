@@ -163,6 +163,8 @@ Set custom theme path and load theme
            ("C-M-!" . my/iterm-shell-command)
            ([remap kill-whole-line] . prelude-kill-whole-line)
            ([(control shift return)] . prelude-smart-open-line-above))
+    :bind (:map ctl-x-map
+                ("n" . narrow-or-widen-dwim))
     :bind* (("C-M-h" . backward-kill-word)))
 #+END_SRC
 
@@ -813,16 +815,6 @@ file buffer.
     :config
     (add-hook 'ag-mode-hook 'wgrep-ag-setup))
 #+END_SRC
-*** repl-toggle
-
-#+begin_src emacs-lisp :tangle no
-  (req-package repl-toggle
-    :config
-    (setq rtog/fullscreen t)
-    (setq rtog/goto-buffer-fun 'pop-to-buffer)
-    (setq rtog/mode-repl-alist '((tuareg-mode . utop))))
-#+end_src
-
 *** goto-chg
 
 #+begin_src emacs-lisp :tangle yes
