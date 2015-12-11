@@ -8,7 +8,6 @@
 (depends-on "async")
 (depends-on "auctex")
 (depends-on "auctex-latexmk")
-(depends-on "auto-complete")
 (depends-on "avy")
 (depends-on "beacon")
 (depends-on "bind-chord")

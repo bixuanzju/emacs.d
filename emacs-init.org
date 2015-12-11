@@ -633,7 +633,6 @@ IDE-like features (precise jumping to definition, showing type, etc).
           haskell-process-log t
           haskell-process-suggest-remove-import-lines t
           haskell-process-auto-import-loaded-modules t
-          haskell-process-type 'stack-ghci
           haskell-compile-cabal-build-command "stack build")
 
     (add-hook 'haskell-mode-hook 'my/haskell-mode-defaults)
@@ -703,7 +702,7 @@ IDE-like features (precise jumping to definition, showing type, etc).
     :diminish (company-mode . "CPY")
     :config
     (setq company-tooltip-align-annotations t)
-    (setq company-idle-delay 0.3)
+    (setq company-idle-delay 0.2)
     (setq company-dabbrev-ignore-case nil)
     (setq company-dabbrev-downcase nil)
     (setq company-tooltip-flip-when-above t)
@@ -830,7 +829,7 @@ file buffer.
 
 *** eyebrowse
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (req-package eyebrowse
     :config
     (eyebrowse-mode t))
@@ -843,14 +842,13 @@ recent files using =recentf=.  It is a great way to manage many open
 files.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (req-package helm-config
-    :require helm
+  (req-package helm
     :bind (("M-y" . helm-show-kill-ring)
            ("C-x C-f" . helm-find-files)
            ("C-c C-r" . helm-resume))
     :commands (helm-mini helm-M-x helm-projectile-switch-project)
     :config
-    ;; (require 'helm-config)
+    (require 'helm-config)
 
     (setq helm-quick-update                     t
           helm-split-window-in-side-p           t
@@ -1101,7 +1099,7 @@ files.
     (global-set-key (kbd "C-c c") #'hydra-corral/body))
 #+end_src
 
-*** flycheck-tip
+*** flycheck-pos-tip
 
 #+begin_src emacs-lisp :tangle yes
   (req-package flycheck-pos-tip
