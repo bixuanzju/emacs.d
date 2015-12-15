@@ -39,6 +39,7 @@
 (depends-on "eyebrowse")
 (depends-on "f")
 (depends-on "faceup")
+(depends-on "fancy-battery")
 (depends-on "find-file-in-project")
 (depends-on "fix-word")
 (depends-on "flx")

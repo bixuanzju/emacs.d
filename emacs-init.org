@@ -1234,6 +1234,14 @@ shell.
     )
 #+end_src
 
+*** Fancy battery mode
+
+#+begin_src emacs-lisp :tangle yes
+  (req-package fancy-battery
+    :config
+    (add-hook 'after-init-hook #'fancy-battery-mode))
+#+end_src
+
 *** Counsel
 
 #+begin_src emacs-lisp :tangle no
