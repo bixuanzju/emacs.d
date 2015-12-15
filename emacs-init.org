@@ -295,50 +295,46 @@ All packages and modes are configured here.
 **** Emacs lisp
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (req-package lisp-mode
-    :preface
-    (defun my/recompile-elc-on-save ()
-      "Recompile your elc when saving an elisp file."
-      (add-hook 'after-save-hook
-                (lambda ()
-                  (when (file-exists-p (byte-compile-dest-file buffer-file-name))
-                    (emacs-lisp-byte-compile)))
-                nil
-                t))
+  (defun my/recompile-elc-on-save ()
+    "Recompile your elc when saving an elisp file."
+    (add-hook 'after-save-hook
+              (lambda ()
+                (when (file-exists-p (byte-compile-dest-file buffer-file-name))
+                  (emacs-lisp-byte-compile)))
+              nil
+              t))
 
-    (defun my/conditional-emacs-lisp-checker ()
-      "Don't check doc style in Emacs Lisp test files."
-      (let ((file-name (buffer-file-name)))
-        (when (and file-name (string-match-p ".*-tests?\\.el\\'" file-name))
-          (setq-local flycheck-checkers '(emacs-lisp)))))
+  (defun my/conditional-emacs-lisp-checker ()
+    "Don't check doc style in Emacs Lisp test files."
+    (let ((file-name (buffer-file-name)))
+      (when (and file-name (string-match-p ".*-tests?\\.el\\'" file-name))
+        (setq-local flycheck-checkers '(emacs-lisp)))))
 
-    (defun my/emacs-lisp-mode-defaults ()
-      "Sensible defaults for `emacs-lisp-mode'."
-      (my/recompile-elc-on-save)
-      (smartparens-mode -1)
-      (my/conditional-emacs-lisp-checker))
+  (defun my/emacs-lisp-mode-defaults ()
+    "Sensible defaults for `emacs-lisp-mode'."
+    (my/recompile-elc-on-save)
+    (smartparens-mode -1)
+    (my/conditional-emacs-lisp-checker))
 
-    ;; ielm is an interactive Emacs Lisp shell
-    (defun my/ielm-mode-defaults ()
-      "Sensible defaults for `ielm'."
-      (whitespace-mode -1))
+  ;; ielm is an interactive Emacs Lisp shell
+  ;; (defun my/ielm-mode-defaults ()
+  ;;   "Sensible defaults for `ielm'."
+  ;;   (whitespace-mode -1))
 
-    :config
-    (add-hook 'emacs-lisp-mode-hook 'my/emacs-lisp-mode-defaults)
+  (add-hook 'emacs-lisp-mode-hook 'my/emacs-lisp-mode-defaults)
 
-    (add-hook 'ielm-mode-hook 'my/ielm-mode-defaults)
+  ;; (add-hook 'ielm-mode-hook 'my/ielm-mode-defaults)
 
-    ;; (add-to-list 'auto-mode-alist '("Cask\\'" . emacs-lisp-mode))
+  (add-to-list 'auto-mode-alist '("Cask\\'" . emacs-lisp-mode))
 
-    :mode ("Cask\\'" . emacs-lisp-mode)
+  (setq flycheck-emacs-lisp-load-path 'inherit)
 
-    :bind (:map
-           emacs-lisp-mode-map
-           ("C-c C-c" . eval-defun)
-           ("C-c C-b" . eval-buffer))
-    ;; (define-key emacs-lisp-mode-map (kbd "C-c C-c") 'eval-defun)
-    ;; (define-key emacs-lisp-mode-map (kbd "C-c C-b") 'eval-buffer)
-    )
+  (eval-after-load 'semantic
+    '(semantic-default-elisp-setup))
+
+  (bind-keys :map emacs-lisp-mode-map
+             ("C-c C-c" . eval-defun)
+             ("C-c C-b" . eval-buffer))
 #+END_SRC
 
 *** Geiser/Scheme
@@ -368,32 +364,70 @@ Sane setup for LaTeX writers.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package auctex-latexmk
-    :require auctex
-    :config
-    (setq auctex-latexmk-inherit-TeX-PDF-mode t)
-    (auctex-latexmk-setup))
-
-  (req-package cdlatex)
-
-  (req-package tex-site
+    :require tex
     :defer t
-    :require auctex
+    :init
+    (add-hook 'LaTeX-mode-hook 'auctex-latexmk-setup))
+
+  ;; (req-package cdlatex)
+
+  (req-package company-auctex
     :config
-    (defun my/latex-mode-defaults ()
-      (visual-line-mode +1)
-      (yas-minor-mode -1))
+    (company-auctex-init))
 
-    (add-hook 'LaTeX-mode-hook 'my/latex-mode-defaults)
-    (add-hook 'LaTeX-mode-hook 'turn-on-cdlatex)
-    (add-to-list 'auto-mode-alist '("\\.l[gh]s\\'" . tex-mode))
+  (req-package tex
+    :defer t
+    :init
+    (setq TeX-auto-save t
+          TeX-parse-self t
+          TeX-syntactic-comment t
+          TeX-PDF-mode t
+          ;; Synctex support
+          TeX-source-correlate-mode t
+          TeX-source-correlate-start-server nil
+          ;; Setup reftex style (RefTeX is supported through extension)
+          reftex-use-fonts t
+          ;; Don't insert line-break at inline math
+          LaTeX-fill-break-at-separators nil)
+    (defvar latex-nofill-env '("equation"
+                               "equation*"
+                               "align"
+                               "align*"
+                               "tabular"
+                               "tikzpicture")
+      "List of environment names in which `auto-fill-mode' will be inhibited.")
+    (add-hook 'LaTeX-mode-hook 'latex/auto-fill-mode)
+    (add-hook 'LaTeX-mode-hook 'latex-math-mode)
+    ;; (add-hook 'LaTeX-mode-hook 'my/latex-mode-defaults)
 
-    (setq TeX-auto-save t)
-    (setq TeX-parse-self t)
-    (setq TeX-save-query nil)
+    :config
 
-    (setq-default TeX-master nil)
+    ;; (defun my/latex-mode-defaults ()
+    ;;   (visual-line-mode +1)
+    ;;   (yas-minor-mode -1))
 
-    (setq TeX-PDF-mode t)
+    (defun latex//autofill ()
+      "Check whether the pointer is ucrrently inside on the
+  environments described in `latex-nofill-env' and if so, inhibits
+  the automatic filling of the current paragraph."
+      (let ((do-auto-fill t)
+            (current-environment "")
+            (level 0))
+        (while (and do-auto-fill (not (string= current-environment "document")))
+          (setq level (1+ level)
+                current-environment (LaTeX-current-environment level)
+                do-auto-fill (not (member current-environment latex-nofill-env))))
+        (when do-auto-fill
+          (do-auto-fill))))
+
+    (defun latex/auto-fill-mode ()
+      "Toggle uato-fill-mode using the custom auto-fill function."
+      (interactive)
+      (auto-fill-mode)
+      (setq auto-fill-function 'latex//autofill))
+
+    ;; (add-hook 'LaTeX-mode-hook 'turn-on-cdlatex)
+    ;; (add-to-list 'auto-mode-alist '("\\.l[gh]s\\'" . tex-mode))
 
     (when (eq system-type 'darwin)
       (setq TeX-view-program-selection
@@ -575,7 +609,7 @@ favorite feature is that pressing =F= will open all marked files.
 
 *** Agda
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (if (executable-find "agda-mode")
       (load-file (let ((coding-system-for-read 'utf-8))
                    (shell-command-to-string "agda-mode locate"))))
@@ -585,7 +619,8 @@ favorite feature is that pressing =F= will open all marked files.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package markdown-mode
-    :mode "\\.md\\'")
+    :mode ("\\.m[k]d" . markdown-mode)
+    :defer t)
 #+END_SRC
 
 *** F2j-mode
@@ -829,7 +864,7 @@ file buffer.
 
 *** eyebrowse
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
   (req-package eyebrowse
     :config
     (eyebrowse-mode t))
@@ -1105,7 +1140,7 @@ files.
   (req-package flycheck-pos-tip
     :require flycheck
     :config
-    (setq flycheck-display-errors-function #'flycheck-pos-tip-error-messages))
+    (flycheck-pos-tip-mode))
 #+end_src
 
 *** Pandoc-mode
@@ -1335,7 +1370,7 @@ Whitespace-mode configuration.
   (req-package helm-ag
     :require helm
     :defer t
-    :config
+    :init
     (setq helm-ag-base-command "ag --nocolor --nogroup --ignore-case"
           helm-ag-command-option "--all-text"
           helm-ag-insert-at-point 'symbol))
@@ -1451,7 +1486,7 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 #+end_src
 *** Company-math
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (req-package company-math
     :require company
     :config
@@ -1484,6 +1519,9 @@ Enable spell-checking in Emacs.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (req-package flyspell
     :diminish (flyspell-mode . "")
+    :init
+    (add-hook 'markdown-mode-hook 'flyspell-mode)
+    (add-hook 'text-mode-hook 'flyspell-mode)
     :config
     (setq flyspell-issue-welcome-flag nil)
     (setq flyspell-issue-message-flag nil)
@@ -1495,10 +1533,12 @@ Enable spell-checking in Emacs.
     (define-key flyspell-mode-map (kbd "C-M-i") nil)
     (define-key flyspell-mode-map (kbd "C-;") nil)
 
+    (flyspell-prog-mode)
     ;; Enable spell check in only plaintext
-    (add-hook 'text-mode-hook 'flyspell-mode)
+    ;; (add-hook 'text-mode-hook 'flyspell-mode)
     ;; Enable spell check in comments
-    (add-hook 'prog-mode-hook 'flyspell-prog-mode))
+    ;; (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+    )
 
 #+END_SRC
 
@@ -1667,7 +1707,7 @@ Show matching and unmatched delimiters, and auto-close them as well.
     :config
     (setq ghc-report-errors nil)
     (setq ghc-display-error 'minibuffer)
-    (add-hook 'haskell-mode-hook (lambda () (ghc-init))))
+    (add-hook 'haskell-mode-hook 'ghc-init))
 #+END_SRC
 
 *** Ace-link

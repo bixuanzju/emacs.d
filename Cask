@@ -19,6 +19,7 @@
 (depends-on "clojure-mode")
 (depends-on "col-highlight")
 (depends-on "company")
+(depends-on "company-auctex")
 (depends-on "company-coq")
 (depends-on "company-flx")
 (depends-on "company-ghc")
