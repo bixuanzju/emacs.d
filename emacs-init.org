@@ -1171,6 +1171,7 @@ files.
     :config
     (remove-hook 'elpy-modules 'elpy-module-flymake)
     (remove-hook 'elpy-modules 'elpy-module-yasnippet)
+    (remove-hook 'elpy-modules 'elpy-module-pyvenv)
     (diminish 'elpy-mode "☕")
     (elpy-enable)
     ;; (elpy-use-ipython)
