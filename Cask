@@ -89,6 +89,7 @@
 (depends-on "mwim")
 (depends-on "ocp-indent")
 (depends-on "org")
+(depends-on "org-ref")
 (depends-on "osx-trash")
 (depends-on "ov")
 (depends-on "ox-pandoc")

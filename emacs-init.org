@@ -437,6 +437,26 @@ Sane setup for LaTeX writers.
 If you are not using it, you need to start.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package org-ref
+    :after org
+    :init
+    (setq reftex-default-bibliography '("/Users/jeremybi/Dropbox/Research/references.bib"))
+    (setq org-ref-bibliography-notes "/Users/jeremybi/Dropbox/Research/notes/notes.org"
+          org-ref-default-bibliography '("/Users/jeremybi/Dropbox/Research/references.bib")
+          org-ref-pdf-directory "/Users/jeremybi/Dropbox/papers/")
+
+    (setq helm-bibtex-bibliography "/Users/jeremybi/Dropbox/Research/references.bib")
+    (setq helm-bibtex-library-path "/Users/jeremybi/Dropbox/papers/")
+
+    (setq helm-bibtex-pdf-open-function
+          (lambda (fpath)
+            (start-process "open" "*open*" "open" fpath)))
+
+    (setq helm-bibtex-notes-path "/Users/jeremybi/Dropbox/Research/notes/notes.org")
+    :config
+    (key-chord-define-global "uu" 'org-ref-cite-hydra/body))
+
+
   (use-package org
     :defer t
     :bind (("C-c a" . org-agenda)
