@@ -454,8 +454,21 @@ If you are not using it, you need to start.
 
     (setq helm-bibtex-notes-path "/Users/jeremybi/Dropbox/Research/notes/notes.org")
     :config
-    (key-chord-define-global "uu" 'org-ref-cite-hydra/body))
+    (key-chord-define-global "uu" 'org-ref-cite-hydra/body)
+    ;; variables that control bibtex key format for auto-generation
+    ;; I want firstauthor-year-title-words
+    ;; this usually makes a legitimate filename to store pdfs under.
+    (setq bibtex-autokey-year-length 4
+          bibtex-autokey-name-year-separator "-"
+          bibtex-autokey-year-title-separator "-"
+          bibtex-autokey-titleword-separator "-"
+          bibtex-autokey-titlewords 2
+          bibtex-autokey-titlewords-stretch 1
+          bibtex-autokey-titleword-length 5))
 
+
+  (use-package doi-utils
+    :after org)
 
   (use-package org
     :defer t
@@ -494,7 +507,7 @@ If you are not using it, you need to start.
              "* TODO [#A] %?")))
 
     (defun my/org-mode-defaults ()
-      ;; (turn-on-org-cdlatex)
+      (turn-on-org-cdlatex)
       ;; (diminish 'org-cdlatex-mode "")
       (turn-on-auto-fill)
 
