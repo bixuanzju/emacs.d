@@ -891,7 +891,10 @@ platform).
   (use-package magit
     :commands magit-status
     :config
-    (setq magit-revert-buffers t))
+    (setq magit-revert-buffers t)
+    (with-eval-after-load 'magit-remote
+      (define-key magit-mode-map "f" 'magit-pull-and-fetch-popup)
+      (define-key magit-mode-map "F" nil)))
 #+END_SRC
 *** hindent
 
