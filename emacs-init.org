@@ -309,6 +309,7 @@ All packages and modes are configured here.
     "Sensible defaults for `emacs-lisp-mode'."
     (my/recompile-elc-on-save)
     (smartparens-mode -1)
+    (eldoc-mode +1)
     (my/conditional-emacs-lisp-checker))
 
   ;; ielm is an interactive Emacs Lisp shell
@@ -440,19 +441,19 @@ If you are not using it, you need to start.
   (use-package org-ref
     :after org
     :init
-    (setq reftex-default-bibliography '("/Users/jeremybi/Dropbox/Research/references.bib"))
-    (setq org-ref-bibliography-notes "/Users/jeremybi/Dropbox/Research/notes/notes.org"
-          org-ref-default-bibliography '("/Users/jeremybi/Dropbox/Research/references.bib")
-          org-ref-pdf-directory "/Users/jeremybi/Dropbox/papers/")
+    (setq reftex-default-bibliography '("~/Dropbox/Research/references.bib"))
+    (setq org-ref-bibliography-notes "~/Dropbox/Research/notes/notes.org"
+          org-ref-default-bibliography '("~/Dropbox/Research/references.bib")
+          org-ref-pdf-directory "~/Dropbox/papers/")
 
-    (setq helm-bibtex-bibliography "/Users/jeremybi/Dropbox/Research/references.bib")
-    (setq helm-bibtex-library-path "/Users/jeremybi/Dropbox/papers/")
+    (setq helm-bibtex-bibliography "~/Dropbox/Research/references.bib")
+    (setq helm-bibtex-library-path "~/Dropbox/papers/")
 
     (setq helm-bibtex-pdf-open-function
           (lambda (fpath)
             (start-process "open" "*open*" "open" fpath)))
 
-    (setq helm-bibtex-notes-path "/Users/jeremybi/Dropbox/Research/notes/notes.org")
+    (setq helm-bibtex-notes-path "~/Dropbox/Research/notes/notes.org")
     :config
     (key-chord-define-global "uu" 'org-ref-cite-hydra/body)
     ;; variables that control bibtex key format for auto-generation
@@ -470,19 +471,22 @@ If you are not using it, you need to start.
   (use-package doi-utils
     :after org)
 
+  (use-package org-ref-bibtex
+    :after org
+    :init
+    (setq org-ref-bibtex-hydra-key-binding "\C-cj"))
+
   (use-package org
     :defer t
     :bind (("C-c a" . org-agenda)
            ("C-c c" . org-capture)
            ("C-c l" . org-store-link))
     :config
-    ;; (require 'ox-md)
-    (require 'ox-latex)
-
+    (require 'ox-md)
     (unbind-key "C-c ;" org-mode-map)
 
     ;;file to save todo items
-    (setq org-agenda-files (quote ("/Users/jeremybi/Dropbox/Research/todo.org")))
+    (setq org-agenda-files (quote ("~/Dropbox/Research/todo.org")))
 
 
     ;;set priority range from A to C with default A
@@ -492,19 +496,45 @@ If you are not using it, you need to start.
 
 
     ;;set colours for priorities
-    (setq org-priority-faces '((?A . (:foreground "#F0DFAF" :weight bold))
+    (setq org-priority-faces '((?A . (:foreground "OliveDrab" :weight bold))
                                (?B . (:foreground "LightSteelBlue"))
-                               (?C . (:foreground "OliveDrab"))))
+                               (?C . (:foreground "#F0DFAF"))))
 
 
     ;;open agenda in current window
     (setq org-agenda-window-setup (quote current-window))
 
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;; org-mode agenda options                                                ;;
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;open agenda in current window
+    (setq org-agenda-window-setup (quote current-window))
+    ;;warn me of any deadlines in next 7 days
+    (setq org-deadline-warning-days 7)
+
+    ;;don't show tasks as scheduled if they are already shown as a deadline
+    (setq org-agenda-skip-scheduled-if-deadline-is-shown t)
+    ;;don't give awarning colour to tasks with impending deadlines
+    ;;if they are scheduled to be done
+    (setq org-agenda-skip-deadline-prewarning-if-scheduled (quote pre-scheduled))
+    ;;don't show tasks that are scheduled or have deadlines in the
+    ;;normal todo list
+    (setq org-agenda-todo-ignore-deadlines (quote all))
+    (setq org-agenda-todo-ignore-scheduled (quote all))
+
+    ;;sort tasks in order of when they are due and then by priority
+
+    (setq org-agenda-sorting-strategy
+          (quote
+           ((agenda deadline-up priority-down)
+            (todo priority-down category-keep)
+            (tags priority-down category-keep)
+            (search category-keep))))
+
     (setq org-capture-templates
-          '(("t" "taday" entry (file+headline "/Users/jeremybi/Dropbox/Research/todo.org" "Tasks")
-             "* TODO [#A] %? %t")
-            ("b" "todo" entry (file+headline "/Users/jeremybi/Dropbox/Research/todo.org" "Tasks")
-             "* TODO [#A] %?")))
+          '(("t" "todo" entry (file+headline "~/Dropbox/Research/todo.org" "Tasks")
+             "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n")))
+
 
     (defun my/org-mode-defaults ()
       (turn-on-org-cdlatex)
@@ -527,7 +557,6 @@ If you are not using it, you need to start.
 
     (setq org-use-fast-todo-selection t)
     (setq org-treat-S-cursor-todo-selection-as-state-change nil)
-    (setq org-agenda-span 'day)
 
     (setq org-todo-keyword-faces
           '(("TODO" . (:foreground "green" :weight bold))
@@ -545,14 +574,17 @@ If you are not using it, you need to start.
                   "pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
                   "pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f")))
 
+    (setq org-latex-create-formula-image-program 'imagemagick)
+
     ;; Tell the latex export to use the minted package for source
     ;; code coloration.
     (add-to-list 'org-latex-packages-alist '("" "minted"))
+    (require 'ox-latex)
     (setq org-latex-listings 'minted)
 
-    (setq org-latex-minted-options
-          '(("frame" "lines") ("framesep" "6pt")
-            ("mathescape" "true") ("fontsize" "\\small")))
+    ;; (setq org-latex-minted-options
+    ;;       '(("frame" "lines") ("framesep" "6pt")
+    ;;         ("mathescape" "true") ("fontsize" "\\small")))
 
     (setq org-confirm-babel-evaluate nil)
 
@@ -781,16 +813,30 @@ platform).
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package company
+    :pin gnu
     :defer t
     :diminish (company-mode . "CPY")
     :init (add-hook 'after-init-hook 'global-company-mode)
     :config
-    (setq company-tooltip-align-annotations t)
-    (setq company-idle-delay 0.2)
-    (setq company-dabbrev-ignore-case nil)
-    (setq company-dabbrev-downcase nil)
-    (setq company-tooltip-flip-when-above t)
-    (setq company-dabbrev-code-other-buffers 'code))
+    ;; Give Company a decent default configuration.
+    (setq company-minimum-prefix-length 2
+          company-selection-wrap-around t
+          company-show-numbers t
+          company-tooltip-align-annotations t
+          company-require-match nil
+          company-dabbrev-downcase nil
+          company-dabbrev-ignore-case nil)
+
+    ;; Sort completion candidates that already occur in the current
+    ;; buffer at the top of the candidate list.
+    ;; (setq company-transformers '(company-sort-by-occurrence))
+    ;; (setq company-tooltip-align-annotations t)
+    ;; (setq company-idle-delay 0.2)
+    ;; (setq company-dabbrev-ignore-case nil)
+    ;; (setq company-dabbrev-downcase nil)
+    ;; (setq company-tooltip-flip-when-above t)
+    ;; (setq company-dabbrev-code-other-buffers 'code)
+    )
 #+END_SRC
 
 *** Company-flx
@@ -915,6 +961,15 @@ file buffer.
     :config
     (eyebrowse-mode t))
 #+end_src
+
+*** pdf-tools
+
+#+begin_src emacs-lisp :tangle no
+  (use-package pdf-tools
+    :config
+    (pdf-tools-install))
+#+end_src
+
 
 *** Helm
 
