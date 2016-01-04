@@ -90,6 +90,7 @@
 (depends-on "mwim")
 (depends-on "ocp-indent")
 (depends-on "org")
+(depends-on "org-autolist")
 (depends-on "org-ref")
 (depends-on "osx-trash")
 (depends-on "ov")
