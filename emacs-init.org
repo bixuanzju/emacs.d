@@ -173,15 +173,10 @@ Key-chord maps pairs of simultaneously pressed keys to commands.
     (setq key-chord-two-keys-delay 0.05)
     (key-chord-define-global "x1" 'delete-other-windows)
     ;; (key-chord-define-global "xk" 'ace-window)
-    (key-chord-define-global "0o" 'delete-window)
-    (key-chord-define-global "jk" 'magit-status)
-    (key-chord-define-global "xn" 'helm-mini)
-    (key-chord-define-global "xm" 'helm-M-x)
-    (key-chord-mode 1))
+    (key-chord-define-global "0o" 'delete-window))
 
-  ;; (use-package use-package-chords
-  ;;   :require key-chord
-  ;;   :config (key-chord-mode 1))
+  (use-package use-package-chords
+    :config (key-chord-mode 1))
 #+END_SRC
 
 ** Unbind keys
@@ -893,7 +888,8 @@ platform).
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package magit
-    :commands magit-status
+    :chords ("jk" . magit-status)
+    :bind ("C-x g" . magit-dispatch-popup)
     :config
     (setq magit-revert-buffers t)
     (with-eval-after-load 'magit-remote
@@ -989,7 +985,9 @@ files.
     :bind (("M-y" . helm-show-kill-ring)
            ("C-x C-f" . helm-find-files)
            ("C-c C-r" . helm-resume))
-    :commands (helm-mini helm-M-x helm-projectile-switch-project)
+    :commands (helm-projectile-switch-project)
+    :chords (("xn" . helm-mini)
+             ("xm" . helm-M-x))
     :config
     (require 'helm-config)
 
