@@ -38,82 +38,6 @@
                         elems)))
     `(progn ,@result)))
 
-(defun prelude-switch-to-previous-buffer ()
-  "Switch to previously open buffer.
-Repeated invocations toggle between the two most recently open buffers."
-  (interactive)
-  (switch-to-buffer (other-buffer (current-buffer) 1)))
-
-;; (defvar my-use-next-or-previous t "If t, call `my-previous-user-buffer', or call `my-next-user-buffer'")
-
-;; (defun my-goto-most-recently-visied-user-buffer ()
-;;   "Switch to previously open user buffer.
-;; Repeated invocations toggle between the two most recently open
-;; buffers."
-;;   (interactive)
-;;   (if my-use-next-or-previous
-;;       (progn (my-previous-user-buffer)
-;;              (setq my-use-next-or-previous nil))
-;;     (progn (my-next-user-buffer)
-;;            (setq my-use-next-or-previous t))))
-
-;; (defun my-next-user-buffer ()
-;;   "Switch to the next user buffer.
-;;  “user buffer” is a buffer whose name does not start with “*”"
-;;   (interactive)
-;;   (next-buffer)
-;;   (let ((i 0))
-;;     (while (< i 20)
-;;       (if (string-equal "*" (substring (buffer-name) 0 1))
-;;           (progn (next-buffer)
-;;                  (setq i (1+ i)))
-;;         (progn (setq i 100))))))
-
-;; (defun my-previous-user-buffer ()
-;;   "Switch to the previous user buffer.
-;;  “user buffer” is a buffer whose name does not start with “*”"
-;;   (interactive)
-;;   (previous-buffer)
-;;   (let ((i 0))
-;;     (while (< i 20)
-;;       (if (string-equal "*" (substring (buffer-name) 0 1))
-;;           (progn (previous-buffer)
-;;                  (setq i (1+ i)))
-;;         (progn (setq i 100))))))
-
-(defun prelude-kill-whole-line (&optional arg)
-  "A simple wrapper around command `kill-whole-line' that respects indentation.
-Passes ARG to command `kill-whole-line' when provided."
-  (interactive "p")
-  (kill-whole-line arg)
-  (back-to-indentation))
-
-(defun prelude-top-join-line ()
-  "Join the current line with the line beneath it."
-  (interactive)
-  (delete-indentation 1))
-
-(defun prelude-smart-open-line-above ()
-  "Insert an empty line above the current line.
-Position the cursor at it's beginning, according to the current mode."
-  (interactive)
-  (move-beginning-of-line nil)
-  (newline-and-indent)
-  (forward-line -1)
-  (indent-according-to-mode))
-
-(defun prelude-smart-open-line (arg)
-  "Insert an empty line after the current line.
-Position the cursor at its beginning, according to the current mode.
-
-With a prefix ARG open line above the current line."
-  (interactive "P")
-  (if arg
-      (prelude-smart-open-line-above)
-    (progn
-      (move-end-of-line nil)
-      (newline-and-indent))))
-
 (defun goto-line-with-feedback ()
   "Show line numbers temporarily, while prompting for the line
   number input."
@@ -151,25 +75,6 @@ a region, all lines that region covers will be duplicated."
     (insert region)
     (goto-char (+ (line-beginning-position) origin))))
 
-(defun prelude-cleanup-buffer-or-region ()
-  "Cleanup a region if selected, otherwise the whole buffer."
-  (interactive)
-  (call-interactively 'untabify)
-  (unless (member major-mode prelude-indent-sensitive-modes)
-    (call-interactively 'indent-region))
-  (whitespace-cleanup))
-
-(defun prelude-kill-other-buffers ()
-  "Kill all buffers but the current one.
-Doesn't mess with special buffers."
-  (interactive)
-  (when (y-or-n-p "Are you sure you want to kill all buffers but the current one? ")
-    (-each
-        (->> (buffer-list)
-             (-filter #'buffer-file-name)
-             (--remove (eql (current-buffer) it)))
-      #'kill-buffer)))
-
 (defun my/forward-line-by-many ()
   "Move line forward by multiple times."
   (interactive)
@@ -181,7 +86,6 @@ Doesn't mess with special buffers."
   (forward-line -4))
 
 ;; borrowed from Emacs 25
-
 (when (= emacs-major-version 24)
   (defun my/comment-line (n)
     "Comment or uncomment current line and leave point after it.

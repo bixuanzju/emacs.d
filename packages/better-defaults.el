@@ -104,31 +104,31 @@
 
 ;; automatically save buffers associated with files on buffer switch
 ;; and on windows switch
-(defun prelude-auto-save-command ()
-  "Save the current buffer if `prelude-auto-save' is not nil."
-  (when (and buffer-file-name
-             (buffer-modified-p (current-buffer))
-             (file-writable-p buffer-file-name))
-    (save-buffer)))
+;; (defun prelude-auto-save-command ()
+;;   "Save the current buffer if `prelude-auto-save' is not nil."
+;;   (when (and buffer-file-name
+;;              (buffer-modified-p (current-buffer))
+;;              (file-writable-p buffer-file-name))
+;;     (save-buffer)))
 
-(defmacro advise-commands (advice-name commands class &rest body)
-  "Apply advice named ADVICE-NAME to multiple COMMANDS.
-The body of the advice is in BODY."
-  `(progn
-     ,@(mapcar (lambda (command)
-                 `(defadvice ,command (,class ,(intern (concat (symbol-name command) "-" advice-name)) activate)
-                    ,@body))
-               commands)))
+;; (defmacro advise-commands (advice-name commands class &rest body)
+;;   "Apply advice named ADVICE-NAME to multiple COMMANDS.
+;; The body of the advice is in BODY."
+;;   `(progn
+;;      ,@(mapcar (lambda (command)
+;;                  `(defadvice ,command (,class ,(intern (concat (symbol-name command) "-" advice-name)) activate)
+;;                     ,@body))
+;;                commands)))
 
 ;; advise all window switching functions
-(advise-commands "auto-save"
-                 (ace-window
-                  switch-to-buffer
-                  other-window)
-                 before
-                 (prelude-auto-save-command))
+;; (advise-commands "auto-save"
+;;                  (ace-window
+;;                   switch-to-buffer
+;;                   other-window)
+;;                  before
+;;                  (prelude-auto-save-command))
 
-(add-hook 'mouse-leave-buffer-hook 'prelude-auto-save-command)
+;; (add-hook 'mouse-leave-buffer-hook 'prelude-auto-save-command)
 
 (defadvice kill-region (before smart-cut activate compile)
   "When called interactively with no active region, kill a single line instead."
@@ -137,24 +137,21 @@ The body of the advice is in BODY."
      (list (line-beginning-position)
            (line-beginning-position 2)))))
 
-;; (when (version<= "24.4" emacs-version)
-;;   (add-hook 'focus-out-hook 'prelude-save-all-buffers))
-
 ;; automatically indenting yanked text if in programming-modes
 (defun yank-advised-indent-function (beg end)
   "Do indentation, as long as the region isn't too large."
   (if (<= (- end beg) prelude-yank-indent-threshold)
       (indent-region beg end nil)))
 
-(advise-commands "indent" (yank yank-pop) after
-  "If current mode is one of `prelude-yank-indent-modes',
-indent yanked text (with prefix arg don't indent)."
-  (if (and (not (ad-get-arg 0))
-           (not (member major-mode prelude-indent-sensitive-modes))
-           (or (derived-mode-p 'prog-mode)
-               (member major-mode prelude-yank-indent-modes)))
-      (let ((transient-mark-mode nil))
-        (yank-advised-indent-function (region-beginning) (region-end)))))
+;; (advise-commands "indent" (yank yank-pop) after
+;;   "If current mode is one of `prelude-yank-indent-modes',
+;; indent yanked text (with prefix arg don't indent)."
+;;   (if (and (not (ad-get-arg 0))
+;;            (not (member major-mode prelude-indent-sensitive-modes))
+;;            (or (derived-mode-p 'prog-mode)
+;;                (member major-mode prelude-yank-indent-modes)))
+;;       (let ((transient-mark-mode nil))
+;;         (yank-advised-indent-function (region-beginning) (region-end)))))
 
 ;; Nic says eval-expression-print-level needs to be set to nil (turned off) so
 ;; that you can always see what's happening.

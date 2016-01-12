@@ -147,17 +147,12 @@ Set custom theme path and load theme
            ("C-:" . eval-expression)
            ("M-SPC" . cycle-spacing)
            ("s-k" . kill-this-buffer)
-           ("C-c k" . prelude-kill-other-buffers)
-           ("C-c n" . prelude-cleanup-buffer-or-region)
            ("C-c d" . duplicate-comment-current-line-or-region)
-           ("C-x b" . prelude-switch-to-previous-buffer)
-           ("C-^" . prelude-top-join-line)
            ("C-x \\" . align-regexp)
            ("C-S-n" . my/forward-line-by-many)
            ("C-S-p" . my/backward-line-by-many)
            ("C-M-!" . my/iterm-shell-command)
-           ([remap kill-whole-line] . prelude-kill-whole-line)
-           ([(control shift return)] . prelude-smart-open-line-above))
+           )
     :bind (:map ctl-x-map
                 ("n" . narrow-or-widen-dwim))
     :bind* (("C-M-h" . backward-kill-word)))
@@ -896,6 +891,32 @@ platform).
       (define-key magit-mode-map "f" 'magit-pull-and-fetch-popup)
       (define-key magit-mode-map "F" nil)))
 #+END_SRC
+
+*** super-save
+
+[[https://github.com/bbatsov/super-save][super-save]] auto-saves your buffers, when certain events happen
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package super-save
+    :config
+    (super-save-initialize))
+#+end_src
+
+*** Crux
+
+A Collection of Ridiculously Useful eXtensions for Emacs
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package crux
+    :bind (("C-c n" . crux-cleanup-buffer-or-region)
+           ("C-c k" . crux-kill-other-buffers)
+           ([remap kill-whole-line] . crux-kill-whole-line)
+           ([(control shift return)] . crux-smart-open-line-above)
+           ("s-j" . crux-top-join-line)
+           ("C-x b" . crux-switch-to-previous-buffer))) 
+#+end_src
+
+
 *** hindent
 
 =stack install hindent= to install the binary.
