@@ -50,7 +50,7 @@
 
   ;; copy from http://endlessparentheses.com/proof-general-configuration-for-the-coq-software-foundations-tutorial.html
   ;; ProofGeneral
-  (load-file "/Users/jeremybi/Projects/ProofGeneral/generic/proof-site.el")
+  (require 'proof-site "~/.emacs.d/packages/PG/generic/proof-site")
 
   ;; I appreciate the effort of writing a splash-screen, but the angry
   ;; general on the gif scares me.
@@ -71,15 +71,15 @@
       #'proof-assert-next-command-interactive)
 
     ;; Small convenience for commonly written commands.
-    (define-key coq-mode-map "\C-c\C-m" "\nend\t")
-    (define-key coq-mode-map "\C-c\C-e"
-      #'endless/qed)
-    (defun endless/qed ()
-      (interactive)
-      (unless (memq (char-before) '(?\s ?\n ?\r))
-        (insert " "))
-      (insert "Qed.")
-      (proof-assert-next-command-interactive))
+    ;; (define-key coq-mode-map "\C-c\C-m" "\nend\t")
+    ;; (define-key coq-mode-map "\C-c\C-e"
+    ;;   #'endless/qed)
+    ;; (defun endless/qed ()
+    ;;   (interactive)
+    ;;   (unless (memq (char-before) '(?\s ?\n ?\r))
+    ;;     (insert " "))
+    ;;   (insert "Qed.")
+    ;;   (proof-assert-next-command-interactive))
 
     ;; (add-hook 'coq-mode-hook 'abbrev-mode)
 

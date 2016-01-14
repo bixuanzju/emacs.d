@@ -720,9 +720,11 @@ platform).
           haskell-process-auto-import-loaded-modules t
           haskell-compile-cabal-build-command "stack build")
 
-    (add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template))
+    (add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template)
+    (add-hook 'haskell-mode-hook 'interactive-haskell-mode))
 
   (use-package ghc
+    :disabled t
     :defer t
     :init
     (defun my/haskell-mode-defaults ()
@@ -886,7 +888,6 @@ platform).
     :chords ("jk" . magit-status)
     :bind ("C-x g" . magit-dispatch-popup)
     :config
-    (setq magit-revert-buffers t)
     (with-eval-after-load 'magit-remote
       (define-key magit-mode-map "f" 'magit-pull-and-fetch-popup)
       (define-key magit-mode-map "F" nil)))
@@ -1601,6 +1602,7 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package company-ghc
+    :disabled t
     :after ghc company
     :config
     (add-to-list 'company-backends '(company-ghc :with company-dabbrev-code)))

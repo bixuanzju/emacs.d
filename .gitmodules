@@ -1,3 +1,6 @@
 [submodule "snippets"]
 	path = snippets
 	url = git@github.com:bixuanzju/yasnippet-snippets.git
+[submodule "packages/PG"]
+	path = packages/PG
+	url = https://github.com/ProofGeneral/PG
