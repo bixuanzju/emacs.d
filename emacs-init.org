@@ -899,8 +899,10 @@ platform).
 
 #+begin_src emacs-lisp :tangle yes
   (use-package super-save
+    :diminish ""
     :config
-    (super-save-initialize))
+    (add-to-list 'super-save-triggers "ace-window")
+    (super-save-mode +1))
 #+end_src
 
 *** Crux
