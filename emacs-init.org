@@ -199,10 +199,6 @@ Some quick essential customizations.
   ;; Start off with some sanity.
   (require 'better-defaults)
 
-  ;; OSX specific settings
-  (when (eq system-type 'darwin)
-    (require 'cocoa-emacs-default))
-
   ;; Store all backup and autosave files in the tmp dir
   (setq backup-directory-alist
         `((".*" . ,temporary-file-directory)))
@@ -606,6 +602,37 @@ If you are not using it, you need to start.
          "\C-x\C-s" #'org-edit-src-exit)))
 #+END_SRC
 
+*** Coq
+
+refer to [[http://endlessparentheses.com/proof-general-configuration-for-the-coq-software-foundations-tutorial.html][here]]
+
+#+begin_src emacs-lisp :tangle yes
+  ;; ProofGeneral
+  (use-package proof-site
+    :config
+    ;; I appreciate the effort of writing a splash-screen, but the angry
+    ;; general on the gif scares me.
+    (setq proof-splash-seen t)
+
+    ;; Hybrid mode is by far the best.
+    (setq proof-three-window-mode-policy 'smart)
+
+    ;; I don't know who wants to evaluate comments
+    ;; one-by-one, but I don't.
+    (setq proof-script-fly-past-comments t)
+
+    (with-eval-after-load 'coq
+      ;; The most common command by far. Having a 3(!)
+      ;; keys long sequence for this command is just a
+      ;; crime.
+      (define-key coq-mode-map "\M-n"
+        #'proof-assert-next-command-interactive)))
+
+  ;; (require 'proof-site "~/.emacs.d/packages/PG/generic/proof-site")
+
+
+#+end_src
+
 *** Dired
 
 Dired Plus is an extension to the =dired= file manager in Emacs.  My
@@ -675,12 +702,6 @@ favorite feature is that pressing =F= will open all marked files.
     :mode ("\\.m[k]d" . markdown-mode)
     :defer t)
 #+END_SRC
-
-*** F2j-mode
-
-#+begin_src emacs-lisp :tangle yes
-  (use-package f2j-mode)
-#+end_src
 
 *** Eshell
 
@@ -2079,6 +2100,26 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
   (rename-modeline "lisp-mode" lisp-interaction-mode "EI")
   (rename-modeline "markdown-mode" markdown-mode "MD")
 #+END_SRC
+
+*** Personal
+
+#+begin_src emacs-lisp :tangle yes
+  ;; (setq mac-command-modifier 'meta)
+  ;; (setq mac-option-modifier 'super)
+
+  (when (string= user-login-name "jeremybi")
+    (setq mac-right-command-modifier 'super)
+
+    ;; Prefer g-prefixed coreutils version of standard utilities when available
+    (let ((gls (executable-find "gls")))
+      (when gls (setq insert-directory-program gls)))
+
+    (mac-auto-operator-composition-mode 1)
+
+    (use-package ottmode)
+
+    (use-package f2j-mode))
+#+end_src
 
 * Rock it!
 
