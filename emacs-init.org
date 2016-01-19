@@ -2105,7 +2105,7 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
 
 #+begin_src emacs-lisp :tangle yes
   ;; (setq mac-command-modifier 'meta)
-  ;; (setq mac-option-modifier 'super)
+  (setq mac-option-modifier 'super)
 
   (when (string= user-login-name "jeremybi")
     (setq mac-right-command-modifier 'super)
