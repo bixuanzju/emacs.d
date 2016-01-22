@@ -830,7 +830,6 @@ platform).
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package company
-    :pin gnu
     :defer t
     :diminish (company-mode . "CPY")
     :init (add-hook 'after-init-hook 'global-company-mode)
