@@ -2122,7 +2122,8 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
 
     (use-package ottmode)
 
-    (use-package f2j-mode))
+    (use-package f2j-mode
+      :disabled t))
 #+end_src
 
 * Rock it!
