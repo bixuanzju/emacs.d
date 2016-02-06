@@ -25,6 +25,7 @@
 (depends-on "company-ghc")
 (depends-on "company-math")
 (depends-on "corral")
+(depends-on "counsel")
 (depends-on "crux")
 (depends-on "dash")
 (depends-on "dash-at-point")

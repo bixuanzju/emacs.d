@@ -914,6 +914,7 @@ platform).
     :chords ("jk" . magit-status)
     :bind ("C-x g" . magit-dispatch-popup)
     :config
+    (setq magit-completing-read-function 'ivy-completing-read)
     (with-eval-after-load 'magit-remote
       (define-key magit-mode-map "f" 'magit-pull-and-fetch-popup)
       (define-key magit-mode-map "F" nil)))
@@ -1032,12 +1033,12 @@ files.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package helm
-    :bind (("M-y" . helm-show-kill-ring)
-           ("C-x C-f" . helm-find-files)
-           ("C-c C-r" . helm-resume))
+    ;; :bind (("M-y" . helm-show-kill-ring)
+    ;;        ("C-x C-f" . helm-find-files)
+    ;;        ("C-c C-r" . helm-resume))
     :commands (helm-projectile-switch-project)
-    :chords (("xn" . helm-mini)
-             ("xm" . helm-M-x))
+    ;; :chords (("xn" . helm-mini)
+    ;;          ("xm" . helm-M-x))
     :config
     (require 'helm-config)
 
@@ -1057,7 +1058,8 @@ files.
 
     ;; shell history.
     (bind-key "C-c C-l" 'helm-comint-input-ring shell-mode-map)
-    (helm-mode +1))
+    ;; (helm-mode +1)
+    )
 #+END_SRC
 
 *** Helm-flx
@@ -1252,17 +1254,17 @@ files.
   (defhydra hydra-projectile (:color blue :columns 4)
     "Projectile"
     ("a" helm-projectile-ag "ag")
-    ("b" helm-projectile-switch-to-buffer "switch to buffer")
+    ("b" projectile-switch-to-buffer "switch to buffer")
     ("c" projectile-compile-project "compile project")
-    ("d" helm-projectile-find-dir "dir")
-    ("f" helm-projectile-find-file "file")
+    ("d" projectile-find-dir "dir")
+    ("f" projectile-find-file "file")
     ;; ("ff" projectile-find-file-dwim "file dwim")
     ;; ("fd" projectile-find-file-in-directory "file curr dir")
     ("g" ggtags-update-tags "update gtags")
     ("i" projectile-ibuffer "Ibuffer")
     ("K" projectile-kill-buffers "Kill all buffers")
-    ("o" projectile-multi-occur "multi-occur")
-    ("p" helm-projectile-switch-project "switch")
+    ;; ("o" projectile-multi-occur "multi-occur")
+    ("p" projectile-switch-project "switch")
     ("r" projectile-run-async-shell-command-in-root "run shell command")
     ("x" projectile-remove-known-project "remove known")
     ("X" projectile-cleanup-known-projects "cleanup non-existing")
@@ -1397,27 +1399,36 @@ shell.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package avy
-    :bind ("s-l" . avy-goto-line)
+    :bind (("s-l" . avy-goto-line)
+           ("s-." . avy-goto-char-timer))
     :config
     (setq avy-background t)
-    (setq avy-styles-alist '((avy-goto-word-or-subword-1 . de-brujin)))
-    (bind-key "s-." 'avy-goto-word-or-subword-1))
+    ;; (setq avy-styles-alist '((avy-goto-word-or-subword-1 . de-brujin)))
+    ;; (bind-key "s-." 'avy-goto-word-or-subword-1)
+    )
 #+end_src
 
-*** Swiper
+*** Counsel
 
 #+begin_src emacs-lisp :tangle yes
-  (use-package swiper
-    :bind (("C-r" . swiper)
-           ("C-s" . swiper)
-           ;; ("C-c C-r" . ivy-resume)
-           )
+  (use-package counsel
+    :bind (("C-s" . swiper)
+           ("C-x C-f" . counsel-find-file)
+           ("C-h f" . counsel-describe-function)
+           ("C-h v" . counsel-describe-variable)
+           ("<f6>" . ivy-resume))
+    :chords (("xm" . counsel-M-x)
+             ("xn" . ivy-switch-buffer))
     :config
-    ;; (ivy-mode 1)
+    (setq ivy-initial-inputs-alist nil)
     (setq ivy-use-virtual-buffers t)
-    ;; (setq ivy-display-style 'fancy)
-    ;; (setq ivy-format-function 'ivy-format-function-arrow)
-    )
+    (setq ivy-re-builders-alist
+          '((t . ivy--regex-fuzzy)))
+    ;; (ivy-set-actions
+    ;;  'counsel-find-file
+    ;;  `((,(propertize "delete" 'face 'font-lock-warning-face)
+    ;;     (lambda (x) (delete-file (expand-file-name x ivy--directory))))))
+    (ivy-mode 1))
 #+end_src
 
 *** Fancy battery mode
@@ -1426,25 +1437,6 @@ shell.
   (use-package fancy-battery
     :config
     (add-hook 'after-init-hook #'fancy-battery-mode))
-#+end_src
-
-*** Counsel
-
-#+begin_src emacs-lisp :tangle no
-  (use-package counsel
-    :ensure
-    :bind (("C-h f" . counsel-describe-function)
-           ("C-h v" . counsel-describe-variable)
-           ("C-x C-f" . counsel-find-file)
-           ;; ("C-c j" . counsel-git-grep)
-           ("M-x" . counsel-M-x))
-    :config
-    (setq counsel-find-file-at-point t)
-    (ivy-set-actions
-     'counsel-find-file
-     `((,(propertize "delete" 'face 'font-lock-warning-face)
-        (lambda (x) (delete-file (expand-file-name x ivy--directory))))))
-    (use-package smex :ensure))
 #+end_src
 
 *** Rainbow mode
@@ -1503,8 +1495,9 @@ Whitespace-mode configuration.
     :config
     (setq projectile-cache-file
           (expand-file-name  "projectile.cache" savefile-dir)
-          projectile-completion-system 'helm
-          projectile-sort-order 'modification-time))
+          ;; projectile-completion-system 'helm
+          projectile-sort-order 'modification-time
+          projectile-completion-system 'ivy))
 #+END_SRC
 
 *** Helm-projectile
