@@ -1648,7 +1648,7 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
     :after company
     :config
     ;; Load company-coq when opening Coq files
-    (setq company-coq-prettify-symbols nil)
+    ;; (setq company-coq-prettify-symbols nil)
     (add-hook 'coq-mode-hook #'company-coq-initialize))
 #+end_src
 
