@@ -129,6 +129,7 @@
 (depends-on "spaceline")
 (depends-on "super-save")
 (depends-on "swiper")
+(depends-on "tablist")
 (depends-on "tuareg")
 (depends-on "undo-tree")
 (depends-on "use-package")
