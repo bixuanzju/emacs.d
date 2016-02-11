@@ -628,11 +628,12 @@ refer to [[http://endlessparentheses.com/proof-general-configuration-for-the-coq
       ;; keys long sequence for this command is just a
       ;; crime.
       (define-key coq-mode-map "\M-n"
-        #'proof-assert-next-command-interactive)))
+        #'proof-assert-next-command-interactive))
 
-  ;; (require 'proof-site "~/.emacs.d/packages/PG/generic/proof-site")
+    (defun my/coq-mode-defaults ()
+      (flycheck-mode -1))
 
-
+    (add-hook 'coq-mode-hook #'my/coq-mode-defaults))
 #+end_src
 
 *** Dired
@@ -797,7 +798,12 @@ platform).
   (use-package idris-mode
     :mode (("\\.idr$" . idris-mode)
            ("\\.lidr$" . idris-mode))
-    :defer t)
+    :defer t
+    :config
+    (defun my/idris-mode-defaults ()
+      (flycheck-mode -1))
+
+    (add-hook 'idris-mode-hook 'my/idris-mode-defaults))
 #+end_src
 
 *** Lua Mode
@@ -938,12 +944,17 @@ A Collection of Ridiculously Useful eXtensions for Emacs
 
 #+begin_src emacs-lisp :tangle yes
   (use-package crux
+    :demand
     :bind (("C-c n" . crux-cleanup-buffer-or-region)
            ("C-c k" . crux-kill-other-buffers)
            ([remap kill-whole-line] . crux-kill-whole-line)
            ([(control shift return)] . crux-smart-open-line-above)
            ("s-j" . crux-top-join-line)
-           ("C-x b" . crux-switch-to-previous-buffer))) 
+           ("C-x b" . crux-switch-to-previous-buffer))
+    :config
+    (crux-with-region-or-buffer indent-region)
+    (crux-with-region-or-buffer untabify)
+    (crux-with-region-or-line kill-region))
 #+end_src
 
 
@@ -1408,17 +1419,13 @@ shell.
     )
 #+end_src
 
-*** Counsel
+*** Swiper
 
 #+begin_src emacs-lisp :tangle yes
-  (use-package counsel
+  (use-package swiper
     :bind (("C-s" . swiper)
-           ("C-x C-f" . counsel-find-file)
-           ("C-h f" . counsel-describe-function)
-           ("C-h v" . counsel-describe-variable)
            ("<f6>" . ivy-resume))
-    :chords (("xm" . counsel-M-x)
-             ("xn" . ivy-switch-buffer))
+    :chords (("xn" . ivy-switch-buffer))
     :config
     (setq ivy-initial-inputs-alist nil)
     (setq ivy-use-virtual-buffers t)
@@ -1429,6 +1436,16 @@ shell.
     ;;  `((,(propertize "delete" 'face 'font-lock-warning-face)
     ;;     (lambda (x) (delete-file (expand-file-name x ivy--directory))))))
     (ivy-mode 1))
+#+end_src
+
+*** Counsel
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package counsel
+    :bind (("C-x C-f" . counsel-find-file)
+           ("C-h f" . counsel-describe-function)
+           ("C-h v" . counsel-describe-variable))
+    :chords ("xm" . counsel-M-x))
 #+end_src
 
 *** Fancy battery mode
@@ -1648,8 +1665,7 @@ More natural undo or redo. Undo with =C-/= and redo with =C-?=.
     :after company
     :config
     ;; Load company-coq when opening Coq files
-    ;; (setq company-coq-prettify-symbols nil)
-    (add-hook 'coq-mode-hook #'company-coq-initialize))
+    (add-hook 'coq-mode-hook #'company-coq-mode))
 #+end_src
 
 *** Flyspell
@@ -1994,21 +2010,6 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
             (set-window-buffer (next-window) next-win-buffer)
             (select-window first-win)
             (if this-win-2nd (other-window 1))))))
-#+END_SRC
-
-*** Indent and untabfy Buffer
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (defmacro with-region-or-buffer (func)
-    "When called with no active region, call FUNC on current buffer."
-    `(defadvice ,func (before with-region-or-buffer activate compile)
-       (interactive
-        (if mark-active
-            (list (region-beginning) (region-end))
-          (list (point-min) (point-max))))))
-
-  (with-region-or-buffer indent-region)
-  (with-region-or-buffer untabify)
 #+END_SRC
 
 ** Miscellaneous

@@ -45,7 +45,7 @@ Only modes that don't derive from `prog-mode' should be listed here.")
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Monoid" :foundry "nil" :slant normal :weight normal :height 161 :width semi-condensed))))
+ '(default ((t (:family "Monoid" :foundry "nil" :slant normal :weight normal :height 141 :width semi-condensed))))
  '(caml-types-expr-face ((t (:background "#8C5353"))) t)
  '(company-tooltip-annotation ((t (:inherit company-tooltip :foreground "orange1"))))
  '(flyspell-incorrect ((t (:inherit nil :underline (:color "yellow" :style wave)))))
