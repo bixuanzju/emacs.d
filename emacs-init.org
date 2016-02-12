@@ -2122,6 +2122,6 @@ Consult [[http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/][Zsh and Mul
 
 * Rock it!
 
-#+begin_src emacs-lisp :tangle no
-  (req-package-finish)
+#+begin_src emacs-lisp :tangle yes
+  (provide 'emacs-init)
 #+end_src

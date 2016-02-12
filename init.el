@@ -13,17 +13,6 @@
 (defvar savefile-dir (expand-file-name "savefile/" user-emacs-directory)
   "This folder stores all the automatically generated save/history-files.")
 
-(defvar prelude-indent-sensitive-modes
-  '(coffee-mode python-mode slim-mode haml-mode)
-  "Modes for which auto-indenting is suppressed.")
-
-(defvar prelude-yank-indent-modes '(LaTeX-mode TeX-mode)
-  "Modes in which to indent regions that are yanked (or yank-popped).
-Only modes that don't derive from `prog-mode' should be listed here.")
-
-(defvar prelude-yank-indent-threshold 1000
-  "Threshold (# chars) over which indentation does not automatically occur.")
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -102,12 +102,6 @@
 (add-hook 'text-mode-hook 'abbrev-mode)
 (setq abbrev-file-name (expand-file-name "abbrev_defs" savefile-dir))
 
-;; automatically indenting yanked text if in programming-modes
-(defun yank-advised-indent-function (beg end)
-  "Do indentation, as long as the region isn't too large."
-  (if (<= (- end beg) prelude-yank-indent-threshold)
-      (indent-region beg end nil)))
-
 ;; Nic says eval-expression-print-level needs to be set to nil (turned off) so
 ;; that you can always see what's happening.
 (setq eval-expression-print-level nil)
