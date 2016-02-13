@@ -1285,8 +1285,9 @@ files.
 
 *** Corral
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
   (use-package corral
+    :bind ("C-c v" . hydra-corral/body)
     :config
     (setq corral-preserve-point t)
     (defhydra hydra-corral (:columns 4)
@@ -1297,8 +1298,7 @@ files.
       ("]" corral-brackets-forward "Forward")
       ("{" corral-braces-backward "Back")
       ("}" corral-braces-forward "Forward")
-      ("." hydra-repeat "Repeat"))
-    (global-set-key (kbd "C-c c") #'hydra-corral/body))
+      ("." hydra-repeat "Repeat")))
 #+end_src
 
 *** flycheck-pos-tip
