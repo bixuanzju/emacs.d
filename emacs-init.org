@@ -1444,7 +1444,8 @@ shell.
   (use-package counsel
     :bind (("C-x C-f" . counsel-find-file)
            ("C-h f" . counsel-describe-function)
-           ("C-h v" . counsel-describe-variable))
+           ("C-h v" . counsel-describe-variable)
+           ("M-y" . counsel-yank-pop))
     :chords ("xm" . counsel-M-x))
 #+end_src
 
