@@ -1438,6 +1438,15 @@ shell.
     (ivy-mode 1))
 #+end_src
 
+*** Smex
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package smex
+    :init
+    (setq smex-save-file
+          (expand-file-name "smex-items" savefile-dir)))
+#+end_src
+
 *** Counsel
 
 #+begin_src emacs-lisp :tangle yes
@@ -1509,12 +1518,14 @@ Whitespace-mode configuration.
   (use-package projectile
     :defer t
     :diminish ""
-    :init (projectile-global-mode t)
-    :config
+    :init
     (setq projectile-cache-file
           (expand-file-name  "projectile.cache" savefile-dir)
-          ;; projectile-completion-system 'helm
-          projectile-sort-order 'modification-time
+          projectile-known-projects-file
+          (expand-file-name  "projectile-bookmarks.eld" savefile-dir))
+    (projectile-global-mode t)
+    :config
+    (setq projectile-sort-order 'modification-time
           projectile-completion-system 'ivy))
 #+END_SRC
 
