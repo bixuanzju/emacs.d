@@ -1044,6 +1044,7 @@ files.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package helm
+    :disabled t
     ;; :bind (("M-y" . helm-show-kill-ring)
     ;;        ("C-x C-f" . helm-find-files)
     ;;        ("C-c C-r" . helm-resume))
@@ -1077,6 +1078,7 @@ files.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package helm-flx
+    :disabled t
     :config
     (helm-flx-mode +1))
 #+end_src
@@ -1085,6 +1087,7 @@ files.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package helm-fuzzier
+    :disabled t
     :after helm
     :config
     (helm-fuzzier-mode 1))
@@ -1264,7 +1267,7 @@ files.
 
   (defhydra hydra-projectile (:color blue :columns 4)
     "Projectile"
-    ("a" helm-projectile-ag "ag")
+    ("a" counsel-git-grep "ag")
     ("b" projectile-switch-to-buffer "switch to buffer")
     ("c" projectile-compile-project "compile project")
     ("d" projectile-find-dir "dir")
@@ -1438,15 +1441,6 @@ shell.
     (ivy-mode 1))
 #+end_src
 
-*** Smex
-
-#+begin_src emacs-lisp :tangle yes
-  (use-package smex
-    :init
-    (setq smex-save-file
-          (expand-file-name "smex-items" savefile-dir)))
-#+end_src
-
 *** Counsel
 
 #+begin_src emacs-lisp :tangle yes
@@ -1456,6 +1450,15 @@ shell.
            ("C-h v" . counsel-describe-variable)
            ("M-y" . counsel-yank-pop))
     :chords ("xm" . counsel-M-x))
+#+end_src
+
+*** Smex
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package smex
+    :init
+    (setq smex-save-file
+          (expand-file-name "smex-items" savefile-dir)))
 #+end_src
 
 *** Fancy battery mode
@@ -1533,6 +1536,7 @@ Whitespace-mode configuration.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package helm-projectile
+    :disabled t
     :after helm)
 #+end_src
 
@@ -1540,6 +1544,7 @@ Whitespace-mode configuration.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package helm-ag
+    :disabled t
     :defer t
     :init
     (setq helm-ag-base-command "ag --nocolor --nogroup --ignore-case"
