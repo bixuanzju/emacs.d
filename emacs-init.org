@@ -606,7 +606,7 @@ If you are not using it, you need to start.
 
 *** Coq
 
-refer to [[http://endlessparentheses.com/proof-general-configuration-for-the-coq-software-foundations-tutorial.html][here]]
+Refer to [[http://endlessparentheses.com/proof-general-configuration-for-the-coq-software-foundations-tutorial.html][here]]
 
 #+begin_src emacs-lisp :tangle yes
   ;; ProofGeneral
@@ -617,7 +617,7 @@ refer to [[http://endlessparentheses.com/proof-general-configuration-for-the-coq
     (setq proof-splash-seen t)
 
     ;; Hybrid mode is by far the best.
-    (setq proof-three-window-mode-policy 'smart)
+    (setq proof-three-window-mode-policy 'hybrid)
 
     ;; I don't know who wants to evaluate comments
     ;; one-by-one, but I don't.
@@ -630,10 +630,11 @@ refer to [[http://endlessparentheses.com/proof-general-configuration-for-the-coq
       (define-key coq-mode-map "\M-n"
         #'proof-assert-next-command-interactive))
 
-    (defun my/coq-mode-defaults ()
-      (flycheck-mode -1))
+    ;; (defun my/coq-mode-defaults ()
+    ;;   (flycheck-mode -1))
 
-    (add-hook 'coq-mode-hook #'my/coq-mode-defaults))
+    ;; (add-hook 'coq-mode-hook #'my/coq-mode-defaults)
+    )
 #+end_src
 
 *** Dired
@@ -1308,6 +1309,7 @@ files.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package flycheck-pos-tip
+    :disabled t
     :after flycheck
     :config
     (flycheck-pos-tip-mode))
@@ -1737,7 +1739,8 @@ A great syntax checker.
     (add-hook 'after-init-hook #'global-flycheck-mode)
     :config
     (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
-    (setq flycheck-indication-mode nil))
+    ;; (setq flycheck-indication-mode nil)
+    )
 #+END_SRC
 
 *** Flycheck-haskell
