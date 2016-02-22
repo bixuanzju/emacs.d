@@ -1504,8 +1504,7 @@ Whitespace-mode configuration.
     (dolist (hook '(prog-mode-hook text-mode-hook))
       (add-hook hook #'whitespace-mode))
     (setq whitespace-line-column 80)
-    (setq whitespace-style '(face tabs empty trailing lines-tail)))
-
+    (setq whitespace-style '(face tabs empty trailing)))
 #+END_SRC
 
 *** Whitespace-cleanup-mode
