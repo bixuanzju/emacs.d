@@ -1,6 +1,9 @@
 My Emacs Directory
 =================
 
+Note: I am moving towards [Spacemacs](https://github.com/syl20bnr/spacemacs).
+
+
 # Prerequisites #
 
 [Cask](https://github.com/cask/cask)

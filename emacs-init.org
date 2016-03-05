@@ -142,7 +142,6 @@ Set custom theme path and load theme
 
   (use-package elisp
     :bind (("M-/" . hippie-expand)
-           ("C-x C-b" . ibuffer)
            ([remap goto-line] . goto-line-with-feedback)
            ("C-:" . eval-expression)
            ("M-SPC" . cycle-spacing)
@@ -152,10 +151,10 @@ Set custom theme path and load theme
            ("C-S-n" . my/forward-line-by-many)
            ("C-S-p" . my/backward-line-by-many)
            ("C-M-!" . my/iterm-shell-command)
-           )
-    :bind (:map ctl-x-map
-                ("n" . narrow-or-widen-dwim))
-    :bind* (("C-M-h" . backward-kill-word)))
+           ("C-M-h" . backward-kill-word)
+           :map ctl-x-map
+           ("n" . narrow-or-widen-dwim)
+           ("C-b" . ibuffer)))
 #+END_SRC
 
 ** Key-chord
@@ -492,9 +491,6 @@ If you are not using it, you need to start.
                                (?B . (:foreground "LightSteelBlue"))
                                (?C . (:foreground "#F0DFAF"))))
 
-
-    ;;open agenda in current window
-    (setq org-agenda-window-setup (quote current-window))
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; org-mode agenda options                                                ;;
@@ -945,7 +941,7 @@ A Collection of Ridiculously Useful eXtensions for Emacs
 
 #+begin_src emacs-lisp :tangle yes
   (use-package crux
-    :demand
+    :demand t
     :bind (("C-c n" . crux-cleanup-buffer-or-region)
            ("C-c k" . crux-kill-other-buffers)
            ([remap kill-whole-line] . crux-kill-whole-line)
@@ -1011,7 +1007,7 @@ file buffer.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package goto-chg
-    :bind* ("C-M-." . goto-last-change))
+    :bind ("C-M-." . goto-last-change))
 #+end_src
 
 *** gscholar bibtex
