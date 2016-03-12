@@ -1,8 +1,5 @@
-My Emacs Directory
+I am moving towards [Spacemacs](https://github.com/syl20bnr/spacemacs).
 =================
-
-Note: I am moving towards [Spacemacs](https://github.com/syl20bnr/spacemacs).
-
 
 # Prerequisites #
 
