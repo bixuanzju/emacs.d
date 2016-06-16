@@ -1,4 +1,4 @@
-I am moving towards [Spacemacs](https://github.com/syl20bnr/spacemacs).
+I moved to [Spacemacs](https://github.com/syl20bnr/spacemacs).
 =================
 
 # Prerequisites #
