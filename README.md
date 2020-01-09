@@ -1,4 +1,4 @@
-I moved to [Spacemacs](https://github.com/syl20bnr/spacemacs).
+I moved to [doom-emacs](https://github.com/hlissner/doom-emacs).
 =================
 
 # Prerequisites #
